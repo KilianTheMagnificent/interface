@@ -1,0 +1,24 @@
+/* TN Code Light: TN Code's own theme, light side.
+
+   Ported from TN Code by docs/theme-examples/tn-code/port-themes.mjs; change
+   it there, not here. Copy it to ~/.config/interface/themes/ and pick it in
+   Settings › Appearance. The format is in docs/THEMES.md. */
+:root {
+  --theme-kind: light;
+
+  /* Key colours: everything else is worked out from these. */
+  --theme-background: #f4f2ed;
+  --theme-panel: #f4f2ed;
+  --theme-raised: #ffffff;
+  --theme-text: #17181a;
+  --theme-accent: #1d6aa8;
+  --theme-selection: #1d6aa8;
+  --theme-screen: #fbfaf7;
+  --theme-screen-text: #1f2023;
+
+  /* Meaning colours, and the few tokens TN Code names outright. */
+  --theme-danger: #b8321c;
+  --theme-warning: #a95408;
+  --border: #e3e0d8;
+  --accent-fg: #ffffff;
+}

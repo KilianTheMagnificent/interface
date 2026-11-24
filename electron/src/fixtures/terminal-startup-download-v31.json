@@ -1,0 +1,9 @@
+{
+  "protocolVersion": 31,
+  "download": {
+    "version": 1,
+    "files": [".git/HEAD", "CLAUDE.md", "~/Desktop/Projects/AGENTS.md"],
+    "remaining": 5
+  },
+  "notice": "Waiting for cloud download: .git/HEAD, CLAUDE.md, ~/Desktop/Projects/AGENTS.md and 2 more"
+}

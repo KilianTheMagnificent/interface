@@ -1,0 +1,29 @@
+{
+  "protocolVersion": 58,
+  "view": {
+    "version": 1,
+    "revision": 12,
+    "now": 1791298800000,
+    "settings": {
+      "autoSettleDays": 3,
+      "settleOnMerge": true,
+      "generatedTitles": false,
+      "trackPullRequests": true
+    },
+    "threads": [
+      {
+        "key": "claude#5b0c1d2e-3f40-4a51-8b62-c7d8e9f0a1b2",
+        "section": "active",
+        "createdAt": 1791216000000,
+        "woke": false,
+        "unread": false,
+        "autoSettle": true,
+        "turns": []
+      }
+    ],
+    "hiddenKeys": [
+      "codex#0199f2a4-7c1e-7d30-9a5b-1c2d3e4f5a6b",
+      "codex#0199f2a4-review"
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+/* The Pair (owner, 2026-10-23). The beads cross twice a cycle: on the first
+   pass the left one goes behind (smaller and fainter), on the way back it goes
+   in front, so the two read as strands passing over and under. Four segments
+   of five steps over 1.6s is the app's 12-or-so frames a second, and it rests
+   with every other loop while Interface is not in front. */
+.thinking-mark { display:inline-block; flex:none; overflow:visible; color:var(--status-working);
+  fill:currentColor; vertical-align:middle; }
+.thinking-mark circle { transform-box:fill-box; transform-origin:center; }
+.thinking-mark-a { animation:thinking-mark-a 1.6s steps(5) infinite;
+  animation-play-state:var(--ambient-play-state); }
+.thinking-mark-b { animation:thinking-mark-b 1.6s steps(5) infinite;
+  animation-play-state:var(--ambient-play-state); }
+@keyframes thinking-mark-a {
+  0%, 100% { transform:translateX(0) scale(1); opacity:1; }
+  25% { transform:translateX(5px) scale(.7); opacity:.45; }
+  50% { transform:translateX(10px) scale(1); opacity:1; }
+  75% { transform:translateX(5px) scale(1.2); opacity:1; }
+}
+@keyframes thinking-mark-b {
+  0%, 100% { transform:translateX(0) scale(1); opacity:1; }
+  25% { transform:translateX(-5px) scale(1.2); opacity:1; }
+  50% { transform:translateX(-10px) scale(1); opacity:1; }
+  75% { transform:translateX(-5px) scale(.7); opacity:.45; }
+}
+/* At rest the beads overlap, the near one full and the far one half: the
+   greeting's mark, and the whole mark under reduced motion. */
+.thinking-mark.is-still circle { animation:none; }
+.thinking-mark.is-still .thinking-mark-a { transform:translateX(3px); }
+.thinking-mark.is-still .thinking-mark-b { transform:translateX(-3px); opacity:.5; }
+@media (prefers-reduced-motion: reduce) {
+  .thinking-mark circle { animation:none; }
+  .thinking-mark .thinking-mark-a { transform:translateX(3px); }
+  .thinking-mark .thinking-mark-b { transform:translateX(-3px); opacity:.5; }
+}

@@ -1,0 +1,136 @@
+{
+  "commands": [
+    {
+      "kind": "read"
+    },
+    {
+      "kind": "catalog"
+    },
+    {
+      "kind": "recordAttention",
+      "item": {
+        "id": "event:1",
+        "kind": "finished",
+        "target": {
+          "kind": "terminal",
+          "terminalId": "00000000-0000-4000-8000-000000000001",
+          "generation": 2
+        },
+        "title": "Inspect result",
+        "place": "project",
+        "at": 1,
+        "provenance": "terminal-hook",
+        "seen": false,
+        "resolved": false
+      }
+    },
+    {
+      "kind": "markSeen",
+      "ids": [
+        "event:1"
+      ]
+    },
+    {
+      "kind": "resolve",
+      "id": "event:1",
+      "target": {
+        "kind": "terminal",
+        "terminalId": "00000000-0000-4000-8000-000000000001",
+        "generation": 2
+      }
+    },
+    {
+      "kind": "captureResult",
+      "id": "result:1",
+      "objective": "Review the task",
+      "target": {
+        "kind": "terminal",
+        "terminalId": "00000000-0000-4000-8000-000000000001",
+        "generation": 2
+      },
+      "root": "/project"
+    },
+    {
+      "kind": "inspectResult",
+      "id": "result:1"
+    },
+    {
+      "kind": "runChecks",
+      "id": "result:1",
+      "selected": [
+        "test"
+      ]
+    },
+    {
+      "kind": "context",
+      "root": "/project",
+      "query": "terminal"
+    },
+    {
+      "kind": "presets",
+      "root": "/project"
+    },
+    {
+      "kind": "readDraft",
+      "target": {
+        "kind": "terminal",
+        "terminalId": "00000000-0000-4000-8000-000000000001",
+        "generation": 2
+      }
+    },
+    {
+      "kind": "saveDraft",
+      "target": {
+        "kind": "terminal",
+        "terminalId": "00000000-0000-4000-8000-000000000001",
+        "generation": 2
+      },
+      "expectedRevision": 0,
+      "text": "Follow up"
+    },
+    {
+      "kind": "recordBranch",
+      "branch": {
+        "parent": "codex#parent",
+        "child": "codex#child",
+        "root": "/project",
+        "boundary": "provider-current"
+      }
+    }
+  ],
+  "state": {
+    "version": 1,
+    "revision": 1,
+    "attention": [
+      {
+        "id": "event:1",
+        "kind": "finished",
+        "target": {
+          "kind": "terminal",
+          "terminalId": "00000000-0000-4000-8000-000000000001",
+          "generation": 2
+        },
+        "title": "Inspect result",
+        "place": "project",
+        "at": 1,
+        "provenance": "terminal-hook",
+        "seen": false,
+        "resolved": false
+      }
+    ],
+    "tasks": [],
+    "drafts": [],
+    "branches": []
+  },
+  "serverRequest": {
+    "id": "00000000-0000-4000-8000-000000000001",
+    "generation": 2
+  },
+  "serverLinks": [
+    {
+      "processId": 11,
+      "url": "http://127.0.0.1:3000",
+      "readiness": "Listening; application health not verified"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "channel": "iface:threadJournal",
+  "protocol": 61,
+  "events": [
+    { "kind": "visual.shown", "id": "v1731630000500-0a1b2c3d", "title": "Signups by week", "bytes": 1834 },
+    { "at": "2026-11-15T10:00:00.500Z", "kind": "visual.shown", "id": "v1731630000600-ffffffff", "title": "Mockup", "bytes": 524288 }
+  ],
+  "refusedEvents": [
+    { "kind": "visual.shown", "id": "v1731630000500-0a1b2c3d", "title": "Signups by week" },
+    { "kind": "visual.shown", "id": "v1731630000500-0a1b2c3d", "title": "Signups by week", "bytes": 10, "html": "<p>no</p>" }
+  ],
+  "lines": [
+    { "seq": 7, "at": 1731630000500, "turn": 0, "entry": { "kind": "visual", "id": "v1731630000500-0a1b2c3d", "title": "Signups by week", "bytes": 1834 } }
+  ],
+  "refusedLines": [
+    { "seq": 7, "at": 1731630000500, "entry": { "kind": "visual", "id": "v1731630000500-0a1b2c3d", "title": "Signups by week" } },
+    { "seq": 7, "at": 1731630000500, "entry": { "kind": "visual", "id": "v1731630000500-0a1b2c3d", "title": "x", "bytes": 1, "html": "<p>no</p>" } }
+  ],
+  "requests": [
+    { "kind": "visual", "key": "claude#11111111-1111-4111-8111-111111111111", "id": "v1731630000500-0a1b2c3d" }
+  ],
+  "refused": [
+    { "kind": "visual", "key": "claude#a" },
+    { "kind": "visual", "key": "", "id": "v1731630000500-0a1b2c3d" },
+    { "kind": "visual", "key": "claude#a", "id": "../../etc/passwd" },
+    { "kind": "visual", "key": "claude#a", "id": "v1731630000500-0A1B2C3D" },
+    { "kind": "visual", "key": "claude#a", "id": "v173163000050-0a1b2c3d" },
+    { "kind": "visual", "key": "claude#a", "id": "v1731630000500-0a1b2c3d", "html": "<p>no</p>" }
+  ],
+  "responses": [
+    { "visual": { "id": "v1731630000500-0a1b2c3d", "html": "<!doctype html><html><body><svg viewBox=\"0 0 10 10\"><rect width=\"5\" height=\"9\"/></svg></body></html>" } },
+    {}
+  ]
+}

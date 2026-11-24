@@ -1,0 +1,76 @@
+{
+  "view": {
+    "version": 1,
+    "revision": 4021,
+    "now": 1791302400000,
+    "settings": {
+      "autoSettleDays": 3,
+      "settleOnMerge": true,
+      "generatedTitles": false,
+      "trackPullRequests": true
+    },
+    "threads": [
+      {
+        "key": "claude#5f0c1d2e-8a4b-4c6d-9e7f-1a2b3c4d5e6f",
+        "section": "active",
+        "createdAt": 1791190800000,
+        "activeOrder": "a0",
+        "woke": false,
+        "unread": false,
+        "lastVisitedAt": 1791298000000,
+        "lastRun": {
+          "startedAt": 1791302300000
+        },
+        "autoSettle": true,
+        "workspace": {
+          "mode": "local",
+          "projectRoot": "/Users/owner/Developer/Projects/atlas",
+          "owned": false
+        },
+        "titleSource": "prompt",
+        "turns": [
+          {
+            "ordinal": 0,
+            "sentAt": 1791190800000,
+            "promptDigest": "971ad67d98611a46",
+            "hasStart": true,
+            "hasEnd": true,
+            "state": "done",
+            "filesChanged": 2,
+            "added": 14,
+            "removed": 3
+          },
+          {
+            "ordinal": 1,
+            "sentAt": 1791298500000,
+            "promptDigest": "6def2534bbfcef51",
+            "hasStart": true,
+            "hasEnd": true,
+            "state": "failed",
+            "endedAt": 1791298534000
+          },
+          {
+            "ordinal": 2,
+            "sentAt": 1791301000000,
+            "promptDigest": "0c3b9a7e1d2f4a56",
+            "hasStart": true,
+            "hasEnd": true,
+            "state": "done",
+            "endedAt": 1791301041000,
+            "filesChanged": 1,
+            "added": 2,
+            "removed": 8
+          },
+          {
+            "ordinal": 3,
+            "sentAt": 1791302300000,
+            "promptDigest": "8d1e5f0a9b7c3e21",
+            "hasStart": true,
+            "hasEnd": false,
+            "state": "running"
+          }
+        ]
+      }
+    ]
+  }
+}

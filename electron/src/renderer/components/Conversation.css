@@ -1,0 +1,1016 @@
+/* min-width:0 as well as min-height:0 — every ellipsis in the pane depends on
+   this box being allowed to shrink; as a flex item its auto minimum would be the
+   widest unbreakable tool argument and the whole pane would push past the pane. */
+.conv { position:relative; display:flex; flex-direction:column; width:100%; height:100%; min-height:0;
+  min-width:0; background:var(--editor-bg); color:var(--fg);
+  --conv-measure:720px;
+  --conv-gutter:clamp(24px, 3.5cqi, 48px); }
+.conv.is-drop-target { outline:var(--focus-ring-w) solid var(--focus); outline-offset:calc(-1 * var(--focus-ring-offset)); }
+
+.conv-findbar { flex:none; display:flex; align-items:center; gap:4px; min-width:0;
+  min-height:32px; padding:4px 8px; background:var(--chrome-bg);
+  border-bottom:var(--border-w) solid var(--border); }
+.conv-findfield { flex:1 1 auto; min-width:70px; height:var(--control-h);
+  padding:0 7px; font:inherit; font-size:var(--text-ui); color:var(--fg);
+  background:var(--input-bg); border:var(--border-w) solid var(--border-strong);
+  border-radius:var(--radius-control); outline:none; }
+.conv-findfield:focus { border-color:var(--focus); }
+.conv-findfield::placeholder { color:var(--input-placeholder); }
+.conv-findcount { flex:none; min-width:48px; font-size:var(--text-meta); color:var(--fg-muted);
+  text-align:right; white-space:nowrap; }
+.conv-findcount-empty { color:var(--fg-dim); }
+.conv-findbtn { display:inline-flex; align-items:center; justify-content:center;
+  flex:none; width:var(--control-h); height:var(--control-h); padding:0;
+  color:var(--fg-muted); background:transparent; border:0;
+  border-radius:var(--radius-control); cursor:pointer; }
+.conv-findbtn:hover:not(:disabled) { color:var(--fg); background:var(--row-hover); }
+.conv-findbtn:disabled { color:var(--fg-faint); cursor:default; }
+/* The prompt anchor: one strip between the tile head and the scroller. It is
+   deliberately NOT position:sticky — see the note at its markup for why the
+   plan header keeps that job alone. Frost comes from the material tokens, so
+   CLI chrome, reduced transparency and the flat palettes collapse this bar with
+   every other frosted surface instead of it keeping a private blur. (theme.css
+   owns that collapse and lists the surfaces it declares the filter for; this
+   pane's own sheet declares it here from the same tokens.)
+
+   --strip-h, not the mock's 26px: this is a strip, and every other strip in the
+   app is 24px (22px under CLI chrome, which tightens the whole geometry). Two
+   pixels of fidelity to one frame is not worth a rail that reads a shade taller
+   than the strips above and below it in the same window. */
+.conv-anchor { flex:none; display:flex; align-items:center; gap:8px; min-width:0;
+  min-height:var(--strip-h); padding:0 12px; background:var(--material-chrome);
+  -webkit-backdrop-filter:blur(var(--material-blur)) saturate(var(--material-saturate));
+  backdrop-filter:blur(var(--material-blur)) saturate(var(--material-saturate));
+  border-bottom:var(--border-w) solid var(--border); }
+.conv-anchor-glyph { flex:none; color:var(--fg-muted); }
+/* One line, always: it names a prompt that may be a page long, and a bar that
+   grew a second line would push the transcript it is describing down the pane. */
+.conv-anchor-text { flex:1 1 auto; min-width:0; padding:0; overflow:hidden;
+  text-overflow:ellipsis; white-space:nowrap; text-align:left;
+  color:var(--fg-muted); font:inherit; font-size:var(--text-ui); background:none;
+  border:0; cursor:pointer; }
+.conv-anchor-text:hover { color:var(--fg); }
+/* --fg-dim, not --fg-faint. Faint is the app's non-text tier (theme.css:81-86)
+   and measures 2.12:1 on --chrome-bg; "3/7" is text the reader is meant to
+   read. The mono face and the tabular figures are what set it apart from the
+   prompt beside it, not a colour it is not allowed to wear. */
+.conv-anchor-ord { flex:none; color:var(--fg-dim); font-family:var(--font-mono);
+  font-size:var(--text-meta); font-variant-numeric:tabular-nums; }
+/* 24 square, the app's target floor. --strip-h is 24 in refined chrome, so the
+   pair costs the bar nothing there; the Bare-CLI form axis tightens --strip-h to
+   22 (theme.css) and the bar grows two pixels to hold them. That is the right
+   way round: the form axis tightens geometry, not reach. */
+.conv-anchor-step { display:inline-flex; align-items:center; justify-content:center;
+  flex:none; width:24px; height:24px; padding:0; color:var(--fg-muted);
+  background:transparent; border:0; border-radius:var(--radius-control);
+  cursor:pointer; }
+.conv-anchor-step:hover:not(:disabled) { color:var(--fg); background:var(--row-hover); }
+.conv-anchor-step:disabled { color:var(--fg-faint); cursor:default; }
+/* THE SCROLLER'S OWN POSITIONING CONTEXT, and the only reason this element
+   exists. Everything that floats OVER the transcript — today the jump capsule —
+   used to be positioned against .conv, whose box runs all the way down past the
+   status sink, the composer and the caller's slot above it. That made every
+   offset a guess about how tall those three were, and the guess was wrong
+   whenever any of them grew: the capsule at bottom:108px landed on top of the
+   recap line's dismiss button on a narrow pane. Anchored here instead, "just
+   above the transcript" is a fact rather than an arithmetic, and it stays true
+   when the furniture below changes height. */
+/* z-index:1 keeps BOTH hermes watermark layers behind the transcript. They are
+   .conv::before and .conv::after at z-index:0, and a positioned sibling at
+   z-index:auto sorts between them by tree order — so the crossfade's two plates
+   straddled the text, one under it and one over it, alternating every 12s. */
+.conv-scroll { position:relative; z-index:1; display:flex; flex-direction:column;
+  flex:1; min-width:0; min-height:0; }
+.conv-list { flex:1; min-width:0; min-height:0; overflow-y:auto;
+  padding:16px var(--conv-gutter) 24px; }
+.conv-sr { position:absolute; width:1px; height:1px; margin:-1px; padding:0;
+  overflow:hidden; clip-path:inset(50%); white-space:nowrap; border:0; }
+/* width:100% is load-bearing. max-width alone plus auto margins lets this
+   shrink-wrap to min-content inside the flex/overflow pane. word-break:
+   break-word (overflow-wrap: anywhere) then makes that min-content one
+   word, so the transcript paints one word per line. */
+.conv-column { box-sizing:border-box; width:100%; max-width:var(--conv-measure); margin:0 auto; }
+/* The session's opening block is a TERMINAL gesture. Refined chrome opens with
+   its own hero and its cards, so the node is mounted and drawn by nobody but
+   the CLI rule in theme.css. */
+.conv-welcome { display:none; }
+/* ONE DRAWN LINE OF THE TRANSCRIPT, and the node every measurement in this pane
+   reads back: the prompt anchor, both prompt steppers and the find scroll all
+   ask find.register for exactly this element.
+
+   NO content-visibility HERE. Skipping offscreen rows is the obvious next
+   saving and it was tried, but a skipped subtree lays out nothing inside
+   itself: the rect goes to a remembered estimate at best, and to zero on any
+   descendant. Those are the same rects the three measurements above depend on,
+   and the renderer suite is pure-function with no live DOM, so nothing in this
+   repo can prove the scroll arithmetic survives it. It stays out until someone
+   has driven a long transcript in the running app. The per-row memo below is
+   the saving that needed no such proof. */
+.conv-find-item { position:relative; border-radius:var(--radius-control); }
+/* Accent, not amber: a find hit belongs to the selection family. Amber in this
+   app says an agent is blocked on you, and a match in old scrollback is not. */
+.conv-find-hit::before { content:""; position:absolute; z-index:2; pointer-events:none;
+  inset:0 auto 0 0; width:2px; background:var(--accent); }
+/* Every hit now shares the hue, so the current one is marked by the wider rail,
+   the selected wash and the focus outline together. */
+.conv-find-current { background:var(--row-selected);
+  outline:var(--focus-ring-w) solid var(--focus); outline-offset:var(--focus-ring-offset); }
+.conv-find-current::before { width:3px; }
+.conv-plan {
+  position:sticky; z-index:2; top:0; margin:0 0 12px; overflow:hidden;
+  background:color-mix(in srgb, var(--surface) 94%, transparent);
+  /* Frost comes from the shared material rule in theme.css, so CLI chrome,
+     reduced transparency and the flat palettes collapse it with everything
+     else instead of this one block keeping a private blur. */
+  border:var(--border-w) solid var(--border-strong); border-radius:var(--radius-container);
+}
+.conv-plan-summary {
+  display:flex; align-items:center; gap:7px; min-height:32px; padding:0 9px;
+  color:var(--fg-strong); font-size:var(--text-meta); font-weight:var(--wght-strong); cursor:pointer;
+}
+.conv-plan-summary::marker { color:var(--fg-dim); }
+.conv-plan-progress { margin-left:auto; color:var(--fg-dim); font-weight:var(--wght-regular); }
+.conv-plan-list { margin:0; padding:0 8px 7px; list-style:none; }
+.conv-plan-item { display:grid; grid-template-columns:14px minmax(0, 1fr) auto;
+  gap:7px; align-items:start; padding:5px 2px; color:var(--fg-muted); font-size:var(--text-meta); line-height:var(--lh-ui); }
+.conv-plan-item + .conv-plan-item { border-top:var(--border-w) solid var(--border); }
+.conv-plan-item.is-current { color:var(--fg); }
+.conv-plan-item.is-complete { color:var(--fg-dim); }
+.conv-plan-mark { color:var(--fg-dim); }
+.conv-plan-item.is-current .conv-plan-mark { color:var(--status-working); }
+.conv-plan-item.is-complete .conv-plan-mark { color:var(--diff-added); }
+.conv-plan-priority { color:var(--fg-dim); font-size:var(--text-meta); text-transform:capitalize; }
+.conv-compact { display:flex; align-items:center; gap:8px; margin:8px 0 14px;
+  color:var(--fg-dim); font-size:var(--text-meta); line-height:var(--lh-ui); text-align:center; }
+.conv-compact::before, .conv-compact::after { content:""; flex:1 1 12px; height:var(--border-w);
+  background:var(--border); }
+.conv-compact.is-failed { color:var(--status-failed); }
+.conv-context-meter { position:relative; flex:none; }
+.conv-context-meter-btn { min-width:36px; padding:0 6px; color:var(--fg-dim);
+  font-variant-numeric:tabular-nums; font-size:var(--text-meta); }
+.conv-context-meter-btn.is-high { color:var(--status-failed); }
+/* left:0, not right:0 — the meter sits near the composer’s left edge, so a
+   right-anchored panel grows into the sidebar and is clipped by
+   .workspace-tile { overflow:hidden }. Opening to the right keeps every row
+   inside the conversation tile. */
+.conv-context-meter-panel { position:absolute; left:0; bottom:calc(100% + 6px); z-index:6;
+  box-sizing:border-box; min-width:220px; max-width:280px; padding:8px 10px;
+  color:var(--fg); background:var(--surface);
+  border:var(--border-w) solid var(--border-strong); border-radius:var(--radius-container);
+  box-shadow:var(--overlay-shadow); }
+.conv-context-meter-title { margin:0 0 4px; color:var(--fg-strong); font-size:var(--text-meta);
+  font-weight:var(--wght-strong); }
+.conv-context-meter-head { margin:0 0 6px; color:var(--fg-muted); font-size:var(--text-meta);
+  font-variant-numeric:tabular-nums; }
+.conv-context-meter-row { display:flex; justify-content:space-between; gap:12px;
+  color:var(--fg-muted); font-size:var(--text-meta); }
+.conv-context-meter-row + .conv-context-meter-row { margin-top:3px; }
+.conv-context-meter-note { margin:6px 0 0; color:var(--fg-dim); font-size:var(--text-meta); }
+.conv-context-meter-action { width:100%; margin-top:8px; padding:4px 8px;
+  color:var(--fg-strong); background:var(--surface-raised);
+  border:var(--border-w) solid var(--border-strong); border-radius:var(--radius-control);
+  font:inherit; font-size:var(--text-meta); cursor:pointer; }
+.conv-context-meter-action:hover { background:var(--row-hover); }
+.conv-context-meter-action:focus-visible { outline:var(--focus-ring-w) solid var(--focus); outline-offset:var(--focus-ring-offset); }
+
+/* Assistant turns are flat markdown on the pane background — no bubble, no
+   avatar, no rail, no alignment shift. */
+.conv-text { margin:0 0 14px; color:var(--fg); font-size:var(--text-prose);
+  font-weight:var(--wght-prose); line-height:var(--lh-prose); overflow-wrap:break-word; }
+/* Quote (T3 section 9): a small button under a selection in one reply. */
+.conv-text.is-quoting { position:relative; }
+.conv-quote-button { position:absolute; z-index:2; height:24px; padding:0 9px;
+  color:var(--fg-strong); background:var(--surface-raised);
+  border:var(--border-w) solid var(--border-strong); border-radius:var(--radius-control);
+  font:inherit; font-size:var(--text-meta); line-height:var(--lh-tight); cursor:pointer; }
+.conv-quote-button:hover { background:var(--row-hover); }
+.conv-quote-button:focus-visible { outline:var(--focus-ring-w) solid var(--focus); outline-offset:var(--focus-ring-offset); }
+.conv-caret { color:var(--accent); animation:conv-blink 1s step-end infinite;
+  animation-play-state:var(--ambient-play-state); }
+.conv-markdown { min-width:0; font-size:var(--text-prose); font-weight:var(--wght-prose);
+  line-height:var(--lh-prose); }
+.conv-markdown > :first-child { margin-top:0; }
+.conv-markdown > :last-child { margin-bottom:0; }
+.conv-md-p { margin:0 0 9px; }
+.conv-md-heading { margin:16px 0 7px; color:var(--fg); font-weight:var(--wght-strong);
+  line-height:var(--lh-tight); }
+.conv-md-h1 { font-size:var(--text-h1); }
+.conv-md-h2 { font-size:var(--text-h2); }
+.conv-md-h3 { font-size:var(--text-h3); }
+/* --text-prose, not --text-body. These three used to render at 13px above the
+   15px paragraph they head, so a fourth-level heading an agent wrote read as a
+   caption for the text under it rather than a heading over it. They rank on
+   WEIGHT instead, which is what h3 already does at this same size: 560 against
+   the reading face's 430, plus .conv-md-heading's 16px of air above. */
+.conv-md-h4, .conv-md-h5, .conv-md-h6 { font-size:var(--text-prose);
+  font-weight:var(--wght-strong); }
+.conv-md-list { margin:2px 0 10px; padding-left:24px; }
+.conv-md-list li { margin:2px 0; padding-left:2px; }
+/* A list under an item sits tight against it. */
+.conv-md-list .conv-md-list { margin:2px 0 0; }
+/* GFM task items: the box takes the bullet's place, so the text still lines
+   up with its plain siblings. Read-only; ticked is the theme's accent. */
+.conv-md-list li.conv-md-task { list-style:none; }
+.conv-md-task-box { display:inline-grid; place-items:center; box-sizing:border-box;
+  width:14px; height:14px; margin:0 6px 0 -20px; vertical-align:-2px;
+  border:var(--border-w) solid var(--border-strong); border-radius:var(--radius-control);
+  color:var(--accent-fg); }
+.conv-md-task-box[aria-checked="true"] { background:var(--accent); border-color:var(--accent); }
+.conv-md-task-box .codicon { font-size:var(--text-meta); }
+.conv-md-table-wrap { max-width:100%; margin:5px 0 11px; overflow-x:auto;
+  border:var(--border-w) solid var(--border); border-radius:var(--radius-container);
+  background:var(--surface); overscroll-behavior-inline:contain; }
+.conv-md-table-wrap:focus-visible { outline:var(--focus-ring-w) solid var(--focus); outline-offset:var(--focus-ring-offset); }
+.conv-md-table { width:max-content; min-width:100%; border-collapse:collapse;
+  color:var(--fg); font-family:var(--font-ui); font-size:var(--text-ui); line-height:var(--lh-ui); }
+.conv-md-table th, .conv-md-table td { min-width:96px; max-width:420px;
+  padding:7px 9px; overflow-wrap:anywhere; text-align:left;
+  border-right:var(--border-w) solid var(--border);
+  border-bottom:var(--border-w) solid var(--border); }
+.conv-md-table th:last-child, .conv-md-table td:last-child { border-right:0; }
+.conv-md-table tbody tr:last-child td { border-bottom:0; }
+.conv-md-table th { color:var(--fg-strong); background:var(--chrome-bg); font-weight:var(--wght-strong); }
+.conv-md-table .is-align-center { text-align:center; }
+.conv-md-table .is-align-right { text-align:right; }
+.conv-md-quote { margin:4px 0 10px; padding:2px 0 2px 12px;
+  color:var(--fg-muted); border-left:2px solid var(--border-strong); }
+/* The one size in the app that is deliberately RELATIVE, and allowlisted as
+   such in theme-accessibility.test.ts: a code span inside a markdown heading
+   has to scale with the heading, and a ramp token would flatten it to body
+   size wherever it appeared. */
+.conv-md-inline-code { padding:1px 4px; color:var(--fg);
+  background:var(--surface); border-radius:var(--radius-control); font-family:var(--font-mono);
+  font-size:0.92em; }
+.conv-md-code { margin:5px 0 11px; overflow:hidden; background:var(--chrome-bg);
+  border:var(--border-w) solid var(--border-strong);
+  border-radius:var(--radius-container); }
+/* 26, up from 22, so the Copy button inside it can clear the app's 24px target
+   floor. The vertical padding goes with it: the row is a centred flex line, so
+   4px above and below a 24px child would have made a 32px bar instead of the
+   26px one this is, and shifted every code block in the transcript by ten. */
+.conv-md-code-language { display:flex; align-items:center; justify-content:space-between;
+  gap:8px; min-height:26px; padding:0 9px; color:var(--fg-dim); font-size:var(--text-meta);
+  font-family:var(--font-mono); text-transform:uppercase;
+  border-bottom:var(--border-w) solid var(--border); }
+.conv-md-code-copy { flex:none; min-height:24px; padding:0 6px; color:var(--fg-muted);
+  background:transparent; border:0; border-radius:var(--radius-control);
+  font:inherit; font-family:var(--font-ui); text-transform:none; cursor:pointer; }
+.conv-md-code-copy:hover { color:var(--fg); background:var(--row-hover); }
+.conv-md-code-copy:focus-visible { outline:var(--focus-ring-w) solid var(--focus); outline-offset:var(--focus-ring-offset); }
+.conv-md-code pre { margin:0; padding:9px 10px; overflow-x:auto; color:var(--fg);
+  font-family:var(--font-mono); font-size:var(--text-ui); line-height:var(--lh-ui);
+  white-space:pre; }
+/* The scroller is the element that has to be reachable, so the ring goes on the
+   pre and not on the box around it — the same rule .conv-md-table-wrap gets for
+   the same reason (WCAG 2.1.1: a region a pointer can scroll and a keyboard
+   cannot is unreachable). Inset, because the pre fills its bordered box. */
+.conv-md-code pre:focus-visible { outline:var(--focus-ring-w) solid var(--focus); outline-offset:calc(-1 * var(--focus-ring-offset)); }
+/* A RESTING UNDERLINE, not a hover one. --accent is held to 4.5:1 against the
+   SURFACE, which is the wrong measurement for a link inside a paragraph: it
+   sits 1.22:1 from --fg in light and 1.41:1 in dark, so colour alone left the
+   link findable only by sweeping the pointer across the prose (WCAG 1.4.1
+   wants 3:1 from the surrounding text or a non-colour cue). The rule is the
+   cue; hover strengthens it to full accent rather than introducing it. */
+.conv-md-link { color:var(--accent); text-decoration:underline;
+  text-decoration-color:color-mix(in srgb, var(--accent) 50%, transparent);
+  text-underline-offset:2px; }
+.conv-md-link:hover { text-decoration-color:var(--accent); }
+.conv-md-link-disabled { text-decoration:underline dotted; text-underline-offset:2px; }
+.conv-md-rule { height:0; margin:12px 0; border:0;
+  border-top:var(--border-w) solid var(--border); }
+.conv-md-annotation { display:inline-flex; align-items:center; min-height:18px;
+  margin:0 2px; padding:0 6px; color:var(--fg-muted); background:var(--surface);
+  border:var(--border-w) solid var(--border-strong); border-radius:var(--radius-pill);
+  font-size:var(--text-meta); line-height:var(--lh-ui); vertical-align:1px; white-space:nowrap; }
+/* A review comment is read, not answered, so its left rule is a thicker edge in
+   the same neutral border tone — never the amber 2-3px rail the app spends on
+   an agent that is blocked on you. */
+.conv-md-code-comment { margin:5px 0 11px; padding:9px 10px;
+  background:var(--surface); border:var(--border-w) solid var(--border-strong);
+  border-left-width:3px; border-radius:var(--radius-container); }
+.conv-md-code-comment-head { display:flex; align-items:center; gap:7px; }
+.conv-md-code-comment-head strong { min-width:0; }
+.conv-md-priority { flex:none; margin-left:auto; padding:0 5px;
+  color:var(--fg-dim); background:var(--chrome-bg);
+  border-radius:var(--radius-pill); font-size:var(--text-meta); }
+.conv-md-code-comment-body { margin-top:5px; color:var(--fg-muted); }
+.conv-md-code-comment-path { display:block; margin-top:6px; color:var(--fg-dim);
+  font-family:var(--font-mono); font-size:var(--text-meta); overflow-wrap:anywhere; }
+
+/* The other half of that asymmetry: a user turn is a bordered chip, so the two
+   speakers differ by SHAPE and not by colour — flat prose on the pane vs. a
+   contained block on a 6% ink wash. Both a replayed user.message and a message
+   this window just sent render through here (see ConvItem "user"), which is
+   what makes a sent message look identical before and after a reload.
+
+   THE ONE BEAT IN THE TRANSCRIPT. Every other top-level block carries the same
+   0 0 14px, so a new exchange used to open exactly as much space as a paragraph
+   break inside one and scanning for "where did I ask this" meant reading. 10px
+   above (block tier) makes it 24px before a user turn against 14 everywhere
+   else — enough to group an exchange without inventing a divider. The first
+   block in the column keeps its flush top. */
+.conv-turn-user { box-sizing:border-box; width:fit-content; max-width:min(76%, 620px);
+  margin:10px 0 14px auto; padding:9px 11px; color:var(--fg);
+  font-weight:var(--wght-prose);
+  background:color-mix(in srgb, var(--fg) 6%, var(--surface));
+  border:var(--border-w) solid var(--border);
+  border-radius:var(--radius-composer); white-space:pre-wrap; overflow-wrap:break-word; }
+.conv-column > :first-child .conv-turn-user,
+.conv-column > .conv-turn-user:first-child { margin-top:0; }
+/* Attached screenshots, drawn at a size you can actually read a UI in — the
+   point of attaching one is usually that it contains text. The turn above is
+   width:fit-content, so the bubble sizes to the picture rather than the picture
+   being squeezed into a bubble sized for the sentence. */
+.conv-turn-images { display:flex; flex-wrap:wrap; gap:6px; margin:0 0 7px; }
+.conv-turn-image { display:block; max-width:100%; max-height:280px;
+  object-fit:contain; background:var(--surface);
+  border:var(--border-w) solid var(--border); border-radius:var(--radius-control); }
+.conv-turn-image.is-clickable { cursor:pointer; }
+.conv-turn-image.is-clickable:hover { border-color:var(--border-strong); }
+.conv-turn-image.is-clickable:focus-visible { outline:var(--focus-ring-w) solid var(--focus); outline-offset:var(--focus-ring-offset); }
+.conv-turn-attachments { display:flex; flex-wrap:wrap; gap:5px; margin:0 0 7px; }
+.conv-turn-attachment { display:inline-flex; align-items:center; gap:5px; max-width:100%;
+  min-height:24px; padding:0 8px; color:var(--fg-muted); background:var(--surface);
+  border:var(--border-w) solid var(--border-strong); border-radius:var(--radius-control);
+  font-size:var(--text-meta); cursor:pointer; user-select:none; }
+.conv-turn-attachment:hover { color:var(--fg); background:var(--row-hover); }
+.conv-turn-attachment:focus-visible { outline:var(--focus-ring-w) solid var(--focus); outline-offset:var(--focus-ring-offset); }
+.conv-turn-attachment-label { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+/* Shape and right alignment identify user turns visually; the speaker label
+   remains in the accessibility tree without spending a caption line on every
+   message. */
+.conv-turn-who { position:absolute; width:1px; height:1px; margin:-1px; padding:0;
+  overflow:hidden; clip-path:inset(50%); white-space:nowrap; border:0; }
+/* The caption line becomes a row once a turn can be rolled back to, so the
+   restore control sits on the message it is about instead of in a panel two
+   destinations away. It is drawn ONLY where the caller supplied a real restore
+   point, so a turn with no checkpoint behind it is unchanged — including its
+   caption's spacing, which moves to the row. */
+.conv-turn-head { display:flex; align-items:center; gap:12px; margin-bottom:4px; }
+.conv-turn-head .conv-turn-who { margin-bottom:0; }
+.conv-turn-restore { display:inline-flex; align-items:center; gap:4px; flex:none;
+  margin-left:auto; min-height:24px; padding:0 6px; font:inherit; font-size:var(--text-meta);
+  color:var(--fg-muted); background:transparent; border:0;
+  border-radius:var(--radius-control); cursor:pointer; }
+.conv-turn-restore:hover:not(:disabled) { color:var(--fg-strong);
+  background:var(--row-hover); }
+.conv-turn-restore:disabled { color:var(--fg-dim); cursor:default; }
+/* WHAT THIS TURN CHANGED, as TEXT and never a filled pill: the counts carry
+   the diff vocabulary's own colours (.conv-stat-add/.conv-stat-del, the same
+   pair every file row uses) and the file count stays --fg-dim, because it is
+   orientation and not a status. Drawn only where the turn actually produced
+   diffs this window saw. */
+.conv-turn-changes { display:inline-flex; align-items:center; gap:4px; flex:none;
+  margin-left:auto; min-height:20px; padding:0 6px; font:inherit; font-size:var(--text-meta);
+  color:var(--fg-dim); background:transparent; border:0;
+  border-radius:var(--radius-control); }
+/* Two margin-left:auto siblings SPLIT the free space between them and both end
+   up stranded mid-row. The chip is the leftmost of the pair, so it keeps the
+   auto and the restore control follows it. */
+.conv-turn-changes + .conv-turn-restore { margin-left:0; }
+/* A THREAD TURN'S CONTROLS. On a Threads pane the change summary is Rust's
+   measure of the turn and opens its diff, so the same text becomes a button;
+   "Edit from here" sits beside the restore control in its style. At a turn's
+   end, "Fork from here" takes the turn clock's measure and alignment. All of
+   it is drawn only for a row that maps to a Rust turn. */
+.conv-turn-changes.is-action { cursor:pointer; }
+.conv-turn-changes.is-action:hover { color:var(--fg-strong); background:var(--row-hover); }
+.conv-turn-restore + .conv-turn-edit,
+.conv-turn-changes + .conv-turn-edit { margin-left:0; }
+.conv-turn-end { display:flex; justify-content:flex-end;
+  width:min(calc(100% - 2 * var(--conv-gutter)), var(--conv-measure)); box-sizing:border-box;
+  margin:-4px auto 10px; }
+.conv-turn-action { display:inline-flex; align-items:center; gap:4px; flex:none;
+  min-height:24px; padding:0 6px; font:inherit; font-size:var(--text-meta);
+  color:var(--fg-dim); background:transparent; border:0;
+  border-radius:var(--radius-control); cursor:pointer; }
+.conv-turn-action:hover:not(:disabled) { color:var(--fg-strong); background:var(--row-hover); }
+.conv-turn-action:disabled { color:var(--fg-faint); cursor:default; }
+.thread-edit-error { color:var(--danger-fg); }
+
+/* ---- tool calls: a 22px row, borderless, the body folded away behind it ---- */
+.conv-card { margin:0 0 2px; overflow:hidden; background:transparent; border:0;
+  border-radius:var(--radius-control); }
+.conv-tool-card { margin-bottom:0; }
+.conv-row { display:flex; align-items:center; gap:6px; width:100%;
+  height:var(--row-h); padding:0 6px; font:inherit; font-size:var(--text-body);
+  color:var(--fg); text-align:left; background:transparent; border:0;
+  border-radius:var(--radius-control); }
+/* Scoped to the element that is actually a control. The file and diff rows wear
+   this same shape but only STATE a change — they lost their destination with the
+   editor — so a hand cursor and a hover wash on them would promise a click that
+   cannot happen. */
+button.conv-row { cursor:pointer; }
+button.conv-row:hover { background:var(--row-hover); }
+/* Rotation, not a glyph swap, so the 100ms turn reads as one affordance. */
+/* --fg-dim, not --fg-faint, on both glyphs below. They are controls, so they
+   need to remain visible through the neutral row-hover wash. */
+.conv-chev { color:var(--fg-dim); transform:rotate(-90deg);
+  transition:transform var(--motion-fast) ease-out; }
+.conv-chev-open { transform:rotate(0deg); }
+.conv-kind { color:var(--fg-dim); }
+/* Shrinkable, NOT flex:none. A 60-character MCP tool name (mcp__server__tool has
+   no break opportunity) plus the ~75px status group overruns a 420px pane; with
+   flex:none the name pushed the run-state word past .conv-card's overflow:hidden
+   and it was clipped off the row entirely. The run state is the one field that
+   must always be visible, so the name ellipsises and the row's title attribute
+   keeps the whole name reachable. */
+.conv-name { flex:0 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis;
+  white-space:nowrap; font-weight:var(--wght-regular); color:var(--fg); }
+/* flex-grow 1: the summary takes the slack when there is any, and being the
+   widest flexible item it also gives most of it back first when there is not. */
+.conv-sum { flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis;
+  white-space:nowrap; color:var(--fg-muted); font-family:var(--font-mono);
+  font-size:var(--text-ui); }
+/* A merged file-change row's verb is a row NAME and takes the same quiet tier
+   every other row name does, so the path beside it stays the field that reads
+   first. Named by .conv-filerow rather than by .conv-diffrow: that class is
+   also worn by the plain diff row and by the edited-files row, neither of
+   which has a name slot at all. */
+.conv-tool-row .conv-name, .conv-filerow .conv-name { color:var(--fg-muted); }
+/* SHRINK PRIORITY, not width — the argument theme.css makes for .sub-type, one
+   step further because this slot is shorter still. .conv-name and .conv-path
+   shrank at equal priority, and flex shrink is weighted by content basis, so
+   the ~50px verb gave up as much as the 288px path beside it. Measured in the
+   app's own runtime: at the 420px pane the verb lost 22-35% of its width and
+   the rows read "Upda…" "Dele…" "Del…" "Up…" "Upd…"; at 320px it lost 51-65%
+   and they read "Up…" "D…" "U…". The verb is the entire reason the tool row was
+   merged rather than deleted; a truncated one buys the density with the field
+   it was bought for.
+
+   flex:none is refused on bare .conv-name above, and correctly. Applying it to
+   .conv-tool-row instead of here, measured at the 320px pane: two MCP rows
+   overflow by 89px and 62px and both run-state words are clipped off the row
+   entirely — the exact failure the comment above .conv-name records. It is safe
+   HERE and only here because a file-change verb is a closed vocabulary of eight
+   words, the widest of which ("Changing") measures 57px. Scoped by a class and
+   not by markup adjacency: a rule whose correctness rests on which element sits
+   next to which dies silently the day a slot is inserted between them. */
+.conv-filerow .conv-name { flex:none; }
+/* SHRINK PRIORITY, the .sub-type idiom (theme.css:3812), for the same reason
+   one row up: equal priority is weighted by content basis, so a ~35px "Read"
+   beside a ~300px path gave up the same PERCENTAGE the path did and the row
+   read "R…" over a filename that was barely trimmed. The method name is what
+   the reader is scanning for, so the path yields first.
+
+   0.15 and not flex:none, deliberately — the comment above .conv-name records
+   what flex:none does to a 60-character MCP row. A near-zero shrink still lets
+   the name give way once the summary has collapsed to nothing, so the run
+   state can never be pushed off the row. */
+.conv-tool-row .conv-name { flex-shrink:0.15; }
+.conv-tool-row .conv-sum { flex:0 1 auto; }
+.conv-tool-row .conv-state, .conv-tool-run-summary .conv-state { margin-left:0; }
+.conv-tool-row .conv-chev, .conv-tool-run-summary .conv-chev { flex:none; }
+.conv-inline { display:inline-flex; align-items:center; gap:4px; }
+/* ---- the file-change row's two sibling controls ----
+   Same rule, same reason, same shape as .sub-head/.sub-fold below: the row
+   OPENS THE DIFF and the disclosure beside it opens the reason, and they are
+   siblings because a button inside a button is invalid HTML and the inner one
+   is unreachable by keyboard.
+
+   The fold is ABSENT, not disabled, when there is nothing to disclose — and no
+   column is held for it, because unlike a subagent cell this row's left edge is
+   its glyph, which never moves. */
+.conv-filehead { display:flex; align-items:center; width:100%; min-width:0; }
+.conv-filefold { display:inline-flex; align-items:center; flex:none;
+  height:var(--row-h); padding:0 6px; color:var(--fg-dim);
+  background:transparent; border:0; border-radius:var(--radius-control);
+  cursor:pointer; }
+.conv-filefold:hover { color:var(--fg); background:var(--row-hover); }
+/* ---- the subagent cell's two sibling controls ----
+   LAYOUT ONLY, and deliberately here rather than in theme.css. Every other
+   .sub-* rule is the shell's, but these two classes are new with this markup
+   and a component whose own structure collapses when another stylesheet has
+   not caught up is the failure this file keeps being audited for. theme.css
+   still owns the cell's paint; it must not redefine the two rules below.
+
+   The fold is a real button so the row beside it can do something else, and
+   the two are siblings because a button inside a button is invalid HTML and
+   the inner one is unreachable by keyboard. */
+.sub-head { display:flex; align-items:center; width:100%; min-width:0; }
+.sub-fold { display:inline-flex; align-items:center; flex:none;
+  height:var(--row-h); padding:0 0 0 6px; color:var(--fg-dim);
+  background:transparent; border:0; border-radius:var(--radius-control);
+  cursor:pointer; }
+.sub-fold:hover { color:var(--fg); background:var(--row-hover); }
+/* An agent with nothing under it yet draws NO fold control — but the column it
+   would have occupied is held as padding, because every tool row in this
+   transcript starts its glyph one chevron in and a cell that broke that left
+   edge would read as a different kind of thing. Padding is not an element: no
+   tab stop, no hidden glyph, no aria-expanded over an empty disclosure. */
+.sub-head-flat .sub-row { padding-left:calc(var(--icon-size) + 12px); }
+/* Meta fields on a one-row cell never wrap. Applied alongside theme.css's own
+   .sub-* classes rather than redefining them — that file is the shell's.
+   -nowrap holds its width (short, bounded values: a subagent type, a status
+   word); -shrink ellipsises instead (long, unbounded values). */
+.conv-nowrap { flex:none; white-space:nowrap; }
+.conv-shrink { flex:0 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis;
+  white-space:nowrap; }
+/* Run state is compact informational text, so it uses the AA text tier rather
+   than the quieter icon tier. */
+.conv-state { flex:none; margin-left:auto; font-size:var(--text-meta); color:var(--fg-muted); }
+.conv-state-run { color:var(--status-working); }
+.conv-state-fail { color:var(--danger-fg); }   /* text tier, not --status-failed */
+.conv-glyph-ok { color:var(--diff-added); }
+.conv-glyph-fail { color:var(--status-failed); }   /* glyph tier */
+.conv-glyph-idle { color:var(--fg-dim); }
+.conv-glyph-wait { color:var(--status-waiting); }
+.conv-tool-id { display:flex; align-items:center; gap:6px; padding:4px 10px;
+  color:var(--fg-dim); background:var(--chrome-bg);
+  border-top:var(--border-w) solid var(--border); font-family:var(--font-mono);
+  font-size:var(--text-meta); overflow-wrap:anywhere; }
+.conv-tool-id-label { font-family:var(--font-ui); color:var(--fg-muted); }
+.conv-tool-id + .conv-input, .conv-tool-id + .conv-pre { border-top:0; }
+.conv-pre { margin:0; padding:6px 10px; border:0;
+  border-top:var(--border-w) solid var(--border); background:var(--chrome-bg);
+  color:var(--fg-muted); font-family:var(--font-mono); font-size:var(--text-ui);
+  white-space:pre-wrap; overflow-wrap:break-word; overflow-x:auto; }
+/* Tool output scrolls, so a keyboard has to be able to reach it. Same ring, and
+   the same inset reason, as .conv-md-code pre above. */
+.conv-pre:focus-visible { outline:var(--focus-ring-w) solid var(--focus); outline-offset:calc(-1 * var(--focus-ring-offset)); }
+
+/* The argument body of an expanded call. The label carries the divider so the
+   key and the text it names read as one block rather than two stacked panes. */
+.conv-input { border-top:var(--border-w) solid var(--border); }
+.conv-input .conv-pre { border-top:0; }
+.conv-input-label { padding:5px 10px 0; color:var(--fg-dim); font-size:var(--text-meta);
+  font-family:var(--font-mono); background:var(--chrome-bg); }
+.conv-input-label + .conv-pre { padding-top:2px; }
+
+/* NO OUTLINE. A produced diff used to be the one boxed row in the pane, and a
+   file edit really does produce four or five of them in a row: four stacked
+   rectangles inside a transcript that is otherwise a flat column of rows read
+   as a half-rendered widget, not as emphasis. What this row still has to say
+   is what KIND of thing it is, and that is carried by two quieter things it
+   already had — the git-compare glyph and the accent its path takes on hover.
+   It says nothing about opening, because it opens nothing: the trailing
+   chevron that used to claim otherwise is gone. No rule of its own is needed:
+   it inherits .conv-row's padding so it lands on the same 6px grid as its
+   neighbours. */
+/* NO LEADING SPACER. There used to be one, holding 22px so a diff row's glyph
+   sat under the NAME column of the tool row that produced it — correct while a
+   diff row was always a child of the row directly above. Now that a file change
+   is drawn as one row, no diff row has a parent above it, and the spacer was
+   indenting top-level rows against nothing: in a mixed pane the merged rows and
+   the tool rows sat flush left while these two started a column of their own,
+   which is the false indent the merge existed to remove. Every row in this
+   transcript starts its glyph in one column. */
+.conv-path { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  color:var(--fg); font-family:var(--font-mono); font-size:var(--text-ui); }
+
+/* ---- approval: a blocking decision, so it is a real card ------------------ */
+.conv-approval { margin:0 0 14px; overflow:hidden; background:var(--surface);
+  border:var(--border-w) solid var(--border-strong);
+  border-radius:var(--radius-container); }
+/* THE AMBER RULE IS A MEANING, NOT A LIST. The attention hue says one thing
+   anywhere in this app: an agent is blocked on you, or a limit is about to
+   block you. Nothing else may take it — a find hit, a review comment's rule and
+   a compacting counter each used to, which taught the user that amber meant
+   nothing in particular.
+
+   This is the transcript's site, alongside .conv-glyph-wait on the same card.
+   Do not maintain a roster of the others here; a list written into a comment
+   goes stale the first time a surface is added, and this one had. Two tests
+   hold the rule instead: theme-accessibility.test.ts enumerates every rule in
+   theme.css that spends it, and Conversation.queue.test.ts counts the
+   occurrences in THIS stylesheet, so a fourth one cannot be added quietly. */
+.conv-approval-pending { border-color:var(--status-waiting); }
+.conv-q { display:flex; flex-direction:column; gap:10px; padding:6px 10px 10px; }
+.conv-q-block { display:flex; flex-direction:column; gap:6px; }
+.conv-q-head { font-size:var(--text-meta); font-weight:var(--wght-strong); color:var(--fg-dim);
+  text-transform:uppercase; letter-spacing:var(--track-caps); }
+.conv-q-text { margin:0; font-size:var(--text-body); line-height:var(--lh-ui); }
+.conv-q-opts { display:flex; flex-direction:column; gap:4px; }
+.conv-q-choice { display:flex; flex-direction:column; gap:4px; }
+.conv-q-opt { display:flex; align-items:flex-start; gap:8px; padding:6px 8px;
+  border:var(--border-w) solid var(--border); border-radius:var(--radius-control);
+  background:var(--surface); text-align:left; cursor:pointer; }
+.conv-q-opt.is-on { border-color:var(--accent); }
+.conv-q-native { flex:none; margin:3px 0 0; accent-color:var(--accent); }
+.conv-q-opt:focus-within { outline:var(--focus-ring-w) solid var(--focus); outline-offset:var(--focus-ring-offset); }
+.conv-q-opt-copy { min-width:0; display:flex; flex-direction:column; gap:2px; }
+.conv-q-opt-label { font-size:var(--text-body); font-weight:var(--wght-strong); }
+.conv-q-opt-desc { font-size:var(--text-meta); color:var(--fg-dim); line-height:var(--lh-ui); }
+/* --editor-bg, the paper this option card is lifted off, rather than the --bg
+   alias that resolves to it. That alias was the app's last one, and its own
+   comment in theme.css said it goes the day its final call site moves. This is
+   that call site; the rendered colour is identical in all thirteen themes,
+   since --bg is declared once on :root and never re-declared. */
+.conv-q-preview { margin:4px 0 0; padding:6px 8px; font:inherit; font-size:var(--text-meta);
+  line-height:var(--lh-ui); white-space:pre-wrap; color:var(--fg-dim);
+  background:var(--editor-bg); border-radius:var(--radius-control); }
+.conv-q-other { width:100%; box-sizing:border-box; height:var(--control-h);
+  margin:0; padding:0 8px; font:inherit; font-size:var(--text-body);
+  color:var(--input-fg); background:var(--input-bg);
+  border:var(--border-w) solid var(--input-border); border-radius:var(--radius-control); }
+.conv-head { display:flex; align-items:center; gap:6px; padding:8px 10px 4px; }
+.conv-head .conv-name { font-weight:var(--wght-strong); }
+.conv-acts { display:flex; align-items:center; gap:6px; padding:6px 10px 10px;
+  flex-wrap:wrap; }
+.conv-acts .btn { display:inline-flex; align-items:center; gap:6px; }
+/* The printed key. 11px is the type floor, and the chip earns it: it is a
+   label ON a control, not a second line of copy. Mono because a glyph pair is
+   read as a key, not as a word. The accent-filled Allow gets its border from
+   its own foreground so the chip reads as part of the fill rather than a
+   sticker on it. */
+.kbd-hint { display:inline-flex; align-items:center; padding:0 4px;
+  font-family:var(--font-mono); font-size:var(--text-meta); line-height:var(--lh-prose);
+  color:var(--fg-dim); border:var(--border-w) solid var(--border);
+  border-radius:var(--radius-control); }
+.btn-primary .kbd-hint { color:var(--accent-fg); opacity:.9;
+  border-color:color-mix(in srgb, var(--accent-fg) 40%, transparent); }
+.conv-note { flex:1; min-width:120px; height:var(--control-h); padding:0 8px;
+  font:inherit; font-size:var(--text-body); color:var(--input-fg); background:var(--input-bg);
+  border:var(--border-w) solid var(--input-border); border-radius:var(--radius-control); }
+.conv-note::placeholder { color:var(--input-placeholder); }
+.conv-verdict { display:flex; align-items:center; gap:4px; padding:6px 10px 10px;
+  font-size:var(--text-meta); color:var(--fg-dim); }
+/* A verdict that did not land. It WRAPS — this is the sentence that explains
+   why the agent is still blocked, and the card puts Allow/Deny back underneath
+   it, so an ellipsis here would hide the only reason the buttons returned.
+   --danger-fg is the text tier (the same one .btn-danger and .conv-notice
+   take on this card's --surface); nothing here has a hover wash. */
+.conv-verdict-err { display:flex; align-items:flex-start; gap:6px;
+  padding:6px 10px 0; font-size:var(--text-meta); color:var(--danger-fg);
+  overflow-wrap:break-word; }
+/* THE DESTRUCTIVE TONE. Deny, Confirm deny and Skip answers used to differ
+   from the Cancel beside them by text colour alone — same transparent fill,
+   same neutral edge, same size — so the loudest button on an approval card was
+   the SAFE one. A tint, a doubled danger edge and the strong weight, which is
+   the recipe ConfirmDialog and the steering queue's Clear all also take. Not a
+   solid --danger-fg fill: that has to clear contrast in thirteen themes, and
+   the tint does not. The name is theme.css's, which already lists .btn-danger
+   in the app's one :active rule.
+
+   HOVER THICKENS THE RING; IT DOES NOT MOVE THE BACKGROUND. Stepping the fill
+   toward --danger-fg is the obvious hover and it is the wrong one here: the
+   label is --danger-fg, so every percent of the mix walks the background
+   toward the text. Measured across all thirteen theme blocks, an 18% step put
+   nine of them under 4.5:1 (3.91 at worst) and even 8% left one theme at 4.53.
+   The ring is free of that arithmetic — the resting pair is the only pair
+   anyone has to read, and theme-accessibility.test.ts now measures it. The
+   background is RESTATED rather than omitted: theme.css's
+   .btn:not(.btn-primary):hover carries the same specificity, so leaving it out
+   lets --row-hover repaint the tint away. */
+.btn.btn-danger { color:var(--danger-fg); background:var(--danger-bg);
+  border-color:var(--danger-fg); font-weight:var(--wght-strong);
+  box-shadow:inset 0 0 0 var(--border-w) var(--danger-fg); }
+.btn.btn-danger:hover:not(:disabled) {
+  background:var(--danger-bg); box-shadow:inset 0 0 0 2px var(--danger-fg); }
+.conv-notice { display:flex; align-items:flex-start; gap:6px; margin:0 0 14px;
+  color:var(--danger-fg); }
+.conv-notice-info { color:var(--fg-dim); }
+.conv-notice > span { min-width:0; white-space:pre-wrap; overflow-wrap:anywhere; }
+/* A failure the owner can fix from here (Sign in): one quiet outlined button
+   after the provider's own words. */
+.conv-notice-action { flex:none; margin-left:auto; height:22px; padding:0 8px;
+  color:var(--fg-strong); background:transparent; border:var(--border-w) solid var(--border-strong);
+  border-radius:var(--radius-control); font:inherit; cursor:pointer; }
+.conv-notice-action:hover { background:var(--row-hover); }
+
+/* A peer agent's reply: the one block of prose in this transcript that nobody
+   in this session wrote. The rail and the named source above it are the whole
+   point — unlabelled, and flat on the pane background like an assistant turn,
+   these words read as the agent's own, which is precisely the relabelling the
+   untrusted flag exists to prevent. The mark takes --danger-fg because it is a
+   safety statement about the text under it and not a subtitle. */
+.conv-peer { margin:0 0 14px; padding:2px 0 2px 12px;
+  border-left:2px solid var(--border-strong); }
+.conv-peer-head { display:flex; align-items:center; gap:6px; margin:0 0 4px;
+  font-size:var(--text-meta); color:var(--fg-dim); }
+.conv-peer-objective { min-width:0; overflow:hidden; text-overflow:ellipsis;
+  white-space:nowrap; }
+.conv-peer-untrusted { flex:none; color:var(--danger-fg);
+  font-weight:var(--wght-strong); }
+
+/* ---- the past transcript and the states around it ------------------------
+   These rows sit INSIDE the scroller, at the top of the reading column, which
+   is where the missing messages themselves would be — so "loading" and "the
+   read failed" occupy the space they are talking about instead of being chrome
+   somewhere else. --fg-dim, not --fg-faint: this is informational text, the
+   token is non-text only, and nothing here carries a hover wash to erode it
+   (--fg-dim on --editor-bg measures 5.04:1). */
+.conv-hist { display:flex; align-items:center; gap:6px; margin:0 0 14px;
+  font-size:var(--text-ui); color:var(--fg-dim); }
+/* Same treatment .conv-notice gives an engine error: a failure to read the
+   transcript is one more reason the pane is not showing what it should. */
+.conv-hist-fail { color:var(--danger-fg); }
+.conv-hist-msg { flex:1 1 auto; min-width:0; overflow-wrap:break-word; }
+
+/* THE COLD OPEN. Not a spinner over an empty pane: the shapes the transcript is
+   about to put there, at the sizes it will use — prose lines, 22px tool rows,
+   one user card — so the read lands into a layout that is already the right
+   height instead of dropping a screenful in under a single line of text. The
+   tint is derived from a token rather than picked, so it is the same weight
+   relative to the paper in every theme, and theme.css's reduced-motion guard
+   stills the pulse without stilling the shape.
+
+   skeleton-pulse is the app's ONE skeleton cadence, the sidebar's too, and its
+   keyframes live once in theme.css: a keyframe NAME is global, so two sheets
+   declaring it could let mount order decide which tempo either pane breathes
+   at. Same name, same 1.6s. */
+.conv-skeleton { --conv-skel:color-mix(in srgb, var(--fg-dim) 18%, transparent);
+  margin:0 0 14px; }
+.conv-skel-line, .conv-skel-row, .conv-skel-user { background:var(--conv-skel);
+  animation:skeleton-pulse 1.6s steps(10) infinite; animation-play-state:var(--ambient-play-state); }
+.conv-skel-line { height:11px; margin:0 0 9px; border-radius:var(--radius-control); }
+.conv-skel-line-b { width:94%; }
+.conv-skel-line-c { width:61%; }
+.conv-skel-row { height:var(--row-h); margin:0 0 2px;
+  border-radius:var(--radius-control); }
+.conv-skel-user { height:42px; width:44%; margin:0 0 14px auto;
+  border-radius:var(--radius-composer); }
+.conv-skel-group { margin:14px 0; }
+
+/* The seam between what the session already contained and what arrived while
+   this window was open. Labelled rather than a bare rule: the pane never
+   reorders the two halves, and it should not silently merge them either. */
+.conv-mark { display:flex; align-items:center; gap:8px; margin:2px 0 10px;
+  font-size:var(--text-meta); color:var(--fg-dim); }
+.conv-mark::before, .conv-mark::after { content:""; flex:1 1 auto;
+  height:var(--border-w); background:var(--border); }
+/* NO CARD. A filled, bordered container around a fold of tool calls stacked a
+   second box inside a transcript that is already a column of rows — the
+   sibling .conv-tool-run-commands rule below had already reached the right
+   answer ("Claude Code's finished command line: dim text and a chevron, no
+   card"); this is the same treatment for every other folded run. */
+.conv-tool-run { margin:0; overflow:hidden; background:transparent;
+  border:0; border-radius:var(--radius-control); }
+/* Aligned to .conv-row (22px, 0 6px), because without the card this line is a
+   sibling of the rows it folds rather than the header of a box around them. */
+.conv-tool-run-summary { display:flex; align-items:center; gap:6px; min-height:var(--row-h);
+  padding:0 6px; color:var(--fg-dim); font-size:var(--text-body); cursor:pointer;
+  border-radius:var(--radius-control); list-style:none; }
+.conv-tool-run-summary::-webkit-details-marker { display:none; }
+.conv-tool-run-summary:hover { background:var(--row-hover); }
+.conv-tool-run-summary:focus-visible { outline:var(--focus-ring-w) solid var(--focus);
+  outline-offset:calc(-1 * var(--focus-ring-offset)); }
+.conv-tool-run-summary::marker { color:var(--fg-dim); }
+.conv-run-result { display:none; }
+.conv-tool-run-items { margin:1px 0 2px 14px; padding:1px 0 1px 9px;
+  border-left:var(--border-w) solid var(--border); }
+.conv-tool-run-items .conv-card { margin-bottom:0; }
+/* Claude Code's finished command line: dim text and a chevron, no card. */
+.conv-tool-run-commands { margin:0; background:transparent; border:0;
+  border-radius:0; overflow:visible; }
+/* Height and padding are INHERITED from the base rule above, not restated: the
+   override said 22px/0 2px against --row-h (28px) and 0 6px, so the one line in
+   the pane that folds a command run sat 6px shorter than and 4px left of every
+   row around it — a fold reading as a different kind of object than the rows it
+   stands among is the opposite of what folding it was for. */
+.conv-tool-run-commands .conv-tool-run-summary { gap:6px; color:var(--fg-dim);
+  font-size:var(--text-body); list-style:none; }
+.conv-tool-run-commands .conv-tool-run-summary::-webkit-details-marker { display:none; }
+.conv-tool-run-commands .conv-tool-run-summary::marker { content:""; }
+.conv-tool-run-commands .conv-chev { margin-left:0; }
+.conv-work-add { color:var(--diff-added); }
+.conv-work-del { color:var(--danger-fg); }
+/* The file-row diffstat. Its own pair rather than the work-group pair above,
+   because the minus here is a REMOVED LINE and not a failure: --diff-removed is
+   the diff vocabulary, --danger-fg is the "something went wrong" tier, and the
+   two are the same hex in most themes only by coincidence. These sit INSIDE
+   .conv-state, whose running/failed colour is INHERITED — a declaration on the
+   child beats an inherited value outright, so keeping the counts off the state
+   hue needs no order or specificity trick. */
+.conv-stat-add { color:var(--diff-added); }
+.conv-stat-del { color:var(--diff-removed); }
+
+/* Codex/Claude-style turn status: visible while tools run, not only while the
+   last event is a thinking pulse. Sits between the transcript and the prompt. */
+.conv-working { flex:none; display:flex; align-items:center; gap:8px;
+  min-height:24px; width:min(calc(100% - 2 * var(--conv-gutter)), var(--conv-measure)); box-sizing:border-box;
+  margin:0 auto; padding:0 2px 4px; color:var(--status-working); font-size:var(--text-ui);
+  background:transparent; border:0; }
+.conv-working-label { min-width:0; overflow:hidden; text-overflow:ellipsis;
+  white-space:nowrap; }
+.conv-working-elapsed { flex:none; color:var(--fg-dim);
+  font-variant-numeric:tabular-nums; }
+.conv-working .codicon { flex:none; }
+/* A slow breath, not a spin: opacity carries it and the scale is small enough
+   that the 14px mark never jitters against the label beside it. */
+.conv-working-mark { display:inline-flex; flex:none; align-items:center;
+  justify-content:center; width:14px; height:14px;
+  animation:conv-spark-pulse 1.6s steps(10) infinite; animation-play-state:var(--ambient-play-state); }
+@keyframes conv-spark-pulse {
+  0%, 100% { opacity:0.45; transform:scale(0.86); }
+  50%      { opacity:1;    transform:scale(1); }
+}
+/* theme.css's global guard only zeroes the DURATION, which would strand the
+   mark on the 0% frame — dimmed and shrunk, reading as disabled. Reduced
+   motion gets the resting state at full presence instead. */
+@media (prefers-reduced-motion: reduce) {
+  .conv-working-mark { animation:none; opacity:1; transform:none; }
+}
+.conv-working-stop { margin-left:auto; color:inherit; }
+.sub-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(128px, 1fr));
+  gap:8px; margin:0 0 12px; }
+.sub-tile { box-sizing:border-box; aspect-ratio:1; display:flex; flex-direction:column;
+  align-items:stretch; gap:6px; min-width:0; min-height:0; padding:10px;
+  color:inherit; text-align:left; font:inherit; background:var(--surface);
+  border:var(--border-w) solid var(--border); border-radius:var(--radius-container);
+  cursor:pointer; }
+.sub-tile:hover:not(:disabled) { background:var(--row-hover); }
+.sub-tile:disabled { cursor:default; }
+.sub-tile.is-selected { border-color:var(--accent); background:var(--row-selected); }
+.sub-tile-top { display:flex; align-items:center; gap:6px; min-width:0; }
+.sub-tile-type { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  color:var(--fg-strong); font-weight:var(--wght-strong); font-size:var(--text-ui); }
+.sub-tile-desc { flex:1 1 auto; min-height:0; overflow:hidden; color:var(--fg-muted);
+  font-size:var(--text-ui); line-height:var(--lh-ui); display:-webkit-box; -webkit-line-clamp:4;
+  -webkit-box-orient:vertical; }
+.sub-tile-state { display:inline-flex; align-items:center; gap:4px; margin-top:auto;
+  font-size:var(--text-meta); color:var(--fg-muted); }
+.sub-tile-state.is-run { color:var(--status-working); }
+.sub-tile-state.is-fail { color:var(--danger-fg); }
+.conv-subrun { flex:none; display:flex; align-items:center; gap:6px;
+  width:min(calc(100% - 2 * var(--conv-gutter)), var(--conv-measure)); box-sizing:border-box;
+  margin:0 auto; padding:0 2px 6px; overflow-x:auto; }
+.sub-mini { box-sizing:border-box; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:2px; flex:none;
+  width:36px; height:36px; padding:3px; color:var(--fg-muted);
+  background:var(--surface); border:var(--border-w) solid var(--border);
+  border-radius:var(--radius-control); cursor:pointer; }
+.sub-mini:hover:not(:disabled) { background:var(--row-hover); color:var(--fg); }
+.sub-mini.is-selected { border-color:var(--accent); background:var(--row-selected); }
+.sub-mini-type { max-width:100%; overflow:hidden; text-overflow:ellipsis;
+  white-space:nowrap; font-size:var(--text-meta); line-height:var(--lh-tight); }
+.conv-dirty { display:block; flex:none; width:min(calc(100% - 2 * var(--conv-gutter)), var(--conv-measure));
+  box-sizing:border-box; margin:0 auto; padding:0 2px 6px; color:var(--fg-dim);
+  background:transparent; border:0; font:inherit; font-size:var(--text-ui); text-align:left;
+  font-variant-numeric:tabular-nums; }
+/* bottom:12px, inside .conv-scroll — 12px above the bottom edge of the
+   TRANSCRIPT, not 108px above the bottom of the pane. The old offset had to
+   clear the composer, the status sink and the caller's slot by arithmetic, and
+   it cleared them only at the heights they happened to have. */
+.conv-jump-latest { position:absolute; z-index:4; right:20px; bottom:12px;
+  display:flex; align-items:center; gap:5px; max-width:calc(100% - 40px);
+  min-height:28px; padding:0 10px 0 8px; color:var(--fg-strong);
+  background:var(--surface-raised);
+  border:var(--border-w) solid var(--border-strong); border-radius:var(--radius-pill);
+  box-shadow:var(--overlay-shadow); font:inherit; font-size:var(--text-ui);
+  font-variant-numeric:tabular-nums; cursor:pointer; }
+.conv-jump-latest:hover { background:var(--row-hover); }
+/* Never wraps. A second line on a floating capsule covers the transcript it is
+   there to sit beside; the narrow pane drops the word and keeps the number. */
+.conv-jump-full, .conv-jump-short { min-width:0; overflow:hidden;
+  text-overflow:ellipsis; white-space:nowrap; }
+.conv-jump-short { display:none; }
+/* The same amber sentence the approval card says, said where the card cannot be
+   seen: the reader scrolled away, the request is off screen below them, and the
+   agent is blocked until they answer it. */
+.conv-jump-latest.is-waiting { color:var(--status-waiting); border-color:currentColor; }
+.conv-turn-clock { display:flex; justify-content:flex-end;
+  width:min(calc(100% - 2 * var(--conv-gutter)), var(--conv-measure)); box-sizing:border-box;
+  margin:-2px auto 10px; padding:0 2px; color:var(--fg-dim); font-size:var(--text-meta);
+  font-variant-numeric:tabular-nums; }
+
+/* A caller-owned durable queue stays bounded so it can never evict the transcript
+   or composer from a short tile. The error precedes the rows and remains the first
+   thing exposed when a capped queue refuses a draft. */
+.conv-status-sink { flex:none; display:flex; flex-direction:column; gap:0;
+  width:min(calc(100% - 2 * var(--conv-gutter)), var(--conv-measure));
+  box-sizing:border-box; margin:0 auto 4px; min-width:0; }
+.conv-status-sink .conv-subrun,
+.conv-status-sink .conv-working { width:100%; margin:0; padding:6px 2px 4px; }
+.conv-status-sink .conv-queue-slot { padding:0; }
+.conv-status-sink .steering-queue { border:0; background:transparent; border-radius:0; }
+.conv-queue-slot { flex:none; box-sizing:border-box; max-height:min(34vh, 300px);
+  min-width:0; padding:8px 10px 0; overflow-y:auto; }
+.conv-queue-error { display:flex; align-items:flex-start; gap:6px; margin:0 0 6px;
+  color:var(--danger-fg); font-size:var(--text-meta); line-height:var(--lh-ui); overflow-wrap:break-word; }
+
+/* ---- composer: textarea and controls inside ONE box ---------------------- */
+.conv-strip { flex:none; padding:0; background:transparent; border:0; }
+/* Deliberately NOT overflow:hidden. The model/effort pickers are anchored
+   INSIDE this box and open upward, so a clip here cuts the top off the menu —
+   measured, a 6-row effort list lost 81px, and "default", "low"
+   and "medium" were painted outside the clip rect and hit-tested to the
+   transcript behind. The clip was also buying nothing: both children
+   (.conv-ta, .conv-controls) are transparent, so this element's own background
+   and border already draw the rounded box. */
+/* NO DRAWN BORDER. A 1px --border-strong rectangle around a surface this wide
+   read as a selection box permanently lassoing the prompt — the heaviest line
+   on the screen sitting under every message. The surface still separates
+   itself from the pane (--material-surface over --editor-bg) and --composer-lift
+   raises it, so the prompt reads as a raised sheet rather than a boxed field. */
+.conv-composer { box-sizing:border-box; width:min(calc(100% - 2 * var(--conv-gutter)), var(--conv-measure));
+  position:relative; margin:4px auto 12px; overflow:visible; background:var(--material-surface);
+  border:0; box-shadow:var(--composer-lift);
+  border-radius:var(--radius-composer); }
+/* Typing does not repaint the compound surface; the caret is the focus cue. */
+.conv-context-row { display:flex; align-items:center; min-width:0; padding:6px 8px 0; }
+.conv-ta { display:block; box-sizing:border-box; width:100%; min-height:32px;
+  resize:none; padding:7px 12px 2px; font:inherit; font-size:var(--text-prose); line-height:var(--lh-ui);
+  color:var(--fg);
+  background:transparent; border:0; outline:none; }
+.conv-ta::placeholder { color:var(--input-placeholder); }
+.conv-lock-reason { display:flex; align-items:center; gap:6px; padding:6px 10px 0;
+  color:var(--fg-muted); font-size:var(--text-meta); line-height:var(--lh-ui); }
+.conv-command-error { display:flex; align-items:flex-start; gap:6px; padding:7px 10px 0;
+  color:var(--danger-fg); font-size:var(--text-meta); line-height:var(--lh-ui); }
+.conv-controls { display:flex; align-items:center; gap:3px; min-height:32px;
+  padding:2px 7px 6px; }
+.conv-pills { display:flex; align-items:center; gap:4px; min-width:0; flex-wrap:wrap; }
+/* CLI chrome reveals these as a middle-dot between model / access / effort. */
+.conv-pill-sep { display:none; }
+.conv-config-select { min-width:0; max-width:220px; }
+.conv-config-select .app-select-trigger { height:24px; min-width:0; max-width:220px;
+  padding:0 5px; background:transparent; border:0; }
+.conv-config-select .app-select-value { max-width:170px; }
+.conv-model-select .app-select-leading { flex:none; }
+.conv-session-tokens { display:inline; padding:0; border:0; background:transparent;
+  font:inherit; color:var(--mode-accept); font-variant-numeric:tabular-nums; cursor:pointer; }
+.conv-session-tokens.is-high { color:var(--status-failed); }
+/* Compaction is something the engine is doing, not something it wants from the
+   user, so the counter drops to the quiet tier instead of taking the amber. */
+.conv-session-tokens.is-compacting { color:var(--fg-dim); }
+.conv-actions { display:flex; align-items:center; gap:4px; margin-left:auto; }
+.conv-iconbtn { display:inline-flex; align-items:center; justify-content:center;
+  width:24px; height:24px; padding:0; font:inherit;
+  color:var(--fg-muted); background:transparent; border:0;
+  border-radius:var(--radius-control); cursor:pointer; }
+.conv-iconbtn:hover:not(:disabled):not([aria-disabled="true"]) {
+  background:var(--row-hover); color:var(--fg);
+}
+.conv-iconbtn:disabled, .conv-iconbtn[aria-disabled="true"] { color:var(--fg-faint); cursor:default; }
+/* --fg-muted, the quiet-control tier its neighbours on this row take: a dial
+   the reader can still act on does not sit a tier below the buttons beside it. */
+.conv-detail { color:var(--fg-muted); }
+/* THE ACCENT, not the selection blue. theme.css states the split: warm bronze
+   is the primary-action colour and the electric blue carries selection and
+   focus. Send used to be the blue while the queue's own Save — rendered one
+   step away inside this same composer stack — was the bronze, so two primary
+   actions on one surface wore two identities. Hover steps the fill rather than
+   fading the whole control, which faded the glyph with it. */
+.conv-send { color:var(--accent-fg); background:var(--accent); border-radius:50%; }
+.conv-send:hover:not(:disabled) {
+  color:var(--accent-fg); background:var(--accent-hover);
+}
+/* The filled variant of the disabled rule above: dropping the glyph to
+   --fg-faint alone would leave a full-strength accent disc that still reads as
+   pressable. Same pair .composer-submit:disabled and theme.css's .btn:disabled
+   take. */
+.conv-send:disabled { background:var(--surface-raised); }
+.conv-send-queue { width:auto; gap:4px; padding:0 8px; border-radius:var(--radius-pill);
+  font-size:var(--text-meta); white-space:nowrap; }
+/* Secondary to the send control it stands beside: same pill, no fill — and the
+   same token. Both carried a literal 12px once, kept square in CLI chrome by a
+   by-name escape list in theme.css; the token squares them there without one. */
+.conv-steer { width:auto; gap:4px; padding:0 8px; border-radius:var(--radius-pill);
+  font-size:var(--text-meta); white-space:nowrap; }
+/* The command launcher's glyph is a typed character, not a codicon, so it needs
+   the mono face and a weight of its own. A class rather than an inline style:
+   this file already has a rule for every other thing on that row. */
+.conv-slash-glyph { font-family:var(--font-mono); font-size:var(--text-prose);
+  font-weight:var(--wght-strong); }
+
+/* The one surviving member of the hand-rolled model/effort picker this pane
+   used to draw: its pill, popover and option rules went with the markup when
+   AppSelect and EffortBar took the job over. */
+.conv-pill-err { min-width:0; overflow:hidden; text-overflow:ellipsis;
+  white-space:nowrap; font-size:var(--text-meta); color:var(--danger-fg); }
+
+@keyframes conv-blink { 50% { opacity:0 } }
+
+/* One centered measure for prose, tools, and the composer. A wider pane
+   keeps equal gutters instead of stretching the line or hanging tool rows
+   into the margin — the same column Claude Code uses. */
+.conv { container-type:inline-size; }
+@container (max-width: 420px) {
+  /* Keep attach/command/detail and Send on the first line. Session controls
+     move together beneath them instead of squeezing the textarea or pushing
+     Send onto a third row. Every setting remains visible and keyboardable. */
+  .conv-controls { flex-wrap:wrap; }
+  .conv-actions { order:1; }
+  .conv-pills { order:2; flex:1 1 100%; width:100%; }
+  .conv-model-select { flex:1 1 140px; }
+  .conv-config-select, .conv-config-select .app-select-trigger { max-width:100%; }
+  /* "3 new" becomes "3" and "Approval waiting" becomes "Approval", beside a
+     chevron that already says which way the jump goes. */
+  .conv-jump-full { display:none; }
+  .conv-jump-short { display:block; }
+}
+
+/* ==========================================================================
+   THREADS: STREAMED WORDS SETTLE IN (owner, 2026-10-07). Everything in this
+   block is scoped to a Threads pane (.conv.is-thread-layout); no other pane
+   changes. The words each paced paint adds fade up from a slight blur
+   instead of popping on — markdown.tsx's SETTLING IN decides which: prose
+   only, never code, only while the reveal paces, and each span once. The
+   streaming caret is a thin bar right after the last painted word (markdown.tsx,
+   THE THREADS CARET; under the block after code or a table), in the theme's
+   accent (the Threads look, owner, 2026-10-23: the project's hue no longer
+   tints it). The span holds a word joiner and blinks; its ::after is the bar.
+   It keeps its class, so theme.css's reduced-motion guard still holds it at
+   full opacity; the fade is switched off outright there.
+   ========================================================================== */
+.conv.is-thread-layout .conv-md-fresh { animation:conv-settle-in 240ms ease-out; }
+@keyframes conv-settle-in { from { opacity:0; filter:blur(3px); } }
+.conv.is-thread-layout .conv-caret { animation:conv-blink 1s steps(1) infinite; }
+.conv.is-thread-layout .conv-caret { animation-play-state:var(--ambient-play-state); }
+.conv.is-thread-layout .conv-caret::after { content:""; display:inline-block; width:2px;
+  height:1.15em; margin-left:1px; vertical-align:text-bottom;
+  background:var(--accent); border-radius:var(--radius-pill); }
+@media (prefers-reduced-motion: reduce) {
+  .conv.is-thread-layout .conv-md-fresh { animation:none; }
+}

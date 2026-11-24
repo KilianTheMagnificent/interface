@@ -1,0 +1,202 @@
+{
+  "sessions": [
+    {
+      "engine": "claude",
+      "sessionId": "kite",
+      "title": "kite",
+      "cwd": "/Users/me/Kite App/web",
+      "status": "idle",
+      "cloud": false,
+      "lastActivity": "2026-09-26T20:00:00Z",
+      "firstSeen": "2026-09-26T19:00:00Z",
+      "archived": false,
+      "projectRoot": "/Users/me/Kite App"
+    },
+    {
+      "engine": "codex",
+      "sessionId": "loose",
+      "title": "loose",
+      "cwd": "/Users/me/Desktop/Projects",
+      "status": "idle",
+      "cloud": false,
+      "lastActivity": "2026-09-26T20:00:00Z",
+      "firstSeen": "2026-09-26T19:00:00Z",
+      "archived": false
+    },
+    {
+      "engine": "claude",
+      "sessionId": "rust",
+      "title": "rust",
+      "cwd": "/Users/me/Developer/Interface-Rust",
+      "status": "idle",
+      "cloud": false,
+      "lastActivity": "2026-09-26T20:00:00Z",
+      "firstSeen": "2026-09-26T19:00:00Z",
+      "archived": false,
+      "projectRoot": "/Users/me/Developer/Interface-Rust/"
+    },
+    {
+      "engine": "claude",
+      "sessionId": "vendored",
+      "title": "vendored",
+      "cwd": "/Users/me/Developer/Interface-Rust/vendor/lib",
+      "status": "idle",
+      "cloud": false,
+      "lastActivity": "2026-09-26T20:00:00Z",
+      "firstSeen": "2026-09-26T19:00:00Z",
+      "archived": false,
+      "projectRoot": "/Users/me/Developer/Interface-Rust/vendor/lib"
+    },
+    {
+      "engine": "claude",
+      "sessionId": "web",
+      "title": "web",
+      "cwd": "/Users/me/web",
+      "status": "idle",
+      "cloud": false,
+      "lastActivity": "2026-09-26T20:00:00Z",
+      "firstSeen": "2026-09-26T19:00:00Z",
+      "archived": false,
+      "projectRoot": "/Users/me/web"
+    }
+  ],
+  "terminals": [
+    {
+      "id": "00000000-0000-4000-8000-000000000001",
+      "generation": 1,
+      "title": "Chat in a repository subfolder",
+      "root": "/Users/me/Kite App/web",
+      "cwd": "/Users/me/Kite App/web",
+      "sessionKey": "claude#kite",
+      "launch": {
+        "version": 1,
+        "profileId": "claude"
+      },
+      "state": "running",
+      "size": {
+        "columns": 80,
+        "rows": 24
+      },
+      "createdAt": "2026-09-26T19:00:00Z",
+      "updatedAt": "2026-09-26T20:00:00Z"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000002",
+      "generation": 1,
+      "title": "Chat outside any repository",
+      "root": "/Users/me/Desktop/Projects",
+      "cwd": "/Users/me/Desktop/Projects",
+      "sessionKey": "codex#loose",
+      "launch": {
+        "version": 1,
+        "profileId": "codex"
+      },
+      "state": "running",
+      "size": {
+        "columns": 80,
+        "rows": 24
+      },
+      "createdAt": "2026-09-26T19:00:00Z",
+      "updatedAt": "2026-09-26T20:00:00Z"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000003",
+      "generation": 1,
+      "title": "Shell inside a known project",
+      "root": "/Users/me/Kite App/docs",
+      "cwd": "/Users/me/Kite App/docs",
+      "state": "running",
+      "size": {
+        "columns": 80,
+        "rows": 24
+      },
+      "createdAt": "2026-09-26T19:00:00Z",
+      "updatedAt": "2026-09-26T20:00:00Z"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000004",
+      "generation": 1,
+      "title": "Shell in a folder no chat claims",
+      "root": "/Users/me/Desktop/Projects/Journal App",
+      "cwd": "/Users/me/Desktop/Projects/Journal App",
+      "state": "running",
+      "size": {
+        "columns": 80,
+        "rows": 24
+      },
+      "createdAt": "2026-09-26T19:00:00Z",
+      "updatedAt": "2026-09-26T20:00:00Z"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000005",
+      "generation": 1,
+      "title": "Chat whose session left the registry",
+      "root": "/Users/me/Developer/Interface-Rust/",
+      "cwd": "/Users/me/Developer/Interface-Rust/",
+      "sessionKey": "claude#forgotten",
+      "launch": {
+        "version": 1,
+        "profileId": "claude"
+      },
+      "state": "running",
+      "size": {
+        "columns": 80,
+        "rows": 24
+      },
+      "createdAt": "2026-09-26T19:00:00Z",
+      "updatedAt": "2026-09-26T20:00:00Z"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000006",
+      "generation": 1,
+      "title": "Pane with a poisoned root",
+      "root": "/",
+      "cwd": "/Users/me/Desktop/Projects/Harbor App",
+      "state": "running",
+      "size": {
+        "columns": 80,
+        "rows": 24
+      },
+      "createdAt": "2026-09-26T19:00:00Z",
+      "updatedAt": "2026-09-26T20:00:00Z"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000007",
+      "generation": 1,
+      "title": "Shell in a nested project",
+      "root": "/Users/me/Developer/Interface-Rust/vendor/lib/src",
+      "cwd": "/Users/me/Developer/Interface-Rust/vendor/lib/src",
+      "state": "running",
+      "size": {
+        "columns": 80,
+        "rows": 24
+      },
+      "createdAt": "2026-09-26T19:00:00Z",
+      "updatedAt": "2026-09-26T20:00:00Z"
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000008",
+      "generation": 1,
+      "title": "Shell beside a shorter project name",
+      "root": "/Users/me/website",
+      "cwd": "/Users/me/website",
+      "state": "running",
+      "size": {
+        "columns": 80,
+        "rows": 24
+      },
+      "createdAt": "2026-09-26T19:00:00Z",
+      "updatedAt": "2026-09-26T20:00:00Z"
+    }
+  ],
+  "expected": {
+    "00000000-0000-4000-8000-000000000001": "/Users/me/Kite App",
+    "00000000-0000-4000-8000-000000000002": null,
+    "00000000-0000-4000-8000-000000000003": "/Users/me/Kite App",
+    "00000000-0000-4000-8000-000000000004": "/Users/me/Desktop/Projects/Journal App",
+    "00000000-0000-4000-8000-000000000005": "/Users/me/Developer/Interface-Rust",
+    "00000000-0000-4000-8000-000000000006": "/Users/me/Desktop/Projects/Harbor App",
+    "00000000-0000-4000-8000-000000000007": "/Users/me/Developer/Interface-Rust/vendor/lib",
+    "00000000-0000-4000-8000-000000000008": "/Users/me/website"
+  }
+}

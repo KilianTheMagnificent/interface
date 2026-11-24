@@ -1,0 +1,41 @@
+{
+  "withMode": {
+    "engine": "claude",
+    "sessionId": "helper",
+    "title": "write h.txt helper",
+    "cwd": "/tmp/project",
+    "status": "idle",
+    "cloud": false,
+    "model": "claude-opus",
+    "lastActivity": "2026-11-15T22:00:00.000Z",
+    "firstSeen": "2026-11-15T21:59:00.000Z",
+    "archived": false,
+    "kind": "code",
+    "permissionMode": "acceptEdits"
+  },
+  "withDefault": {
+    "engine": "claude",
+    "sessionId": "manual",
+    "title": "a Manual thread",
+    "cwd": "/tmp/project",
+    "status": "idle",
+    "cloud": false,
+    "model": "claude-opus",
+    "lastActivity": "2026-11-15T22:00:00.000Z",
+    "firstSeen": "2026-11-15T21:59:00.000Z",
+    "archived": false,
+    "permissionMode": "default"
+  },
+  "withoutMode": {
+    "engine": "claude",
+    "sessionId": "older",
+    "title": "a session the host said nothing about",
+    "cwd": "/tmp/project",
+    "status": "idle",
+    "cloud": false,
+    "model": "claude-opus",
+    "lastActivity": "2026-11-15T22:00:00.000Z",
+    "firstSeen": "2026-11-15T21:59:00.000Z",
+    "archived": false
+  }
+}

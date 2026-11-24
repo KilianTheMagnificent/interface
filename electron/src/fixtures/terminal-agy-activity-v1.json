@@ -1,0 +1,207 @@
+[
+  {
+    "name": "AGY 1.4.5 live no-tools response with Interface-equivalent capture hooks, 2026-10-22",
+    "profile": "gemini",
+    "steps": [
+      {
+        "output": "\u001b]7501;state=blocked:kind=auth:app=antigravity:msg=U2lnbiBpbiByZXF1aXJlZA==\u0007",
+        "activity": "waiting",
+        "completed": 0
+      },
+      {
+        "output": "\u001b]7501;state=idle:app=antigravity\u0007",
+        "activity": "idle",
+        "completed": 0
+      },
+      {
+        "output": "\u001b]7501;state=working:app=antigravity\u0007",
+        "activity": "working",
+        "completed": 0
+      },
+      {
+        "output": "\u001b]2;interface-terminal-activity:v1:working\u0007",
+        "activity": "working",
+        "completed": 0
+      },
+      {
+        "output": "\u001b]2;interface-terminal-activity:v1:working\u0007",
+        "activity": "working",
+        "completed": 0
+      },
+      {
+        "output": "\u001b]2;interface-terminal-activity:v1:idle\u0007",
+        "activity": "working",
+        "completed": 0
+      },
+      {
+        "output": "\u001b]7501;state=done:app=antigravity:msg=b3JhbmdlIG9yYW5nZSBvcmFuZ2Ugb3JhbmdlIG9yYW5nZSBvcmFuZ2Ugb3JhbmdlIG9yYW5nZSBvcmFuZ2Ugb3JhbmdlIG9yYW5nZSBvcmFuZ2Ugb3JhbmdlIG9yYW5nZSBvcmFuZ2Ugb3JhbmdlIG9yYW5nZSBvcmFuZ2Ugb3JhbmdlIG9yYW5nZSBvcmFuZ2Ugb3JhbmdlIG9yYW5nZSBvcmFuZ2Ugb3JhbmdlIG9yYW5nZSBvcmFuZ2Ugb3JhbmdlIG9yYeKApg==\u0007",
+        "activity": "idle",
+        "completed": 1
+      }
+    ]
+  },
+  {
+    "name": "native completion and permission waits override captured hooks",
+    "profile": "gemini",
+    "steps": [
+      {
+        "output": "\u001b]2;interface-terminal-activity:v1:working\u0007",
+        "activity": "working",
+        "completed": 0
+      },
+      {
+        "output": "\u001b]7501;state=working:app=antigravity\u0007",
+        "activity": "working",
+        "completed": 0
+      },
+      {
+        "output": "\u001b]7501;state=blocked:app=antigravity\u0007",
+        "activity": "waiting",
+        "completed": 0
+      },
+      {
+        "output": "\u001b]2;interface-terminal-activity:v1:working\u0007",
+        "activity": "waiting",
+        "completed": 0
+      },
+      {
+        "output": "\u001b]7501;state=working:app=antigravity\u0007",
+        "activity": "working",
+        "completed": 0
+      },
+      {
+        "output": "\u001b]2;interface-terminal-activity:v1:idle\u0007",
+        "activity": "working",
+        "completed": 0
+      },
+      {
+        "output": "\u001b]7501;state=done:app=antigravity\u0007",
+        "activity": "idle",
+        "completed": 1
+      },
+      {
+        "output": "\u001b]2;interface-terminal-activity:v1:working\u0007",
+        "activity": "idle",
+        "completed": 1
+      },
+      {
+        "output": "\u001b]7501;state=idle:app=antigravity\u0007",
+        "activity": "idle",
+        "completed": 1
+      },
+      {
+        "output": "\u001b]7501;state=done:app=antigravity\u0007",
+        "activity": "idle",
+        "completed": 1
+      },
+      {
+        "output": "\u0007",
+        "activity": "idle",
+        "completed": 1
+      },
+      {
+        "output": "\u001b]7501;state=working:app=antigravity\u0007",
+        "activity": "working",
+        "completed": 1
+      },
+      {
+        "output": "\u001b]7501;state=error:app=antigravity\u0007",
+        "activity": "idle",
+        "completed": 1
+      },
+      {
+        "output": "\u001b]2;interface-terminal-activity:v1:working\u0007",
+        "activity": "idle",
+        "completed": 1
+      },
+      {
+        "output": "\u001b]7501;state=working:app=antigravity\u0007",
+        "activity": "working",
+        "completed": 1
+      },
+      {
+        "output": "\u001b]7501;state=done:app=antigravity\u0007",
+        "activity": "idle",
+        "completed": 2
+      }
+    ]
+  },
+  {
+    "name": "native startup idle is not completion or overwritten by session-start hooks",
+    "profile": "gemini",
+    "steps": [
+      {
+        "output": "\u001b]7501;state=idle:app=antigravity\u0007",
+        "activity": "idle",
+        "completed": 0
+      },
+      {
+        "output": "\u001b]2;interface-terminal-activity:v1:working\u0007",
+        "activity": "idle",
+        "completed": 0
+      },
+      {
+        "output": "\u001b]7501;state=blocked:app=antigravity\u0007",
+        "activity": "waiting",
+        "completed": 0
+      },
+      {
+        "output": "\u001b]2;interface-terminal-activity:v1:idle\u0007",
+        "activity": "waiting",
+        "completed": 0
+      },
+      {
+        "output": "\u001b]7501;state=clear:app=antigravity\u0007",
+        "activity": "idle",
+        "completed": 0
+      }
+    ]
+  },
+  {
+    "name": "an unsupported status does not displace hook activity",
+    "profile": "gemini",
+    "steps": [
+      {
+        "output": "\u001b]2;interface-terminal-activity:v1:working\u0007",
+        "activity": "working",
+        "completed": 0
+      },
+      {
+        "output": "\u001b]7501;state=future:app=antigravity\u0007",
+        "activity": "working",
+        "completed": 0
+      },
+      {
+        "output": "\u001b]2;interface-terminal-activity:v1:idle\u0007",
+        "activity": "idle",
+        "completed": 0
+      }
+    ]
+  },
+  {
+    "name": "other providers keep their authoritative hook stream",
+    "profile": "muse",
+    "steps": [
+      {
+        "output": "\u001b]2;interface-terminal-activity:v1:working\u0007",
+        "activity": "working",
+        "completed": 0
+      },
+      {
+        "output": "\u001b]7501;state=done:app=antigravity\u0007",
+        "activity": "working",
+        "completed": 0
+      },
+      {
+        "output": "\u001b]7501;state=blocked:app=antigravity\u0007",
+        "activity": "working",
+        "completed": 0
+      },
+      {
+        "output": "\u001b]2;interface-terminal-activity:v1:idle\u0007",
+        "activity": "idle",
+        "completed": 0
+      }
+    ]
+  }
+]

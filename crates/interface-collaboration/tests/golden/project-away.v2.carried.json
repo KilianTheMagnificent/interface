@@ -1,0 +1,51 @@
+{
+  "version": 2,
+  "revision": 2,
+  "defaults": {
+    "objective": "Improve this project. Follow its instructions and existing to-do list; choose useful, evidence-backed work, implement it, run the relevant checks, and stop when no justified work remains.",
+    "provider": "codex",
+    "model": null,
+    "durationSeconds": 3600,
+    "maxIterations": 12
+  },
+  "presets": [
+    {
+      "cwd": "/project",
+      "options": {
+        "objective": "Improve this project. Follow its instructions and existing to-do list; choose useful, evidence-backed work, implement it, run the relevant checks, and stop when no justified work remains.",
+        "provider": "codex",
+        "model": null,
+        "durationSeconds": 3600,
+        "maxIterations": 12
+      }
+    }
+  ],
+  "runs": [
+    {
+      "id": "interrupted",
+      "cwd": "/project",
+      "options": {
+        "objective": "Improve this project. Follow its instructions and existing to-do list; choose useful, evidence-backed work, implement it, run the relevant checks, and stop when no justified work remains.",
+        "provider": "codex",
+        "model": null,
+        "durationSeconds": 3600,
+        "maxIterations": 12
+      },
+      "startedAtMs": 1,
+      "deadlineAtMs": 3600001,
+      "state": "unknown",
+      "detail": "Interface stopped during this loop. Inspect the project and retained sessions; no work was replayed.",
+      "turns": [
+        {
+          "iteration": 1,
+          "role": "work",
+          "sessionKey": "codex:exact",
+          "state": "unknown",
+          "report": "partial \"report\""
+        }
+      ]
+    }
+  ],
+  "storageUncertain": false,
+  "cancelledStarts": []
+}

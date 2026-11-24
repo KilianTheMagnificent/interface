@@ -1,0 +1,52 @@
+{
+  "themeIds": {
+    "accepted": [
+      "system",
+      "light",
+      "dark",
+      "anthropic-dark",
+      "grok-build",
+      "custom:Moss",
+      "custom:Paper Lantern",
+      "custom:café 2",
+      "custom:solarized-ish_v3.1",
+      "custom:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    ],
+    "rejected": [
+      "",
+      "auto",
+      "custom:",
+      "custom:.hidden",
+      "custom: padded",
+      "custom:padded ",
+      "custom:a/b",
+      "custom:a\\b",
+      "custom:a:b",
+      "custom:tab\there",
+      "custom:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "Custom:Moss",
+      null,
+      1,
+      {}
+    ]
+  },
+  "systemThemes": {
+    "accepted": [
+      { "version": 1, "light": "light", "dark": "dark" },
+      { "version": 1, "light": "custom:Paper Lantern", "dark": "custom:Moss" },
+      { "version": 1, "light": "solarized-light", "dark": "custom:Moss" }
+    ],
+    "rejected": [
+      {},
+      null,
+      [],
+      "dark",
+      { "version": 2, "light": "light", "dark": "dark" },
+      { "version": 1, "light": "system", "dark": "dark" },
+      { "version": 1, "light": "light", "dark": "system" },
+      { "version": 1, "light": "light" },
+      { "version": 1, "light": "light", "dark": "custom:" },
+      { "version": 1, "light": "light", "dark": "dark", "extra": 1 }
+    ]
+  }
+}

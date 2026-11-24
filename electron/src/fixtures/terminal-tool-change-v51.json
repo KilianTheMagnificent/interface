@@ -1,0 +1,55 @@
+{
+  "protocolVersion": 51,
+  "profiles": [
+    {
+      "id": "claude",
+      "engine": "claude",
+      "label": "Claude Code",
+      "available": true,
+      "version": "2.1.301 (Claude Code)",
+      "changedSinceLastCheck": {
+        "version": 1,
+        "from": "2.1.300",
+        "to": "2.1.301",
+        "checkedAt": "2026-10-15T14:00:00.000Z",
+        "findings": []
+      }
+    },
+    {
+      "id": "codex",
+      "engine": "codex",
+      "label": "Codex",
+      "available": true,
+      "version": "codex-cli 0.163.0",
+      "changedSinceLastCheck": {
+        "version": 1,
+        "from": "0.162.1",
+        "to": "0.163.0",
+        "checkedAt": "2026-10-15T14:00:00.000Z",
+        "findings": [
+          "`codex exec --help` no longer lists --ephemeral.",
+          "Codex's app-server schema no longer declares turn/steer."
+        ]
+      }
+    },
+    {
+      "id": "grok",
+      "engine": "grok",
+      "label": "Grok",
+      "available": true,
+      "version": "grok 1.0.31 (04b7ffed98c6) [stable]",
+      "changedSinceLastCheck": {
+        "version": 1,
+        "to": "1.0.31",
+        "checkedAt": "2026-10-15T14:00:00.000Z",
+        "findings": ["`grok --no-leader` is no longer accepted: error: unexpected argument '--no-leader' found."]
+      }
+    },
+    {
+      "id": "omp",
+      "label": "OMP",
+      "available": true,
+      "version": "omp/18.1.16"
+    }
+  ]
+}

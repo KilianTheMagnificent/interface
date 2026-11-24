@@ -1,0 +1,24 @@
+/* Ocean Dark: T3 Code's Ocean palette, dark side.
+
+   Ported from TN Code by docs/theme-examples/tn-code/port-themes.mjs; change
+   it there, not here. Copy it to ~/.config/interface/themes/ and pick it in
+   Settings › Appearance. The format is in docs/THEMES.md. */
+:root {
+  --theme-kind: dark;
+
+  /* Key colours: everything else is worked out from these. */
+  --theme-background: #17212b;
+  --theme-panel: #1e2d3b;
+  --theme-raised: #333b45;
+  --theme-text: #fffaff;
+  --theme-accent: #70b9ee;
+  --theme-selection: #70b9ee;
+  --theme-screen: #17212b;
+  --theme-screen-text: #fffaff;
+
+  /* Meaning colours, and the few tokens TN Code names outright. */
+  --theme-danger: #fb414a;
+  --theme-warning: #fe9a00;
+  --border: #405567;
+  --accent-fg: #241523;
+}

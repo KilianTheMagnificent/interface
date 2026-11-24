@@ -1,0 +1,46 @@
+{
+  "protocolVersion": 71,
+  "agentCommands": [
+    {
+      "kind": "work",
+      "agentId": "research",
+      "command": {
+        "action": "configure",
+        "expectedRevision": 4,
+        "spec": {
+          "expectedOutput": "A checked summary.",
+          "artifacts": [],
+          "inputs": [],
+          "budget": {
+            "wallSeconds": 1800,
+            "noProgressSeconds": 600,
+            "maxActions": 200,
+            "maxReportedTokens": null
+          },
+          "readOnly": false,
+          "allowOpaqueShellCommands": false,
+          "allowWebSearch": true
+        }
+      }
+    }
+  ],
+  "threadCommands": [
+    {
+      "kind": "setSettings",
+      "settings": {
+        "autoSettleDays": 3,
+        "settleOnMerge": true,
+        "generatedTitles": true,
+        "trackPullRequests": true,
+        "paneToolsWithoutAsking": true
+      }
+    }
+  ],
+  "threadSettings": {
+    "autoSettleDays": 3,
+    "settleOnMerge": true,
+    "generatedTitles": true,
+    "trackPullRequests": true,
+    "paneToolsWithoutAsking": true
+  }
+}

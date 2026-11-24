@@ -1,0 +1,100 @@
+{
+  "protocolVersion": 59,
+  "commands": [
+    {
+      "kind": "switchProvider",
+      "key": "claude#5b0c1d2e-3f40-4a51-8b62-c7d8e9f0a1b2",
+      "engine": "codex"
+    },
+    {
+      "kind": "switchProvider",
+      "key": "codex#019a1b2c-3d4e-7f50-8a61-b2c3d4e5f607",
+      "engine": "acp:grok",
+      "model": "grok-code-fast-1"
+    }
+  ],
+  "view": {
+    "version": 1,
+    "revision": 34,
+    "now": 1791298800000,
+    "settings": {
+      "autoSettleDays": 3,
+      "settleOnMerge": true,
+      "generatedTitles": false,
+      "trackPullRequests": true
+    },
+    "threads": [
+      {
+        "key": "codex#019a1b2c-3d4e-7f50-8a61-b2c3d4e5f607",
+        "section": "pinned",
+        "createdAt": 1791212400000,
+        "pinnedAt": 1791212500000,
+        "pinOrder": "V",
+        "woke": false,
+        "unread": false,
+        "lastVisitedAt": 1791298700000,
+        "lastRun": {
+          "startedAt": 1791298600000,
+          "endedAt": 1791298610000,
+          "outcome": "completed"
+        },
+        "autoSettle": true,
+        "workspace": {
+          "mode": "local",
+          "projectRoot": "/Users/fixture/Developer/Projects/atlas",
+          "branch": "main",
+          "owned": false
+        },
+        "titleSource": "user",
+        "turns": [
+          {
+            "ordinal": 0,
+            "sentAt": 1791298600000,
+            "promptDigest": "4c2b9d0e1f3a5b6c",
+            "hasStart": true,
+            "hasEnd": true,
+            "state": "done",
+            "endedAt": 1791298610000,
+            "filesChanged": 0,
+            "added": 0,
+            "removed": 0
+          }
+        ],
+        "chain": {
+          "segments": [
+            {
+              "key": "claude#5b0c1d2e-3f40-4a51-8b62-c7d8e9f0a1b2",
+              "engine": "claude",
+              "order": 0,
+              "firstAt": 1791212400000,
+              "lastAt": 1791298500000
+            },
+            {
+              "key": "codex#019a1b2c-3d4e-7f50-8a61-b2c3d4e5f607",
+              "engine": "codex",
+              "order": 1,
+              "firstAt": 1791298600000,
+              "lastAt": 1791298610000
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "response": {
+    "view": {
+      "version": 1,
+      "revision": 34,
+      "now": 1791298800000,
+      "settings": {
+        "autoSettleDays": 3,
+        "settleOnMerge": true,
+        "generatedTitles": false,
+        "trackPullRequests": true
+      },
+      "threads": []
+    },
+    "key": "codex#019a1b2c-3d4e-7f50-8a61-b2c3d4e5f607",
+    "handoff": "unknown"
+  }
+}

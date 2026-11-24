@@ -1,0 +1,443 @@
+/* THE THREADS LAYOUT (owner, 2026-10-06 redesign; restyled 2026-10-23 as the
+   Claude app's Code mode; restyled 2026-11-16 as TN Code, the owner's fork of
+   T3 Code with its Apple-style interface: "plain old rob the T3 Code GUI").
+   The measurements and the shapes below are adapted from that fork's sheets
+   (apps/web/src/fork/apple/styles, MIT, (c) 2026 T3 Tools Inc.; the notice is
+   in docs/THIRD_PARTY_NOTICES.md). The --tn-* tokens are in theme.css. A
+   pane in the Threads grid carries .is-thread-layout on its .conv root; every
+   rule here is scoped to it or to a class only that layout draws, so the Agent
+   surface and the phone are exactly what they were.
+
+   Selectors are two classes deep on purpose: that beats Conversation.css's
+   one-class rules, which this sheet follows in the cascade, and loses to the
+   CLI chrome's :root[data-chrome="cli"] rules, so the Bare-CLI look keeps its
+   own measure, corners and quoted prompts. The roomier rhythm between turns
+   is refined chrome's alone (`:where(:root:not([data-chrome="cli"]))`, which
+   adds no weight): a console keeps its own.
+
+   Every colour is the theme's own: labels are alphas of the strongest ink,
+   cards a soft fill with a hairline, your words on the selection colour laid
+   over the ground. Status colours never take a hue. */
+
+/* The reading lane: TN Code's wide chat width (72rem, the owner's setting
+   there), centred, with 48px each side once the pane is 640px wide (24
+   below). The composer reads the same measure and
+   gutter, so the prompt box and the answers above it share their edges.
+   --thread-waiting is the app's one amber, read once for the whole layout: the
+   pending approval card, the live turn's "Waiting for you", its waiting step
+   and the live capsule all say the same sentence, that the run waits on you. */
+.conv.is-thread-layout { --conv-measure:72rem; --conv-gutter:24px; --thread-waiting:var(--status-waiting); }
+/* The system face at macOS weights. Refined chrome only: a console keeps its
+   own face, as it keeps its own measure and corners. */
+:where(:root:not([data-chrome="cli"])) .conv.is-thread-layout { --font-ui:var(--tn-font);
+  --font-mono:var(--tn-font-mono); --wght-regular:400; --wght-medium:500; --wght-strong:600;
+  --wght-prose:400; font-family:var(--font-ui); }
+@container (min-width: 640px) {
+  :where(:root:not([data-chrome="cli"])) .conv.is-thread-layout > * { --conv-gutter:48px; }
+}
+:where(:root:not([data-chrome="cli"])) .conv.is-thread-layout .conv-list { padding-top:36px; padding-bottom:16px; }
+/* The transcript's region clips instead of overflowing. Screen-reader spans
+   (.conv-sr, absolutely placed) inside the scrolling list take this region as
+   their containing block, so their static places far down the list counted as
+   overflow of the tile body, which the browser then scrolled 300px during a
+   run and slid the whole pane, composer included, up its tile. Clip makes no
+   scroll container, so nothing can scroll it. */
+.conv.is-thread-layout > .conv-scroll { overflow:clip; }
+
+/* ---- the prompt ----------------------------------------------------------
+   Your words on the right in a bubble with a tail, with nothing inside it but
+   them: the change summary became the changes card, Undo and Fork the turn's
+   controls, and Edit from here the quiet line underneath. A new turn opens
+   32px under the last one; the first sits flush with the lane's top. */
+.is-thread-layout .conv-turn-user { max-width:min(80%, 560px); margin:10px 0 0 auto;
+  padding:7px 13px; color:var(--fg-strong); font-size:var(--text-label);
+  line-height:var(--lh-ui); background:var(--tn-bubble); border:0;
+  border-radius:calc(var(--radius-composer) + 4px); }
+:where(:root:not([data-chrome="cli"])) .is-thread-layout .conv-turn-user { position:relative;
+  isolation:isolate; margin-top:32px; margin-right:6px; overflow:visible; }
+/* The tail: one masked shape in the bubble's own colour, 6px past its edge. */
+:where(:root:not([data-chrome="cli"])) .is-thread-layout .conv-turn-user::before { content:"";
+  position:absolute; right:-6px; bottom:0; z-index:-1; width:24px; height:20px;
+  background:var(--tn-bubble); mask:var(--tn-tail) no-repeat 0 0 / 100% 100%; pointer-events:none; }
+/* The stamp centred over a prompt: the day in a word, then the time, as a
+   small mono label. It leads its prompt, so the turn's gap sits above it. */
+.thread-stamp { display:block; margin:32px 0 6px; font-family:var(--tn-font-mono);
+  font-size:var(--text-meta); font-weight:var(--wght-medium); letter-spacing:var(--track-caps);
+  text-align:center; text-transform:uppercase; color:var(--tn-label-3); }
+.thread-stamp > b { font-weight:var(--wght-strong); color:var(--tn-label-2); }
+:where(:root:not([data-chrome="cli"])) .is-thread-layout .thread-stamp + .conv-turn-user,
+:where(:root:not([data-chrome="cli"])) .is-thread-layout .thread-stamp + * .conv-turn-user { margin-top:0; }
+/* An earlier turn's controls keep their 40px band while hidden, so the prompt
+   after them counts the band in its 48px. */
+:where(:root:not([data-chrome="cli"])) .thread-answer:not(.is-latest):has(.thread-turn-foot:last-child)
+  + * .conv-turn-user { margin-top:8px; }
+.is-thread-layout .conv-turn-head { margin-bottom:0; }
+/* The reply opens 16px under the line beneath your words. */
+.thread-user { margin-bottom:16px; }
+/* Its line is always there and only shown on hover or focus, so revealing it
+   moves nothing. Focus reaches it by Tab as it reaches any button. */
+.thread-user-meta { display:flex; align-items:center; justify-content:flex-end; gap:2px;
+  min-height:24px; margin:4px 8px 0 0; font-size:var(--text-meta); color:var(--tn-label-3);
+  opacity:0; transition:opacity var(--motion-fast) ease-out; }
+.thread-user:hover .thread-user-meta,
+.thread-user:focus-within .thread-user-meta { opacity:1; }
+.thread-user-meta .thread-act { padding:0 6px; }
+.thread-user-meta .thread-copy { justify-content:center; min-width:24px; padding:0; }
+
+/* The quiet controls under a prompt and under an answer. --fg-dim is the text
+   tier; a disabled one says so in colour, never in opacity. */
+.thread-act { display:inline-flex; align-items:center; gap:5px; flex:none;
+  min-height:24px; padding:0 7px; font:inherit; font-size:var(--text-ui); color:var(--tn-label-2);
+  white-space:nowrap; background:transparent; border:0;
+  border-radius:calc(var(--radius-control) + 3px); cursor:pointer; }
+.thread-act:hover:not(:disabled) { color:var(--fg-strong); background:var(--tn-fill); }
+.thread-act:disabled { color:var(--fg-faint); cursor:default; }
+.thread-time { flex:none; padding:0 6px; font-variant-numeric:tabular-nums; white-space:nowrap; }
+
+/* ---- the answer ------------------------------------------------------------
+   Plain page text at 14px on a 1.55 leading; blocks 16px apart, paragraphs
+   12, list items 5. Inline code sits on a soft fill; a code block is a
+   12px group. A console keeps the transcript's own size. */
+.is-thread-layout .conv-text { margin-bottom:16px; }
+:where(:root:not([data-chrome="cli"])) .is-thread-layout .conv-text { font-size:var(--text-label);
+  line-height:var(--lh-prose); }
+:where(:root:not([data-chrome="cli"])) .is-thread-layout .conv-md-inline-code { border-radius:calc(var(--radius-control) + 1px);
+  background:var(--tn-fill); }
+:where(:root:not([data-chrome="cli"])) .is-thread-layout .conv-md-code { border-radius:calc(var(--radius-container) * 1.5); }
+.is-thread-layout .conv-md-p { margin-bottom:12px; }
+.is-thread-layout .conv-md-list li { margin:0; }
+.is-thread-layout .conv-md-list li + li { margin-top:5px; }
+
+/* ---- a finished turn's work line ------------------------------------------
+   One quiet line between the prompt and the answer: a chevron that turns the
+   way every fold in the transcript turns, "Worked for 41s", and a neutral
+   tally of what was done. The answer, or the opened work, follows 8px under. */
+.thread-fold { display:flex; align-items:center; gap:8px; width:fit-content; max-width:calc(100% + 8px);
+  box-sizing:border-box; margin:0 0 8px -8px; padding:4px 8px; font:inherit; font-size:var(--text-ui);
+  color:var(--tn-label-2); text-align:left; background:transparent; border:0;
+  border-radius:calc(var(--radius-container) + 1px); cursor:pointer; }
+.thread-fold:hover { color:var(--fg-strong); background:var(--tn-fill); }
+.thread-fold-chev { transform:rotate(-90deg); transition:transform var(--motion-fast) ease-out; }
+.thread-fold-chev.is-open { transform:none; }
+.thread-fold-lead { flex:none; white-space:nowrap; }
+/* Then one chip per kind of work, all alike: a count, never a colour. A narrow
+   pane clips the last chips; the line's name and the chips' title keep the
+   whole sentence. */
+.thread-fold-chips { display:flex; align-items:center; gap:4px; min-width:0; overflow:hidden; }
+.thread-work-chip { display:inline-flex; align-items:center; flex:none; box-sizing:border-box;
+  height:18px; padding:0 7px; color:var(--fg-dim); background:var(--tn-fill);
+  border-radius:var(--radius-pill);
+  font-size:var(--text-meta); line-height:1; white-space:nowrap; }
+
+/* ---- what a finished turn changed -----------------------------------------
+   A grouped list 20px under the answer, on a soft fill with a hairline ring:
+   the changes glyph, the count, the lines and their five squares, Review; the
+   files, a hairline between them, each led by its type's badge with its
+   directory dimmed; and on the latest card the ship row. */
+.thread-changes { margin:20px 0 0; overflow:hidden; background:var(--tn-group);
+  border:0; border-radius:calc(var(--radius-container) * 1.5); box-shadow:0 0 0 .5px var(--tn-separator); }
+.thread-changes-head { display:flex; flex-wrap:wrap; align-items:center; gap:8px; min-height:44px;
+  box-sizing:border-box; padding:6px 12px 6px 14px; font-size:var(--text-body); color:var(--tn-label-2); }
+.thread-changes-glyph { color:var(--fg-dim); }
+.thread-changes-count { flex:none; color:var(--fg-strong); font-weight:var(--wght-strong); white-space:nowrap; }
+.thread-stat { display:inline-flex; gap:4px; flex:none; font-size:var(--text-ui);
+  font-variant-numeric:tabular-nums; white-space:nowrap; }
+/* Review is quiet: a bordered button, never filled. */
+.thread-review { display:inline-flex; align-items:center; gap:4px; flex:none; margin-left:auto;
+  min-height:26px; padding:0 8px 0 10px; font:inherit; font-size:var(--text-ui); color:var(--fg);
+  background:var(--tn-fill); border:0;
+  border-radius:var(--radius-pill); cursor:pointer; }
+.thread-review:hover { color:var(--fg-strong); background:var(--tn-fill-strong); }
+.thread-changes .thread-review { height:26px; padding:0 12px; font-size:var(--text-ui);
+  font-weight:var(--wght-medium); }
+.thread-changes-files { display:flex; flex-direction:column; margin:0; padding:0;
+  list-style:none; }
+.thread-changes-file { display:flex; align-items:center; gap:10px; box-sizing:border-box; min-height:34px;
+  padding:4px 14px; font-size:var(--text-body); color:var(--tn-label-2);
+  box-shadow:inset 0 .5px 0 var(--tn-separator); }
+/* The badge reads as the Changes panel's does: the extension in lower case,
+   at the medium weight. */
+.thread-changes-file .file-badge { min-width:28px; height:18px; border-radius:calc(var(--radius-control) + 1px);
+  font-weight:var(--wght-medium); text-transform:lowercase; }
+.thread-file-path { flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis;
+  white-space:nowrap; }
+.thread-file-name { color:var(--fg); }
+.thread-changes-more { padding-left:52px; }
+/* Preview (review B5): a PDF, image or Markdown file opens beside the thread. */
+.thread-changes-file .thread-file-preview { min-height:24px; margin-right:-6px; }
+
+/* ---- the turn's controls, once -------------------------------------------
+   12px under the card (or the answer): Copy, Continue, Fork and Undo as quiet
+   28px icons, each named and titled, then the time. Always under the latest
+   finished answer; under an earlier one the row keeps its height and shows
+   while that answer is hovered or holds focus. */
+.thread-turn-foot { display:flex; align-items:center; flex-wrap:wrap; gap:4px;
+  min-height:28px; margin:12px 0 0 -6px; font-size:var(--text-meta); color:var(--tn-label-3); }
+.thread-turn-foot .thread-act { justify-content:center; min-width:28px; min-height:28px; padding:0 6px;
+  gap:6px; border-radius:calc(var(--radius-container) + 1px); }
+.thread-turn-foot .thread-time { padding:0 0 0 8px; }
+.thread-answer:not(.is-latest) > .thread-turn-foot { opacity:0;
+  transition:opacity var(--motion-fast) ease-out; }
+.thread-answer:hover > .thread-turn-foot,
+.thread-answer:focus-within > .thread-turn-foot { opacity:1; }
+
+/* ---- a failure, unfolded -------------------------------------------------- */
+.thread-failed { margin:0 0 16px; padding:4px;
+  background:color-mix(in srgb, var(--status-failed) 6%, var(--surface));
+  border:var(--border-w) solid color-mix(in srgb, var(--status-failed) 35%, transparent);
+  border-radius:calc(var(--radius-container) * 1.5); }
+.thread-failed .conv-notice { margin:4px 6px; }
+
+/* ---- an approval -----------------------------------------------------------
+   The same card, verdicts and keys, set as the canvas's question: an amber
+   edge while it waits on you, the glyph on a tile, the title over what it
+   asks for, the command on the pane's own ground, then Deny and Allow once at
+   the right with their keys — Allow once the card's one filled button. The
+   edge, the tile and the glyph are the layout's one amber (--thread-waiting),
+   the sentence .conv-approval-pending already says. */
+.is-thread-layout .conv-approval { padding:16px 18px 12px; background:var(--tn-group);
+  border:var(--border-w) solid var(--tn-separator); border-radius:var(--radius-composer); }
+.is-thread-layout .conv-approval-pending { border-color:var(--thread-waiting); }
+.is-thread-layout .conv-approval .conv-head { gap:12px; padding:0; font-size:var(--text-label);
+  color:var(--fg-strong); }
+.is-thread-layout .conv-approval .conv-head > .codicon:first-child { display:inline-flex; flex:none;
+  align-items:center; justify-content:center; width:30px; height:30px;
+  color:var(--thread-waiting); background:color-mix(in srgb, var(--thread-waiting) 16%, transparent);
+  border-radius:var(--radius-container); }
+.is-thread-layout .conv-approval .conv-head > .conv-glyph-idle:first-child { color:var(--fg-dim);
+  background:var(--surface-raised); }
+/* A head that names what it asks for stacks the two, the title over it. */
+.is-thread-layout .conv-approval .conv-head:has(> .conv-sum) { display:grid;
+  grid-template-columns:30px minmax(0, 1fr); align-items:center; column-gap:12px; row-gap:0; }
+.is-thread-layout .conv-approval .conv-head:has(> .conv-sum) > .codicon:first-child { grid-row:1 / span 2; }
+.is-thread-layout .conv-approval .conv-name { color:var(--fg-strong); font-weight:var(--wght-strong); }
+.is-thread-layout .conv-approval .conv-sum { font-family:var(--font-ui); font-size:var(--text-ui);
+  color:var(--fg-dim); }
+.is-thread-layout .conv-approval .conv-input { margin:16px 0 0; border-top:0; }
+.is-thread-layout .conv-approval .conv-input-label { padding:0 0 4px; background:transparent; }
+.is-thread-layout .conv-approval .conv-pre { padding:12px 14px; color:var(--fg-strong);
+  background:var(--editor-bg); border:var(--border-w) solid var(--border);
+  border-radius:var(--radius-container); }
+/* A command reads as one: "$ npm test", its key's label left unsaid. */
+.is-thread-layout .conv-approval .conv-input:has(> .conv-pre[aria-label="command"]) > .conv-input-label {
+  display:none; }
+.is-thread-layout .conv-approval .conv-pre[aria-label="command"]::before { content:"$ "; color:var(--fg-dim); }
+.is-thread-layout .conv-approval .conv-acts { justify-content:flex-end; gap:8px; padding:16px 0 0; }
+.is-thread-layout .conv-approval .conv-verdict,
+.is-thread-layout .conv-approval .conv-verdict-err { padding:12px 0 0; }
+.is-thread-layout .conv-approval .conv-acts .btn { height:28px; padding:0 14px; gap:8px;
+  font-size:var(--text-body); font-weight:var(--wght-medium); border-radius:var(--radius-pill); }
+.is-thread-layout .conv-approval .conv-acts .btn > .codicon { display:none; }
+/* Deny, before it is pressed, is the quiet one; its reason field keeps the
+   destructive Confirm deny. */
+.is-thread-layout .conv-approval .conv-acts:not(:has(.conv-note)) .btn-danger {
+  color:var(--fg); background:transparent; border-color:var(--border-strong); box-shadow:none; }
+.is-thread-layout .conv-approval .conv-acts:not(:has(.conv-note)) .btn-danger:hover:not(:disabled) {
+  color:var(--fg-strong); background:var(--row-hover); border-color:var(--border-strong); box-shadow:none; }
+.is-thread-layout .conv-approval .conv-acts .btn-primary { color:var(--surface);
+  background:var(--fg-strong); border-color:var(--fg-strong); }
+.is-thread-layout .conv-approval .conv-acts .btn-primary:hover:not(:disabled) {
+  background:color-mix(in srgb, var(--fg-strong) 86%, var(--surface));
+  border-color:color-mix(in srgb, var(--fg-strong) 86%, var(--surface)); }
+.is-thread-layout .conv-approval .kbd-hint { padding:0; font-family:var(--font-ui);
+  font-weight:var(--wght-regular); color:inherit; opacity:.72; border:0; }
+.conv-acts-gap { flex:1 1 auto; }
+.is-thread-layout .conv-approval .conv-acts-gap { display:none; }
+
+/* ---- the live turn (owner, 2026-10-07; the Threads look, 2026-10-23) -------
+   A running turn draws itself under its prompt: a railed trail of its work
+   with its prose between, then the status line — the thinking mark, what the
+   agent is doing now, and for how long. Each step wears its tool's glyph on
+   the rail and its state on the right. Status colours never take a hue. */
+.thread-live { margin:0; }
+.thread-live-body { display:grid; grid-template-rows:1fr; }
+.thread-live-inner { min-width:0; min-height:0; }
+/* The body is its own formatting context: the first block sits flush. */
+.thread-live-inner > :first-child { margin-top:0; }
+.thread-live-row { min-width:0; }
+/* Prose the trail leads into opens 20px under the last step. */
+.thread-trail + .thread-live-row { margin-top:20px; }
+
+/* The status line: its mark sits in the rail's column, its words in the
+   steps'. The words hold still, as the settled Wave asked of status words: the
+   mark beside them is the one thing that moves (the shimmer that swept them
+   was cut when the owner asked for less motion, 2026-10-07). */
+.thread-live-status { display:flex; align-items:center; gap:12px; min-height:24px; margin-top:16px;
+  font-size:var(--text-label); color:var(--fg); }
+.thread-live-mark { position:relative; display:inline-flex; flex:none; align-items:center;
+  justify-content:center; width:18px; height:18px; }
+.thread-live-dot { display:block; flex:none; width:8px; height:8px; border-radius:50%;
+  background:var(--thread-waiting); }
+.thread-live-check { position:absolute; inset:0; margin:auto; color:var(--status-done);
+  animation:thread-pop 240ms cubic-bezier(.34, 1.56, .64, 1) 120ms both; }
+.thread-live.is-done .thread-live-pair { animation:thread-fade-out 120ms linear both; }
+.thread-live-words { display:flex; flex:0 1 auto; align-items:baseline; gap:6px; min-width:0;
+  overflow:hidden; white-space:nowrap; }
+.thread-live-verb { flex:none; color:var(--fg); }
+.thread-live-verb.is-waiting { color:var(--thread-waiting); }
+.thread-live-target { min-width:0; overflow:hidden; text-overflow:ellipsis; color:var(--fg-muted); }
+.thread-live-target.is-mono, .thread-step-target.is-mono { font-family:var(--font-mono);
+  font-size:var(--text-ui); }
+.thread-live-clock { flex:none; color:var(--fg-dim); font-variant-numeric:tabular-nums; white-space:nowrap; }
+.thread-live-clock.is-waiting { color:var(--thread-waiting); }
+.thread-live-clock.is-done { color:var(--status-done); transition:color var(--motion-fast) linear 120ms; }
+
+/* The trail: steps 32px tall, 2px apart, on a hairline rail through their
+   glyphs. Each row spans 8px past the lane on both sides, so its glyph sits on
+   the lane's edge and its hover wash has room. */
+.thread-trail { position:relative; display:flex; flex-direction:column; gap:2px; margin:16px 0; }
+/* From the first glyph's centre to the last's: a lone step draws no stub. */
+.thread-trail::before { content:""; position:absolute; top:16px; bottom:16px; left:8.5px; width:1px;
+  background:var(--border); }
+.thread-step { position:relative; min-width:0; }
+.thread-step-row { display:grid; grid-template-columns:18px minmax(0, 1fr) auto; align-items:center;
+  column-gap:12px; box-sizing:border-box; width:calc(100% + 16px); min-height:32px; margin:0 -8px;
+  padding:6px 8px; font:inherit; font-size:var(--text-body); line-height:var(--lh-ui); color:var(--fg-dim);
+  text-align:left; background:transparent; border:0;
+  border-radius:calc(var(--radius-container) + 1px); cursor:pointer; }
+.thread-step-row:hover { background:var(--row-hover); }
+.thread-step-words { display:flex; align-items:baseline; gap:6px; min-width:0; overflow:hidden;
+  white-space:nowrap; }
+.thread-step-prefix { flex:none; color:var(--fg-dim); }
+.thread-step-verb { flex:none; color:var(--fg); font-weight:var(--wght-medium); }
+.thread-step-target { min-width:0; overflow:hidden; text-overflow:ellipsis; color:var(--fg-dim); }
+/* The glyph masks the rail behind it, on whatever the row is painted with. */
+.thread-step-node { position:relative; z-index:1; display:inline-flex; align-items:center;
+  justify-content:center; box-sizing:border-box; width:18px; height:18px; color:var(--fg-dim);
+  background:var(--editor-bg); border-radius:50%; }
+.thread-step-row:hover > .thread-step-node {
+  background:linear-gradient(var(--row-hover), var(--row-hover)), var(--editor-bg); }
+.thread-step.conv-find-current .thread-step-node {
+  background:linear-gradient(var(--row-selected), var(--row-selected)), var(--editor-bg); }
+.thread-step-node.is-pop { animation:thread-pop 240ms cubic-bezier(.34, 1.56, .64, 1) both; }
+/* The state, on the right: a ring turning while it runs, a still amber ring
+   and its note while it waits on you, a failure's note in the failed colour, a
+   finished call's lines or its short note. */
+.thread-step-end { display:inline-flex; align-items:center; justify-content:flex-end; gap:6px;
+  min-width:0; font-size:var(--text-ui); color:var(--fg-dim); font-variant-numeric:tabular-nums;
+  white-space:nowrap; }
+.thread-step-ring { display:block; flex:none; box-sizing:border-box; width:12px; height:12px;
+  border-radius:50%; }
+.thread-step-ring.is-running { border:2px solid var(--border-strong); border-top-color:var(--status-working);
+  animation:thread-spin .9s steps(11) infinite; animation-play-state:var(--ambient-play-state); }
+.thread-step-ring.is-waiting { border:2px solid var(--thread-waiting); }
+.thread-step-meta { min-width:0; overflow:hidden; text-overflow:ellipsis; }
+.thread-step.is-waiting .thread-step-meta { color:var(--thread-waiting); }
+.thread-step.is-failed .thread-step-meta { color:var(--status-failed); }
+.thread-steer-glyph { display:block; width:14px; height:14px; }
+/* A running edit's next lines, from its own input, on a sunken block in line
+   with the step's words. */
+.thread-peek { margin:2px 0 6px 30px; padding:6px 10px; font-family:var(--font-mono);
+  font-size:var(--text-ui); line-height:var(--lh-ui); color:var(--fg-muted);
+  background:color-mix(in srgb, var(--fg) 5%, transparent); border-radius:var(--radius-container); }
+.thread-peek-line { overflow:hidden; text-overflow:ellipsis; white-space:pre;
+  animation:thread-rise 180ms var(--ease-standard) both; }
+.thread-peek-line::before { content:"+ "; color:var(--diff-added); }
+.thread-peek-line:nth-child(2) { animation-delay:40ms; }
+.thread-peek-line:nth-child(3) { animation-delay:80ms; }
+.thread-peek-line:nth-child(4) { animation-delay:120ms; }
+/* An opened step shows the transcript's own row for it, in line with the
+   step's words; its row line is ours. */
+.thread-step-detail { margin:6px 0 10px 30px; }
+.thread-step-detail .conv-tool-card > .conv-tool-row { display:none; }
+/* A message the owner steered the run with: a step of the trail whose words
+   are theirs, on the raised tier their bubble wears. */
+.thread-steer { position:relative; display:flex; align-items:center; gap:8px; box-sizing:border-box;
+  min-height:32px; margin:0 -8px; padding:6px 8px; font-size:var(--text-body); }
+.thread-steer > .thread-step-node { margin-right:4px; }
+.thread-steer-label { flex:none; color:var(--fg-dim); }
+.thread-steer-text { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  padding:2px 10px; color:var(--fg-strong); background:var(--surface-raised);
+  border-radius:var(--radius-overlay); }
+/* Each new row and segment rises in. */
+.thread-step.is-new, .thread-steer.is-new, .thread-live-row.is-new {
+  animation:thread-rise 180ms var(--ease-standard) both; }
+
+/* ---- how a turn ends -------------------------------------------------------
+   The last step's glyph pops and the status line turns to a check, the trail
+   and its status line collapse into the work line arriving above them, the
+   changes card rises in with its rows a beat apart, and the turn's controls
+   come last. */
+.thread-live.is-collapsing .thread-live-body {
+  animation:thread-collapse 340ms cubic-bezier(.4, 0, .2, 1) both; }
+.thread-live.is-collapsing .thread-live-inner { overflow:hidden; }
+.thread-fold.is-arriving { animation:thread-fade-in 160ms ease-out both; }
+.thread-changes.is-arriving { animation:thread-card-rise 180ms var(--ease-standard) both; }
+.thread-changes.is-arriving .thread-changes-file { animation:thread-fade-in 180ms ease-out both; }
+.thread-changes.is-arriving .thread-changes-file:nth-child(2) { animation-delay:60ms; }
+.thread-changes.is-arriving .thread-changes-file:nth-child(3) { animation-delay:120ms; }
+.thread-changes.is-arriving .thread-changes-file:nth-child(4) { animation-delay:180ms; }
+.thread-changes.is-arriving .thread-changes-file:nth-child(5) { animation-delay:240ms; }
+.thread-changes.is-arriving .thread-changes-file:nth-child(n+6) { animation-delay:300ms; }
+.thread-turn-foot.is-arriving { animation:thread-fade-in 140ms ease-out 260ms both; }
+/* A work line opening plays its rows in; closing plays them out first. */
+.thread-reveal { display:grid; grid-template-rows:1fr; }
+.thread-reveal-body { min-width:0; min-height:0; overflow:hidden; }
+.thread-reveal.is-opening { animation:thread-expand 340ms cubic-bezier(.4, 0, .2, 1) both; }
+.thread-reveal.is-closing { animation:thread-collapse 340ms cubic-bezier(.4, 0, .2, 1) both; }
+/* Your message, the moment you send it, rises from below into place. */
+.thread-user.is-sent { transform-origin:100% 100%;
+  animation:thread-sent 340ms var(--ease-standard) both; }
+
+/* ---- the jump capsule ------------------------------------------------------
+   Scrolled away, the capsule floats on a card. While a turn is live it
+   carries it: the thinking mark, the step's short line and the run's clock,
+   then the way down; waiting on you, an amber dot, edge and words. */
+.conv.is-thread-layout .conv-jump-latest { gap:8px; min-height:32px; padding:0 14px;
+  background:var(--surface); border-radius:var(--radius-pill); font-size:var(--text-ui); }
+.conv.is-thread-layout .conv-jump-latest:hover {
+  background:linear-gradient(var(--row-hover), var(--row-hover)), var(--surface); }
+.conv-jump-latest.is-live { max-width:min(420px, calc(100% - 40px)); }
+.conv-jump-latest.is-live .thread-pill-line { min-width:0; overflow:hidden; text-overflow:ellipsis;
+  white-space:nowrap; }
+.conv-jump-latest.is-live:has(.thread-pill-line.is-waiting) { color:var(--thread-waiting);
+  border-color:var(--thread-waiting); }
+.conv-jump-latest.is-live .thread-live-dot { width:7px; height:7px; }
+
+@keyframes thread-spin { to { transform:rotate(360deg); } }
+@keyframes thread-pop { from { transform:scale(.4); opacity:0; } to { transform:none; opacity:1; } }
+@keyframes thread-rise { from { transform:translateY(6px); opacity:0; } to { transform:none; opacity:1; } }
+@keyframes thread-card-rise { from { transform:translateY(8px); opacity:0; } to { transform:none; opacity:1; } }
+@keyframes thread-sent { from { transform:translateY(140px) scale(.97); opacity:0; }
+  to { transform:none; opacity:1; } }
+@keyframes thread-fade-in { from { opacity:0; } to { opacity:1; } }
+@keyframes thread-fade-out { to { opacity:0; } }
+@keyframes thread-expand { from { grid-template-rows:0fr; opacity:0; } to { grid-template-rows:1fr; opacity:1; } }
+@keyframes thread-collapse { from { grid-template-rows:1fr; opacity:1; } to { grid-template-rows:0fr; opacity:0; } }
+
+/* Reduced motion: every arrival is in place at once and the ring stops
+   turning (the thinking mark holds its own resting pair). theme.css's global
+   guard only shortens these, which would still paint a first frame. */
+@media (prefers-reduced-motion: reduce) {
+  .thread-step-ring.is-running, .thread-step-node.is-pop,
+  .thread-live-check, .thread-live.is-done .thread-live-pair, .thread-step.is-new,
+  .thread-steer.is-new, .thread-live-row.is-new, .thread-peek-line, .thread-user.is-sent,
+  .thread-fold.is-arriving, .thread-changes.is-arriving, .thread-changes.is-arriving .thread-changes-file,
+  .thread-turn-foot.is-arriving, .thread-reveal.is-opening, .thread-reveal.is-closing,
+  .thread-live.is-collapsing .thread-live-body { animation:none; }
+  .thread-fold-chev, .thread-live-clock.is-done { transition:none; }
+}
+
+/* ---- shipping, under the latest turn's changes (protocol 37) --------------
+   One row at the card's foot: the branch glyph, Rust's last read in a few
+   words, and the one next step as the card's one filled button. The Changes
+   panel holds the rest. The base button is also the second-opinion cards'
+   quiet action (ThreadOpinionCards), which keeps that look. */
+.thread-ship { display:flex; align-items:center; gap:8px; min-height:44px; box-sizing:border-box;
+  padding:6px 12px 6px 14px; font-size:var(--text-body); color:var(--tn-label-2);
+  box-shadow:inset 0 .5px 0 var(--tn-separator); }
+.thread-ship-text { flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.thread-ship-act { display:inline-flex; align-items:center; flex:none; min-height:26px; padding:0 10px;
+  font:inherit; font-size:var(--text-ui); color:var(--fg); background:transparent;
+  border:var(--border-w) solid var(--border); border-radius:var(--radius-pill); cursor:pointer; }
+.thread-ship-act:hover:not(:disabled) { color:var(--fg-strong); background:var(--row-hover); }
+.thread-ship-act:disabled { color:var(--fg-faint); cursor:default; }
+.thread-ship-act:focus-visible { outline:var(--focus-ring-w) solid var(--focus); outline-offset:var(--focus-ring-offset); }
+.thread-ship .thread-ship-act { height:26px; padding:0 12px; font-size:var(--text-ui);
+  font-weight:var(--wght-medium); color:var(--surface); background:var(--fg-strong);
+  border-color:var(--fg-strong); }
+.thread-ship .thread-ship-act:hover:not(:disabled) { color:var(--surface);
+  background:color-mix(in srgb, var(--fg-strong) 86%, var(--surface));
+  border-color:color-mix(in srgb, var(--fg-strong) 86%, var(--surface)); }
+.thread-ship .thread-ship-act:disabled { color:var(--fg-faint); background:var(--surface-raised);
+  border-color:var(--border); }

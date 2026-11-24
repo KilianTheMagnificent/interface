@@ -1,0 +1,85 @@
+{
+  "channel": "iface:draftStash",
+  "protocol": 63,
+  "requests": [
+    { "command": "list", "key": "claude#thread-a" },
+    {
+      "command": "push",
+      "key": "claude#thread-a",
+      "draft": {
+        "text": "Rename the login page\n\n> the quoted answer",
+        "items": [
+          {
+            "id": "file-1",
+            "kind": "file",
+            "label": "paste-1.png",
+            "value": "/private/tmp/Interface/pasted-images/paste-1.png",
+            "detail": "paste-1.png"
+          },
+          { "id": "chat-1", "kind": "chat", "label": "Fix the header", "value": "codex#thread-b" }
+        ]
+      }
+    },
+    { "command": "pop", "key": "claude#thread-a", "id": "stash-2" },
+    {
+      "command": "pop",
+      "key": "claude#thread-a",
+      "id": "stash-2",
+      "current": { "text": "Half-typed answer", "items": [] }
+    },
+    { "command": "delete", "key": "claude#thread-a", "id": "stash-1" }
+  ],
+  "refusedRequests": [
+    { "command": "push", "key": "claude#thread-a", "draft": { "text": "   ", "items": [] } },
+    { "command": "push", "key": "", "draft": { "text": "x", "items": [] } },
+    { "command": "pop", "key": "claude#thread-a", "id": "../stash" },
+    { "command": "delete", "key": "claude#thread-a" },
+    { "command": "list", "key": "claude#thread-a", "extra": true },
+    { "command": "clear", "key": "claude#thread-a" }
+  ],
+  "view": {
+    "version": 1,
+    "key": "claude#thread-a",
+    "stashes": [
+      { "id": "stash-2", "preview": "Rename the login page", "at": 1763164900000, "items": 2 },
+      { "id": "stash-1", "preview": "", "at": 1763164800000, "items": 1 }
+    ]
+  },
+  "poppedView": {
+    "version": 1,
+    "key": "claude#thread-a",
+    "stashes": [
+      { "id": "stash-3", "preview": "Half-typed answer", "at": 1763165000000, "items": 0 }
+    ],
+    "popped": {
+      "id": "stash-2",
+      "at": 1763164900000,
+      "draft": {
+        "text": "Rename the login page\n\n> the quoted answer",
+        "items": [
+          {
+            "id": "file-1",
+            "kind": "file",
+            "label": "paste-1.png",
+            "value": "/private/tmp/Interface/pasted-images/paste-1.png",
+            "detail": "paste-1.png"
+          },
+          { "id": "chat-1", "kind": "chat", "label": "Fix the header", "value": "codex#thread-b" }
+        ]
+      }
+    }
+  },
+  "threadReference": {
+    "ok": true,
+    "items": [
+      {
+        "id": "chat-1",
+        "kind": "chat",
+        "label": "Fix the header",
+        "value": "codex#thread-b",
+        "safeContent": "Thread \"Fix the header\" (Codex), key codex#thread-b\nUse read_thread with this key for more.\nLast prompt:\nMake the header sticky\nLast answer:\nThe header now stays at the top."
+      }
+    ],
+    "invalid": []
+  }
+}

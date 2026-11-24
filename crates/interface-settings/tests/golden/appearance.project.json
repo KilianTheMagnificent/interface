@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "pinnedProjects": [
+    "/projects/one",
+    "/projects/\\\"quoted\\\""
+  ]
+}

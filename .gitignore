@@ -1,0 +1,51 @@
+# Build and dependency directories. Written without a trailing slash on
+# purpose: a pattern that ends in `/` matches only a real directory, and a
+# worktree reaches the shared build and dependency trees through symlinks —
+# which the old `/target/` and `/node_modules/` reported as untracked.
+target
+target.nosync
+node_modules
+electron/node_modules
+/electron/dist/
+/electron/dist-main/
+/electron/.dev-app/
+/.idea/
+/.vscode/
+.claude/worktrees
+.grok/
+.DS_Store
+*.log
+__pycache__/
+
+# Scratch the owner's policy sends agents to (`work/` in the task workspace)
+# and tool output. Never source: ignored, they are not gate inputs and do not
+# dirty the tree closeout requires clean.
+/work
+/output
+
+# Local runtime state and signed artifacts are never source.
+/.local/
+/.worktrees/
+/release/
+*.dmg
+*.zip
+*.tar.gz
+*.sig
+
+# Credential files are forbidden in this repository.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials.json
+
+electron/dist-remote/
+electron/dist-phone/
+
+# iCloud Drive resolves sync conflicts by writing a numbered copy beside the
+# original ("bootstrap 2.rs"). They are never source; keep them out of builds.
+* [0-9].rs
+* [0-9].ts
+* [0-9].tsx
+* [0-9].css

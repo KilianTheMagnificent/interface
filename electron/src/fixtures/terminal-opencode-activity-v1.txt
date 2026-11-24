@@ -1,0 +1,11 @@
+idle	-
+working	ses_a|ses_a,-,busy,0,0
+waiting	ses_a|ses_a,-,busy,0,0|ses_child,ses_a,busy,1,0
+working	ses_a|ses_a,-,retry,0,0|ses_child,ses_a,busy,0,0
+complete	ses_a|ses_a,-,idle,0,0
+idle	ses_a|ses_a,-,idle,0,0
+working	ses_a|ses_a,-,busy,0,0
+idle	ses_b|ses_b,-,idle,0,0
+waiting	ses_b|ses_b,-,busy,0,1
+working	ses_b|ses_b,-,busy,0,0
+complete	ses_b|ses_b,-,idle,0,0

@@ -1,0 +1,14 @@
+.settings-translucency-card { margin-top: 12px; }
+.translucency-controls { display: grid; gap: 18px; width: 240px; max-width: 100%; }
+.translucency-slider { display: grid; gap: 6px; min-width: 0; width: 100%; }
+.translucency-slider-heading, .translucency-slider-endpoints {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.translucency-slider-heading { color: var(--fg); font-size: var(--text-body); }
+.translucency-slider-heading output { color: var(--fg-muted); font-variant-numeric: tabular-nums; }
+.translucency-slider input[type="range"] {
+  width: 100%; min-width: 0; height: 20px; margin: 0; padding: 0;
+  accent-color: var(--selection-accent); cursor: pointer;
+}
+.translucency-slider input:disabled { cursor: default; }
+.translucency-slider-endpoints { color: var(--fg-muted); font-size: var(--text-meta); }

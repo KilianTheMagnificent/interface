@@ -1,0 +1,236 @@
+/* Codicons — VS Code's own icon font, with zero new dependencies.
+
+   The .ttf is vendored at ./assets/codicon.ttf (copied from monaco-editor's
+   MIT-licensed package; Microsoft Corporation). The url() below is a path
+   relative to this file, which is what this project's Vite resolves: it
+   fingerprints the .ttf and emits it into dist/assets, so the bundled font
+   satisfies the packaged app's `font-src 'self'` policy with no remote fetch.
+
+   monaco's own codicon.css ships only the @font-face and the base rule — it
+   ends with "icon rules are dynamically created by the platform theme service",
+   so the per-glyph classes below are hand-written. Every codepoint here was
+   read out of the upstream library:
+   https://github.com/microsoft/vscode/blob/main/src/vs/base/common/codiconsLibrary.ts
+   A name that does not exist there renders an invisible box, so add glyphs by
+   copying from that file, never from memory.
+
+   MIT License. Copyright (c) 2016 - present Microsoft Corporation.
+   Permission is hereby granted, free of charge, to any person obtaining a copy
+   of this software and associated documentation files (the "Software"), to deal
+   in the Software without restriction, including without limitation the rights
+   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   copies of the Software, and to permit persons to whom the Software is
+   furnished to do so, subject to the following conditions: The above copyright
+   notice and this permission notice shall be included in all copies or
+   substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS",
+   WITHOUT WARRANTY OF ANY KIND.
+
+   Usage: <span className="codicon codicon-close" aria-hidden="true" /> with an
+   accessible label on the control that owns it. Icons inherit `color`, so they
+   theme for free. */
+
+@font-face {
+  font-family: "codicon";
+  font-display: block;
+  src: url("./assets/codicon.ttf") format("truetype");
+}
+
+.codicon {
+  display: inline-block;
+  flex: none;
+  width: var(--icon-size);
+  font-family: "codicon";
+  font-size: var(--icon-size);
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+  text-rendering: auto;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* The compact tier: inside pills and inline with 11px text. 16px and 12px are
+   the only two icon sizes — 14px is always a bug. */
+.codicon-sm {
+  width: var(--icon-size-sm);
+  font-size: var(--icon-size-sm);
+}
+
+/* ---- glyphs ------------------------------------------------------------ */
+
+/* Disclosure. Rotate -90deg for the collapsed state rather than swapping the
+   glyph, so the 100ms rotation reads as one affordance. */
+.codicon-chevron-down::before  { content: "\eab4"; }
+.codicon-chevron-left::before  { content: "\eab5"; }
+.codicon-chevron-right::before { content: "\eab6"; }
+.codicon-chevron-up::before    { content: "\eab7"; }
+/* The sidebar header's fold-every-project toggle. */
+.codicon-collapse-all::before  { content: "\eac5"; }
+.codicon-expand-all::before    { content: "\eb95"; }
+
+/* Actions. */
+.codicon-add::before        { content: "\ea60"; }
+.codicon-arrow-swap::before { content: "\ebcb"; }
+.codicon-bell::before       { content: "\eaa2"; }
+.codicon-check::before      { content: "\eab2"; }
+.codicon-clear-all::before  { content: "\eabf"; }
+.codicon-close::before      { content: "\ea76"; }
+.codicon-copy::before       { content: "\ebcc"; }
+.codicon-debug-restart::before { content: "\ead2"; }
+.codicon-debug-stop::before { content: "\ead7"; }
+.codicon-edit::before       { content: "\ea73"; }
+.codicon-ellipsis::before   { content: "\ea7c"; }
+.codicon-eye-closed::before { content: "\eae7"; }
+.codicon-settings-gear::before { content: "\eb51"; }
+.codicon-link-external::before { content: "\eb14"; }
+.codicon-refresh::before    { content: "\eb37"; }
+.codicon-sync::before       { content: "\ea77"; }
+/* Maximize/restore as the diagonal-arrow pair. The font's own screen-full is
+   corner brackets and it has no arrow version, so these two are CSS masks —
+   still `::before` so the undeclared-glyph guard counts them, same 1em box,
+   and `background: currentColor` so they inherit and theme like the rest.
+   Stroke 2.25 matches the header glyphs' 0.75px text stroke (terminal.css).
+   Restored 2026-09-26 at the owner's request after the 16px icon review. */
+.codicon-expand-diagonal::before,
+.codicon-collapse-diagonal::before {
+  content: "";
+  display: block;
+  width: 1em;
+  height: 1em;
+  background: currentColor;
+  mask: center / contain no-repeat;
+}
+.codicon-expand-diagonal::before {
+  mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'><path d='M6 2H2v4M2 2l4.5 4.5M10 14h4v-4M14 14 9.5 9.5'/></svg>");
+}
+.codicon-collapse-diagonal::before {
+  mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='2.25' stroke-linecap='round' stroke-linejoin='round'><path d='M2.5 6.5h4V2.5M6.5 6.5 2 2M13.5 9.5h-4v4M9.5 9.5 14 14'/></svg>");
+}
+/* Layout: four squares, the toolbar's one terminal-surface control. The
+   font's nearest glyphs are a gauge (dashboard) and a table, so this is a CSS
+   mask like the diagonal pair above, with the same 1em box and currentColor.
+   Stroke 1.1 sits at the weight of the gauge, mic and bell beside it. */
+.codicon-layout-grid::before {
+  content: "";
+  display: block;
+  width: 1em;
+  height: 1em;
+  background: currentColor;
+  mask: center / contain no-repeat;
+  mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.1'><rect x='2' y='2' width='5' height='5' rx='1.3'/><rect x='9' y='2' width='5' height='5' rx='1.3'/><rect x='2' y='9' width='5' height='5' rx='1.3'/><rect x='9' y='9' width='5' height='5' rx='1.3'/></svg>");
+}
+/* Shield: the checking-approval card's mark, for an agent request while
+   Interface's approval policy decides. The font's nearest glyphs are a lock
+   and a warning triangle — one says "closed", the other says "something went
+   wrong", and neither is a request — so this is a mask like the three above,
+   same 1em box, same currentColor. */
+.codicon-shield::before {
+  content: "";
+  display: block;
+  width: 1em;
+  height: 1em;
+  background: currentColor;
+  mask: center / contain no-repeat;
+  mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 3l8 3v6c0 4.4-3.2 8-8 9-4.8-1-8-4.6-8-9V6z'/></svg>");
+}
+.codicon-layout-sidebar-left::before  { content: "\ebf3"; }
+.codicon-layout-sidebar-left-off::before { content: "\ec02"; }
+.codicon-layout-sidebar-right::before { content: "\ebf4"; }
+/* Split Right and Split Down: outline panes divided once, so a split never
+   borrows the filled sidebar glyphs. */
+.codicon-split-horizontal::before { content: "\eb56"; }
+.codicon-split-vertical::before   { content: "\eb57"; }
+.codicon-play::before       { content: "\eb2c"; }
+.codicon-send::before       { content: "\ec0f"; }
+.codicon-trash::before      { content: "\ea81"; }
+
+/* Files and trees. */
+.codicon-file::before          { content: "\ea7b"; }
+/* Output preview (owner, 2026-09-28): the page-beside-a-page glyph, read out
+   of the vendored codicon.ttf's own glyph table (0xeb28 is "open-preview"). */
+.codicon-open-preview::before  { content: "\eb28"; }
+.codicon-files::before         { content: "\eaf0"; }
+.codicon-folder::before        { content: "\ea83"; }
+.codicon-folder-opened::before { content: "\eaf7"; }
+.codicon-git-compare::before   { content: "\eafd"; }
+.codicon-git-pull-request::before { content: "\ea64"; }
+.codicon-git-merge::before     { content: "\eafe"; }
+.codicon-watch::before         { content: "\eb7c"; }
+.codicon-sparkle::before       { content: "\ec10"; }
+.codicon-list-flat::before     { content: "\eb84"; }
+.codicon-list-selection::before { content: "\eb85"; }
+.codicon-list-tree::before     { content: "\eb86"; }
+
+/* State and status. */
+.codicon-circle-filled::before  { content: "\ea71"; }
+.codicon-circle-outline::before { content: "\eabc"; }
+.codicon-cloud::before          { content: "\ebaa"; }
+.codicon-cloud-download::before { content: "\eac2"; }
+.codicon-error::before          { content: "\ea87"; }
+.codicon-loading::before        { content: "\eb19"; }
+.codicon-pass::before           { content: "\eba4"; }
+.codicon-warning::before        { content: "\ea6c"; }
+
+/* Agents and tools. */
+.codicon-code::before              { content: "\eac4"; }
+.codicon-comment-discussion::before { content: "\eac7"; }
+.codicon-dashboard::before         { content: "\eacd"; }
+.codicon-lightbulb::before         { content: "\ea61"; }
+.codicon-plug::before              { content: "\eb2d"; }
+.codicon-robot::before             { content: "\ec20"; }
+.codicon-terminal::before          { content: "\ea85"; }
+.codicon-type-hierarchy-sub::before { content: "\ebba"; }
+
+/* Voice: the idle mic and the live one. Codepoints read out of the vendored
+   codicon.ttf's own post table, not from memory. */
+.codicon-mic::before               { content: "\ec12"; }
+.codicon-mic-filled::before        { content: "\ec1c"; }
+.codicon-unmute::before            { content: "\eb75"; } /* speaking */
+
+/* One glyph, one meaning (icon review, 2026-09-24). Codepoints read out of the
+   vendored codicon.ttf's cmap and post tables. */
+.codicon-globe::before         { content: "\eb01"; } /* Browser pane */
+.codicon-device-mobile::before { content: "\eadb"; } /* iPhone and iOS Simulator */
+.codicon-coffee::before        { content: "\ec15"; } /* Away */
+.codicon-window::before        { content: "\eaae"; } /* Interface style */
+.codicon-symbol-color::before  { content: "\eb5c"; } /* Color theme */
+.codicon-color-mode::before    { content: "\eac6"; } /* Translucency */
+.codicon-paintcan::before      { content: "\eb2a"; } /* Appearance */
+.codicon-record-keys::before   { content: "\ea65"; } /* Shortcut reference */
+
+/* ---- modifiers ---------------------------------------------------------- */
+
+/* The app's shared spinner, at monaco's own throttled cadence, and the ONLY
+   one: ConfirmDialog's hand-rolled border ring was the last holdout and now
+   reaches for this. More than one can turn at a time — the transcript, the
+   steering queue, a pending dialog and Settings each have a busy state — but
+   they all turn at this cadence. prefers-reduced-motion switches it off in
+   theme.css. */
+.codicon-modifier-spin {
+  animation: codicon-spin 1.5s steps(18) infinite;
+  animation-play-state: var(--ambient-play-state);
+  transform-origin: center center;
+}
+
+@keyframes codicon-spin {
+  100% { transform: rotate(360deg); }
+}
+
+/* Used by the transcript (find bar, plan rows, notices, comment tool). Missing
+   declarations render as an empty 16px box, not as nothing — silent clutter.
+   Codepoints read from
+   https://github.com/microsoft/vscode/blob/main/src/vs/base/common/codiconsLibrary.ts
+   never from memory. */
+.codicon-search::before    { content: "\ea6d"; }
+.codicon-checklist::before { content: "\eab3"; }
+.codicon-info::before      { content: "\ea74"; }
+.codicon-comment::before   { content: "\ea6b"; }
+
+/* The terminal layout menu's destinations (same upstream source). */
+.codicon-account::before   { content: "\eb99"; }
+.codicon-history::before   { content: "\ea82"; }

@@ -1,0 +1,27 @@
+{
+  "channel": "iface:diagnostics",
+  "protocol": 39,
+  "requests": [
+    { "kind": "report" },
+    { "kind": "notices" },
+    { "kind": "dismissNotice", "id": "threads-1" },
+    { "kind": "reveal", "target": "logs" },
+    { "kind": "reveal", "target": "dataFolder" },
+    { "kind": "reveal", "target": "notice", "id": "registry-1" }
+  ],
+  "refused": [
+    { "kind": "reveal", "target": "notice" },
+    { "kind": "reveal", "target": "logs", "id": "threads-1" },
+    { "kind": "reveal", "target": "home" },
+    { "kind": "dismissNotice", "id": "" },
+    { "kind": "dismissNotice", "id": "../threads" },
+    { "kind": "report", "extra": true },
+    { "kind": "delete" }
+  ],
+  "responses": [
+    { "report": "Interface diagnostics\nVersion: 0.3.158\n" },
+    { "notices": [] },
+    { "notices": [{ "id": "threads-1", "what": "your Threads list" }] },
+    {}
+  ]
+}

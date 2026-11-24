@@ -1,0 +1,19 @@
+{
+  "kinds": ["chat", "code", "agent", "voice"],
+  "defaultKind": "code",
+  "launch": { "cwd": "/tmp/chat-home", "prompt": "hello", "kind": "chat" },
+  "summary": {
+    "engine": "claude",
+    "sessionId": "s1",
+    "title": "task",
+    "cwd": "/tmp/chat-home",
+    "status": "idle",
+    "cloud": false,
+    "lastActivity": "2026-08-29T00:00:00.000Z",
+    "firstSeen": "2026-08-29T00:00:00.000Z",
+    "archived": false,
+    "kind": "agent"
+  },
+  "codexChatRefusal": "Codex cannot run a tool-less chat, so this session was NOT started: the codex app-server protocol has no way to remove its tools. Choose a Claude model for Chat.",
+  "chatUnavailable": "Chat is unavailable. This build has no chat folder configured."
+}

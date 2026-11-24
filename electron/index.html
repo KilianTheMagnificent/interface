@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <head><meta charset="utf-8" /><title>Interface</title>
+    <!-- Baseline policy, travelling with the document so it applies however the
+         page is opened. In dev @vitejs/plugin-react injects its refresh preamble
+         as an inline <script> into this file, so the source tag keeps dev HMR
+         allowances and vite.config.ts strips 'unsafe-inline' from script-src and
+         loopback WebSockets from connect-src when building dist/index.html (where
+         packaged file:// loads do not fire webRequest.onHeadersReceived). main.ts
+         also sends the matching Content-Security-Policy header on HTTP loads.
+
+         The rest is the real fence, and every entry earns its place:
+           style-src 'unsafe-inline' — xterm writes its own <style> elements
+           worker-src 'self'         — only bundled PDF rendering workers
+           img/font data:            — bundled codicon font, inlined icons
+           object/base/form 'none'   — nothing embeds, rebases or submits, so
+                                       injected markup cannot either
+           frame-src iface-visual:   — only a visual reply's sandboxed frame,
+                                       served by main (T3 section 8)
+         No 'unsafe-eval': leaving it out is also what silences Electron's
+         insecure CSP warning, which tests for eval rather than for the header. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; worker-src 'self'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' ws://localhost:* ws://127.0.0.1:*; object-src 'none'; frame-src iface-visual:; base-uri 'none'; form-action 'none'" />
+  </head>
+  <body style="margin:0"><div id="root"></div>
+    <script type="module" src="/src/renderer/main.tsx"></script>
+  </body>
+</html>

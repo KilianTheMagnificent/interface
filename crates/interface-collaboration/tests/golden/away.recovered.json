@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "revision": 2,
+  "project": "<ROOT>/project",
+  "requestedModel": "codex/test",
+  "maxAttempts": 3,
+  "finished": true,
+  "stopped": true,
+  "tasks": [
+    {
+      "task": {
+        "id": "one",
+        "file": "one.py",
+        "prompt": "Repair a demonstrated defect",
+        "gate": "one",
+        "blockedReason": null
+      },
+      "status": "stopped",
+      "detail": "",
+      "baseline": null,
+      "attempts": []
+    },
+    {
+      "task": {
+        "id": "two",
+        "file": "two.py",
+        "prompt": "Repair a demonstrated defect",
+        "gate": "two",
+        "blockedReason": "Needs a fixture"
+      },
+      "status": "stopped",
+      "detail": "",
+      "baseline": null,
+      "attempts": []
+    }
+  ]
+}

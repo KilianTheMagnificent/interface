@@ -1,0 +1,98 @@
+{
+  "protocolVersion": 42,
+  "commands": [
+    {
+      "kind": "openInTerminal",
+      "key": "codex#0199f2a4-7c1e-7d30-9a5b-1c2d3e4f5a6b"
+    },
+    {
+      "kind": "continueFromTerminal",
+      "key": "claude#5b0c1d2e-3f40-4a51-8b62-c7d8e9f0a1b2"
+    }
+  ],
+  "view": {
+    "version": 1,
+    "revision": 7,
+    "now": 1791298800000,
+    "settings": {
+      "autoSettleDays": 3,
+      "settleOnMerge": true,
+      "generatedTitles": false,
+      "trackPullRequests": true
+    },
+    "threads": [
+      {
+        "key": "claude#5b0c1d2e-3f40-4a51-8b62-c7d8e9f0a1b2",
+        "section": "fromTerminals",
+        "createdAt": 1791212400000,
+        "settledAt": 1791212400000,
+        "settledReason": "external",
+        "woke": false,
+        "unread": false,
+        "autoSettle": true,
+        "turns": []
+      },
+      {
+        "key": "codex#0199f2a4-7c1e-7d30-9a5b-1c2d3e4f5a6b",
+        "section": "active",
+        "createdAt": 1791216000000,
+        "woke": false,
+        "unread": false,
+        "lastVisitedAt": 1791298700000,
+        "autoSettle": true,
+        "workspace": {
+          "mode": "local",
+          "projectRoot": "/Users/fixture/Developer/Projects/atlas",
+          "owned": false
+        },
+        "turns": []
+      }
+    ]
+  },
+  "response": {
+    "view": {
+      "version": 1,
+      "revision": 7,
+      "now": 1791298800000,
+      "settings": {
+        "autoSettleDays": 3,
+        "settleOnMerge": true,
+        "generatedTitles": false,
+        "trackPullRequests": true
+      },
+      "threads": [
+        {
+          "key": "claude#5b0c1d2e-3f40-4a51-8b62-c7d8e9f0a1b2",
+          "section": "fromTerminals",
+          "createdAt": 1791212400000,
+          "settledAt": 1791212400000,
+          "settledReason": "external",
+          "woke": false,
+          "unread": false,
+          "autoSettle": true,
+          "turns": []
+        },
+        {
+          "key": "codex#0199f2a4-7c1e-7d30-9a5b-1c2d3e4f5a6b",
+          "section": "active",
+          "createdAt": 1791216000000,
+          "woke": false,
+          "unread": false,
+          "lastVisitedAt": 1791298700000,
+          "autoSettle": true,
+          "workspace": {
+            "mode": "local",
+            "projectRoot": "/Users/fixture/Developer/Projects/atlas",
+            "owned": false
+          },
+          "turns": []
+        }
+      ]
+    },
+    "terminal": {
+      "profileId": "claude",
+      "providerSessionId": "5b0c1d2e-3f40-4a51-8b62-c7d8e9f0a1b2",
+      "cwd": "/Users/fixture/Developer/Projects/atlas"
+    }
+  }
+}

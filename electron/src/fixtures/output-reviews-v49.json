@@ -1,0 +1,122 @@
+{
+  "requests": [
+    {
+      "version": 2,
+      "root": "/project",
+      "action": "listReviews"
+    },
+    {
+      "version": 2,
+      "root": "/project",
+      "action": "captureReview",
+      "path": "report.md"
+    },
+    {
+      "version": 2,
+      "root": "/project",
+      "action": "saveReview",
+      "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "revision": 1,
+      "anchor": {
+        "kind": "text",
+        "quote": "old",
+        "startLine": 1,
+        "endLine": 1
+      },
+      "note": "Rewrite the ending",
+      "threadKey": "claude#one",
+      "task": "Release notes"
+    },
+    {
+      "version": 2,
+      "root": "/project",
+      "action": "reserveFeedback",
+      "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "revision": 2
+    },
+    {
+      "version": 2,
+      "root": "/project",
+      "action": "settleFeedback",
+      "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "revision": 3,
+      "delivery": "unknown"
+    },
+    {
+      "version": 2,
+      "root": "/project",
+      "action": "deleteReview",
+      "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "revision": 4
+    }
+  ],
+  "responses": [
+    {
+      "version": 2,
+      "kind": "review",
+      "review": {
+        "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "revision": 2,
+        "snapshot": {
+          "root": "/project",
+          "path": "report.md",
+          "byteLength": 3,
+          "revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "content": {
+            "kind": "text",
+            "text": "old",
+            "format": "markdown"
+          }
+        },
+        "anchor": {
+          "kind": "text",
+          "quote": "old",
+          "startLine": 1,
+          "endLine": 1
+        },
+        "note": "Rewrite the ending",
+        "threadKey": "claude#one",
+        "task": "Release notes",
+        "updatedAt": 12,
+        "delivery": null
+      }
+    },
+    {
+      "version": 2,
+      "kind": "reviews",
+      "reviews": [
+        {
+          "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "revision": 2,
+          "snapshot": {
+            "root": "/project",
+            "path": "report.md",
+            "byteLength": 3,
+            "revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "content": {
+              "kind": "text",
+              "text": "old",
+              "format": "markdown"
+            }
+          },
+          "anchor": {
+            "kind": "text",
+            "quote": "old",
+            "startLine": 1,
+            "endLine": 1
+          },
+          "note": "Rewrite the ending",
+          "threadKey": "claude#one",
+          "task": "Release notes",
+          "updatedAt": 12,
+          "delivery": null
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "kind": "deletedReview",
+      "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

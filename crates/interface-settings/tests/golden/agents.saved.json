@@ -1,0 +1,31 @@
+{
+  "version": 2,
+  "revision": 2,
+  "agents": [
+    {
+      "id": "one",
+      "name": "one",
+      "engine": "codex",
+      "model": "",
+      "effort": "",
+      "instructions": "Be precise.",
+      "color": "teal",
+      "shape": "droplet"
+    }
+  ],
+  "assignments": {},
+  "routines": [
+    {
+      "id": "r",
+      "agentId": "one",
+      "name": "Report",
+      "prompt": "Write a report",
+      "cwd": "/fixture",
+      "enabled": true,
+      "startAtMs": 1000,
+      "intervalMinutes": 5,
+      "nextRunAtMs": 1000
+    }
+  ],
+  "runs": []
+}

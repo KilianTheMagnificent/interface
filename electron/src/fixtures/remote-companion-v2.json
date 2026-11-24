@@ -1,0 +1,58 @@
+{
+  "snapshot": {
+    "version": 2,
+    "workspaces": [
+      {
+        "id": "saved-workspace",
+        "name": "Interface",
+        "root": "/Projects/Interface",
+        "terminals": [
+          {
+            "id": "00000000-0000-4000-8000-000000000002",
+            "generation": 3,
+            "title": "iPhone companion",
+            "root": "/Projects/Interface",
+            "cwd": "/Projects/Interface",
+            "sessionKey": "claude#workspace-context",
+            "launch": {
+              "version": 1,
+              "profileId": "claude"
+            },
+            "launchSession": {
+              "version": 1,
+              "id": "confirmed-provider-chat",
+              "resume": true
+            },
+            "state": "running",
+            "size": {
+              "columns": 80,
+              "rows": 24
+            },
+            "createdAt": "2026-09-11T00:00:00Z",
+            "updatedAt": "2026-09-11T00:00:00Z"
+          }
+        ]
+      }
+    ]
+  },
+  "history": {
+    "version": 2,
+    "terminalId": "00000000-0000-4000-8000-000000000002",
+    "generation": 3,
+    "history": {
+      "availability": "available",
+      "events": [
+        {
+          "kind": "user.message",
+          "text": "Show my Interface sessions on iPhone."
+        },
+        {
+          "kind": "message.delta",
+          "text": "The phone shares the same conversation view and connects to the sessions running on your Mac."
+        }
+      ],
+      "messages": 2,
+      "olderMessages": 0
+    }
+  }
+}

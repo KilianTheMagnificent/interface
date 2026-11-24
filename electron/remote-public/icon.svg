@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- Interface's Fold mark, adapted from electron/build/icon.svg for iOS.
+       The opaque, full-bleed tile lets iOS apply its own corner mask. -->
+  <defs>
+    <linearGradient id="face" x1="512" y1="0" x2="512" y2="1024" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#128a55"/><stop offset="1" stop-color="#0b6b41"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="224" fill="url(#face)"/>
+  <g transform="translate(-18 12) translate(512 512) scale(0.92) translate(-512 -512)"
+     fill="none" stroke="#ffffff" stroke-width="96" stroke-linecap="butt" stroke-linejoin="miter">
+    <path d="M 256 256 L 672 672 L 864 480 L 704 320 L 585.5 438.5"/>
+    <path d="M 438.5 585.5 L 256 768"/>
+  </g>
+</svg>

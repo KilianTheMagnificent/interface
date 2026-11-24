@@ -1,0 +1,25 @@
+/* T3 Chat Dark: T3 Code's T3 Chat palette, dark side.
+
+   Ported from TN Code by docs/theme-examples/tn-code/port-themes.mjs; change
+   it there, not here. Copy it to ~/.config/interface/themes/ and pick it in
+   Settings › Appearance. The format is in docs/THEMES.md. */
+:root {
+  --theme-kind: dark;
+
+  /* Key colours: everything else is worked out from these. */
+  --theme-background: #1f1a24;
+  --theme-panel: #171018;
+  --theme-raised: #2c2631;
+  --theme-text: #f9f8fb;
+  --theme-accent: #a3004c;
+  --theme-selection: #db2777;
+  --theme-screen: #1f1a24;
+  --theme-screen-text: #f9f8fb;
+
+  /* Meaning colours, and the few tokens TN Code names outright. */
+  --theme-danger: #9d174d;
+  --theme-warning: #f59e0b;
+  --border: #27242c;
+  --accent-fg: #fbd0e8;
+  --accent-text: #fbd0e8;
+}

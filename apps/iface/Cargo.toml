@@ -1,0 +1,43 @@
+[package]
+name = "iface"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+async-trait.workspace = true
+chrono.workspace = true
+crossterm.workspace = true
+engine-acp = { path = "../../crates/engine-acp" }
+engine-claude = { path = "../../crates/engine-claude" }
+engine-codex = { path = "../../crates/engine-codex" }
+interface-host = { path = "../interface-host" }
+interface-common = { path = "../../crates/interface-common" }
+interface-contracts = { path = "../../crates/interface-contracts" }
+interface-collaboration = { path = "../../crates/interface-collaboration" }
+interface-engine = { path = "../../crates/interface-engine" }
+interface-orchestration = { path = "../../crates/interface-orchestration" }
+interface-registry = { path = "../../crates/interface-registry" }
+interface-runtime = { path = "../../crates/interface-runtime" }
+interface-settings = { path = "../../crates/interface-settings" }
+interface-storage = { path = "../../crates/interface-storage" }
+interface-terminal = { path = "../../crates/interface-terminal" }
+interface-workspace = { path = "../../crates/interface-workspace" }
+libc.workspace = true
+# Exact wrapped heights (Paragraph::line_count) for the windowed transcript.
+ratatui = { workspace = true, features = ["unstable-rendered-line-info"] }
+# Liveness probes and signals without spawning /bin/kill.
+rustix = { workspace = true, features = ["process"] }
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+tokio.workspace = true
+uuid.workspace = true
+
+[dev-dependencies]
+portable-pty.workspace = true
+tempfile.workspace = true
+
+[lints]
+workspace = true

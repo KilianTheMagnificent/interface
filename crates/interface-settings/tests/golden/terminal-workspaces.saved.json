@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "workspaces": [
+    {
+      "id": "w-1",
+      "name": "Backend",
+      "createdAt": "2026-08-28T00:00:00Z",
+      "updatedAt": "2026-08-28T00:00:00Z",
+      "terminals": [
+        {
+          "id": "33333333-3333-4333-8333-333333333333",
+          "title": "Claude",
+          "cwd": "/tmp/project"
+        }
+      ]
+    }
+  ]
+}

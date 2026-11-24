@@ -1,0 +1,34 @@
+{
+  "accepted": [
+    {
+      "version": 1,
+      "paneStyle": "terminal"
+    },
+    {
+      "version": 1,
+      "paneStyle": "clean"
+    }
+  ],
+  "rejected": [
+    {},
+    null,
+    [],
+    {
+      "version": 2,
+      "paneStyle": "clean"
+    },
+    {
+      "version": 1,
+      "paneStyle": "unknown"
+    },
+    {
+      "version": 1,
+      "paneStyle": true
+    },
+    {
+      "version": 1,
+      "paneStyle": "clean",
+      "extra": 1
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "engine": "acp:opencode",
+  "available": true,
+  "plan": "Go",
+  "windows": [
+    {
+      "label": "5-hour",
+      "utilization": 12.5,
+      "resetsAt": "2026-09-07T20:00:00.000Z"
+    },
+    {
+      "label": "Weekly",
+      "utilization": 34.0,
+      "resetsAt": "2026-09-13T00:00:00.000Z"
+    },
+    {
+      "label": "Monthly",
+      "utilization": 100.0,
+      "resetsAt": "2026-10-01T00:00:00.000Z"
+    }
+  ],
+  "note": "Subscription usage reported by OpenCode Go."
+}

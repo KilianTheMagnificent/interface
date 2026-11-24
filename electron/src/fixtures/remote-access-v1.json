@@ -1,0 +1,8 @@
+{
+  "requests": [
+    {"action":"status"}, {"action":"enable","origin":"https://mac.example.ts.net"},
+    {"action":"disable"}, {"action":"pair"}, {"action":"revoke","id":"00000000-0000-4000-8000-000000000001"}
+  ],
+  "status": {"version":1,"enabled":true,"localUrl":"http://127.0.0.1:4321","publicUrl":"https://mac.example.ts.net","devices":[{"id":"00000000-0000-4000-8000-000000000001","name":"iPhone"}]},
+  "output": {"hex":"49525031050000000000000008000000000000000068690a","start":5,"end":8,"gap":false,"text":"hi\n"}
+}

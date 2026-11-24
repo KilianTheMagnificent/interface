@@ -1,0 +1,8 @@
+/* Canvas owns its field geometry; exclude it regardless of mount order. */
+.form-select:not(.canvas-field) .app-select { width:100%; }
+.form-select:not(.canvas-field) .app-select-trigger { width:100%; min-height:var(--control-h);
+  justify-content:space-between; border-color:var(--input-border);
+  background:var(--input-bg); color:var(--input-fg); font-size:var(--text-ui); }
+.form-select:not(.canvas-field) .app-select-trigger:hover:not(:disabled),
+.form-select:not(.canvas-field) .app-select-trigger[aria-expanded="true"] { background:var(--input-bg);
+  border-color:var(--focus); }

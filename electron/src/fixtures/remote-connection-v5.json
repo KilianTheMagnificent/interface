@@ -1,0 +1,86 @@
+{
+  "invitation": {
+    "version": 5,
+    "kind": "interfacePairing",
+    "macId": "698bea63dc44a344663ff1429aea10842df27b6b991ef25866b2c6c02cdcc5be",
+    "macName": "Studio Mac",
+    "profile": "production",
+    "publicKey": "046b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c2964fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5",
+    "invitationId": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+    "issuedAt": 1789142400,
+    "expiresAt": 1789142700,
+    "relayOrigin": "https://relay.example.com"
+  },
+  "qr": "interface-pair:v5:{\"expiresAt\":1789142700,\"invitationId\":\"0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef\",\"issuedAt\":1789142400,\"kind\":\"interfacePairing\",\"macId\":\"698bea63dc44a344663ff1429aea10842df27b6b991ef25866b2c6c02cdcc5be\",\"macName\":\"Studio Mac\",\"profile\":\"production\",\"publicKey\":\"046b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c2964fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5\",\"relayOrigin\":\"https://relay.example.com\",\"version\":5}",
+  "invalidRelayOrigins": [
+    "http://relay.example.com",
+    "https://user@relay.example.com",
+    "https://relay.example.com/path",
+    "https://relay.example.com?secret=value",
+    "https://relay.example.com#fragment",
+    "https://relay.example.com:8443",
+    "https://127.0.0.1",
+    "https://[::1]",
+    "https://localhost",
+    "https://relay.example.com.",
+    "https://relay.example.com/",
+    "https://relay.example.com:443",
+    "https://RELAY.example.com",
+    "https://relay.example.com\\@evil.test",
+    "https://-relay.example.com",
+    "https://relay..example.com",
+    "file:///tmp/relay"
+  ],
+  "admin": [
+    {
+      "action": "connection",
+      "version": 5,
+      "command": "status"
+    },
+    {
+      "action": "connection",
+      "version": 5,
+      "command": "pair"
+    },
+    {
+      "action": "connection",
+      "version": 5,
+      "command": "disable"
+    },
+    {
+      "action": "connection",
+      "version": 5,
+      "command": "enable",
+      "relayOrigin": "https://relay.example.com"
+    }
+  ],
+  "status": {
+    "version": 5,
+    "enabled": true,
+    "macId": "698bea63dc44a344663ff1429aea10842df27b6b991ef25866b2c6c02cdcc5be",
+    "relayOrigin": "https://relay.example.com",
+    "relayOnline": true,
+    "nearbyAvailable": true,
+    "invitation": null,
+    "qrRows": null
+  },
+  "request": {
+    "version": 5,
+    "issuedAt": 1789142400,
+    "expiresAt": 1789142490,
+    "method": "GET",
+    "path": "/api/v2/workspaces",
+    "body": "",
+    "cookie": null,
+    "control": null,
+    "command": null,
+    "invitationId": null
+  },
+  "response": {
+    "version": 5,
+    "status": 204,
+    "body": "",
+    "contentType": "application/octet-stream",
+    "setCookie": null
+  }
+}

@@ -1,0 +1,31 @@
+[package]
+name = "provider-replay"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+description = "Test-only: records a real provider CLI session once and replays it deterministically. Never packaged."
+
+[[bin]]
+name = "provider-replay"
+path = "src/bin/provider-replay.rs"
+test = false
+
+[[bin]]
+name = "provider-record"
+path = "src/bin/provider-record.rs"
+test = false
+
+[dependencies]
+interface-common = { path = "../interface-common" }
+interface-review = { path = "../interface-review" }
+regex.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
+
+[lints]
+workspace = true

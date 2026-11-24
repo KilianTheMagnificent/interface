@@ -1,0 +1,32 @@
+/* Scheduled prompts (T3 section 7): one quiet line above the composer, on
+   the transcript's measure, like Started threads; the schedule dialog's
+   fields on the ConfirmDialog surface; the Settings list. Plain words. */
+.thread-schedules { display:flex; flex-direction:column; align-items:flex-start; gap:2px; box-sizing:border-box;
+  width:min(calc(100% - 2 * var(--conv-gutter)), var(--conv-measure)); margin:0 auto 6px;
+  font-size:var(--text-ui); color:var(--fg-dim); }
+.thread-schedule-line { display:flex; align-items:center; flex-wrap:wrap; gap:2px 6px; max-width:100%; }
+.thread-schedule-line-lead { flex:none; }
+.thread-schedule-line-what { min-width:0; max-width:420px; overflow:hidden; text-overflow:ellipsis;
+  white-space:nowrap; color:var(--fg-muted); }
+.thread-schedule-line-by { font-style:italic; }
+.thread-schedule-line-act { padding:0; font:inherit; color:var(--fg-muted); background:none; border:0; cursor:pointer; }
+.thread-schedule-line-act:hover { color:var(--fg); text-decoration:underline; }
+.thread-schedule-line-act:focus-visible { outline:var(--focus-ring-w) solid var(--focus); outline-offset:2px; }
+.thread-schedule-dialog { width:min(480px, calc(100vw - 32px)); }
+.thread-schedule-form { display:grid; gap:10px; }
+.thread-schedule-field { display:grid; gap:4px; color:var(--fg-muted); font-size:var(--text-ui); }
+.thread-schedule-field textarea, .thread-schedule-field input, .thread-schedule-row input,
+.thread-schedule-row select { box-sizing:border-box; min-height:28px; padding:4px 8px; color:var(--fg);
+  background:var(--input-bg); border:var(--border-w) solid var(--border-strong);
+  border-radius:var(--radius-control); font:inherit; font-size:var(--text-ui); }
+.thread-schedule-field textarea { resize:vertical; font-family:var(--font-ui); }
+.thread-schedule-when { display:grid; gap:8px; margin:0; padding:8px 10px; border:var(--border-w) solid var(--border);
+  border-radius:var(--radius-control); font-size:var(--text-ui); }
+.thread-schedule-when legend { padding:0 4px; color:var(--fg-muted); }
+.thread-schedule-kind { display:inline-flex; align-items:center; gap:5px; margin-right:12px; color:var(--fg); }
+.thread-schedule-row { display:flex; align-items:center; gap:6px; }
+.thread-schedule-row input { width:72px; }
+.thread-schedule-hint { color:var(--fg-dim); }
+.thread-schedule-days { display:flex; flex-wrap:wrap; gap:4px 10px; color:var(--fg); }
+.thread-schedule-days label { display:inline-flex; align-items:center; gap:4px; }
+.thread-schedule-error { color:var(--danger-fg); }

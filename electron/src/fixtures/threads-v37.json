@@ -1,0 +1,197 @@
+{
+  "commands": [
+    {
+      "kind": "shipStatus",
+      "key": "claude#5f0c1d2e-8a4b-4c6d-9e7f-1a2b3c4d5e6f",
+      "remote": true
+    },
+    {
+      "kind": "commit",
+      "key": "claude#5f0c1d2e-8a4b-4c6d-9e7f-1a2b3c4d5e6f",
+      "message": "Fix the login test\n\n- Fix the login test\n- Rewrite the session",
+      "paths": [
+        "src/a.ts",
+        "src/lib/session.ts"
+      ]
+    },
+    {
+      "kind": "createBranch",
+      "key": "claude#5f0c1d2e-8a4b-4c6d-9e7f-1a2b3c4d5e6f",
+      "branch": "iface/fix-the-login-test-3f9a2c"
+    },
+    {
+      "kind": "openPullRequest",
+      "key": "claude#5f0c1d2e-8a4b-4c6d-9e7f-1a2b3c4d5e6f",
+      "title": "Fix the login test",
+      "body": "- Fix the login test\n- Rewrite the session"
+    },
+    {
+      "kind": "failingChecksPrompt",
+      "key": "claude#5f0c1d2e-8a4b-4c6d-9e7f-1a2b3c4d5e6f"
+    },
+    {
+      "kind": "reviewComments",
+      "key": "claude#5f0c1d2e-8a4b-4c6d-9e7f-1a2b3c4d5e6f"
+    },
+    {
+      "kind": "mergePullRequest",
+      "key": "claude#5f0c1d2e-8a4b-4c6d-9e7f-1a2b3c4d5e6f",
+      "number": 42,
+      "method": "squash"
+    }
+  ],
+  "response": {
+    "view": {
+      "version": 1,
+      "revision": 4021,
+      "now": 1791302400000,
+      "settings": {
+        "autoSettleDays": 3,
+        "settleOnMerge": true,
+        "generatedTitles": false,
+        "trackPullRequests": true
+      },
+      "threads": [
+        {
+          "key": "claude#5f0c1d2e-8a4b-4c6d-9e7f-1a2b3c4d5e6f",
+          "section": "active",
+          "createdAt": 1791190800000,
+          "activeOrder": "a0",
+          "woke": false,
+          "unread": false,
+          "lastVisitedAt": 1791298000000,
+          "lastRun": {
+            "startedAt": 1791302300000
+          },
+          "autoSettle": true,
+          "workspace": {
+            "mode": "local",
+            "projectRoot": "/Users/owner/Developer/Projects/atlas",
+            "owned": false
+          },
+          "titleSource": "prompt",
+          "turns": [
+            {
+              "ordinal": 0,
+              "sentAt": 1791190800000,
+              "promptDigest": "971ad67d98611a46",
+              "hasStart": true,
+              "hasEnd": true,
+              "state": "done",
+              "filesChanged": 2,
+              "added": 14,
+              "removed": 3
+            },
+            {
+              "ordinal": 1,
+              "sentAt": 1791298500000,
+              "promptDigest": "6def2534bbfcef51",
+              "hasStart": true,
+              "hasEnd": true,
+              "state": "failed",
+              "endedAt": 1791298534000
+            },
+            {
+              "ordinal": 2,
+              "sentAt": 1791301000000,
+              "promptDigest": "0c3b9a7e1d2f4a56",
+              "hasStart": true,
+              "hasEnd": true,
+              "state": "done",
+              "endedAt": 1791301041000,
+              "filesChanged": 1,
+              "added": 2,
+              "removed": 8
+            },
+            {
+              "ordinal": 3,
+              "sentAt": 1791302300000,
+              "promptDigest": "8d1e5f0a9b7c3e21",
+              "hasStart": true,
+              "hasEnd": false,
+              "state": "running"
+            }
+          ]
+        }
+      ]
+    },
+    "prompt": "The pull request #42 has failing checks:\n- CI / build",
+    "ship": {
+      "key": "claude#5f0c1d2e-8a4b-4c6d-9e7f-1a2b3c4d5e6f",
+      "branch": "iface/fix-the-login-test-3f9a2c",
+      "defaultBranch": "main",
+      "remote": "origin",
+      "upstream": "origin/iface/fix-the-login-test-3f9a2c",
+      "ahead": 1,
+      "behind": 0,
+      "files": [
+        {
+          "path": "src/a.ts",
+          "status": "modified"
+        },
+        {
+          "path": "src/lib/session.ts",
+          "status": "added"
+        }
+      ],
+      "leftOut": [
+        {
+          "path": ".env",
+          "reason": "credential"
+        },
+        {
+          "path": "README.md",
+          "reason": "notThisThread"
+        }
+      ],
+      "filesUnknown": true,
+      "commitBlocked": "Finish the merge in progress first.",
+      "message": "Fix the login test\n\n- Fix the login test\n- Rewrite the session",
+      "pushBlocked": "This checkout is on main. Interface won't push to main: create a branch for this work first.",
+      "suggestedBranch": "iface/fix-the-login-test-3f9a2c",
+      "gh": "signedOut",
+      "ghFix": "Run gh auth login in a terminal, then check again.",
+      "remoteRead": true,
+      "pullRequest": {
+        "number": 42,
+        "url": "https://github.com/owner/atlas/pull/42",
+        "state": "open",
+        "title": "Fix the login test",
+        "base": "main",
+        "draft": false
+      },
+      "checks": {
+        "state": "failing",
+        "passed": 3,
+        "failed": 1,
+        "pending": 1,
+        "skipped": 0,
+        "failing": [
+          {
+            "name": "build",
+            "workflow": "CI",
+            "bucket": "fail",
+            "link": "https://github.com/owner/atlas/actions/runs/123/job/456"
+          }
+        ]
+      }
+    },
+    "shipped": {
+      "action": "openPullRequest",
+      "certainty": "unknown",
+      "message": "Interface couldn't confirm the pull request. Check again before trying again."
+    },
+    "reviewComments": [
+      {
+        "path": "src/a.ts",
+        "startLine": 12,
+        "endLine": 14,
+        "side": "new",
+        "code": "+const a = 1;\n+const b = 2;\n+const c = 3;",
+        "comment": "@reviewer: name these",
+        "url": "https://github.com/owner/atlas/pull/42#discussion_r1",
+        "outdated": false
+      }
+    ]
+  }
+}

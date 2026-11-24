@@ -1,0 +1,3 @@
+/* The Threads icons sit on the text's centre line and never take a pointer:
+   the control around one is the target. */
+.thread-glyph { display:inline-block; flex:none; vertical-align:middle; pointer-events:none; }

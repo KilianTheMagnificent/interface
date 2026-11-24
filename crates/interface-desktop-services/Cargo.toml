@@ -1,0 +1,27 @@
+[package]
+name = "interface-desktop-services"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+chrono.workspace = true
+interface-common = { path = "../interface-common" }
+interface-contracts = { path = "../interface-contracts" }
+interface-registry = { path = "../interface-registry" }
+interface-review = { path = "../interface-review" }
+interface-settings = { path = "../interface-settings" }
+interface-workspace = { path = "../interface-workspace" }
+libc.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+thiserror.workspace = true
+uuid.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
+
+[lints]
+workspace = true

@@ -1,0 +1,322 @@
+{
+  "commands": [
+    { "kind": "read" },
+    { "kind": "pin", "key": "codex#019a3c5e-7d21-7c30-9f4e-2b6d8a1c4e90" },
+    { "kind": "unpin", "key": "claude#5f0c1d2e-8a4b-4c6d-9e7f-1a2b3c4d5e6f" },
+    { "kind": "reorder", "key": "codex#019a3c5e-7d21-7c30-9f4e-2b6d8a1c4e90", "section": "pinned", "beforeKey": "claude#5f0c1d2e-8a4b-4c6d-9e7f-1a2b3c4d5e6f" },
+    { "kind": "reorder", "key": "codex#019a3c5e-7d21-7c30-9f4e-2b6d8a1c4e90", "section": "active" },
+    { "kind": "settle", "key": "codex#019a3c5e-7d21-7c30-9f4e-2b6d8a1c4e90" },
+    { "kind": "unsettle", "key": "claude#c8e1f2a3-4b5c-4d6e-8f70-91a2b3c4d5e6" },
+    { "kind": "snooze", "key": "codex#019a3d70-1b42-7e55-8c11-5f3a9d2e7b04", "until": 1791363600000 },
+    { "kind": "unsnooze", "key": "codex#019a3d70-1b42-7e55-8c11-5f3a9d2e7b04" },
+    { "kind": "visit", "key": "codex#019a3c5e-7d21-7c30-9f4e-2b6d8a1c4e90" },
+    { "kind": "markUnread", "key": "claude#5f0c1d2e-8a4b-4c6d-9e7f-1a2b3c4d5e6f" },
+    { "kind": "setAutoSettle", "key": "codex#019a3c5e-7d21-7c30-9f4e-2b6d8a1c4e90", "enabled": false },
+    {
+      "kind": "setSettings",
+      "settings": { "autoSettleDays": 7, "settleOnMerge": false, "generatedTitles": true, "trackPullRequests": false }
+    },
+    {
+      "kind": "prepareWorkspace",
+      "projectRoot": "/Users/owner/Developer/Projects/atlas",
+      "mode": "local",
+      "hint": "Explain how the session cache invalidates"
+    },
+    {
+      "kind": "prepareWorkspace",
+      "projectRoot": "/Users/owner/Developer/Projects/atlas",
+      "mode": "worktree",
+      "baseRef": "main",
+      "hint": "Fix the flaky login test"
+    },
+    {
+      "kind": "prepareWorkspace",
+      "projectRoot": "/Users/owner/Developer/Projects/atlas",
+      "mode": "existing",
+      "worktreePath": "/Users/owner/Developer/Projects/.interface-worktrees/fix-the-flaky-login-test-3f9a2c",
+      "hint": "Now add a regression test for the retry path"
+    },
+    { "kind": "discardWorkspace", "token": "prep-7c2e9a41d0b35f68" },
+    {
+      "kind": "bind",
+      "key": "codex#019a3c5e-7d21-7c30-9f4e-2b6d8a1c4e90",
+      "token": "prep-7c2e9a41d0b35f68",
+      "prompt": "Fix the flaky login test",
+      "titleSource": "prompt"
+    },
+    { "kind": "bind", "key": "claude#c8e1f2a3-4b5c-4d6e-8f70-91a2b3c4d5e6", "prompt": "Draft release notes for 0.4" },
+    { "kind": "listBranches", "projectRoot": "/Users/owner/Developer/Projects/atlas" },
+    { "kind": "listWorktrees", "projectRoot": "/Users/owner/Developer/Projects/atlas" },
+    { "kind": "turnDiff", "key": "codex#019a3c5e-7d21-7c30-9f4e-2b6d8a1c4e90", "ordinal": 1 },
+    { "kind": "threadDiff", "key": "codex#019a3c5e-7d21-7c30-9f4e-2b6d8a1c4e90", "scope": "branch" },
+    { "kind": "restoreTurn", "key": "codex#019a3c5e-7d21-7c30-9f4e-2b6d8a1c4e90", "ordinal": 1 },
+    { "kind": "forkAt", "key": "codex#019a3c5e-7d21-7c30-9f4e-2b6d8a1c4e90", "keepTurns": 1 },
+    { "kind": "editFrom", "key": "codex#019a3c5e-7d21-7c30-9f4e-2b6d8a1c4e90", "ordinal": 1, "restoreFiles": true },
+    { "kind": "releaseWorkspace", "key": "codex#019a3c5e-7d21-7c30-9f4e-2b6d8a1c4e90" },
+    { "kind": "regenerateTitle", "key": "claude#5f0c1d2e-8a4b-4c6d-9e7f-1a2b3c4d5e6f" },
+    { "kind": "refreshPullRequest", "key": "codex#019a3c5e-7d21-7c30-9f4e-2b6d8a1c4e90" }
+  ],
+  "view": {
+    "version": 1,
+    "revision": 118,
+    "now": 1791298800000,
+    "settings": { "autoSettleDays": 3, "settleOnMerge": true, "generatedTitles": false, "trackPullRequests": true },
+    "threads": [
+      {
+        "key": "claude#5f0c1d2e-8a4b-4c6d-9e7f-1a2b3c4d5e6f",
+        "section": "pinned",
+        "createdAt": 1791190800000,
+        "pinnedAt": 1791295200000,
+        "pinOrder": "a0",
+        "woke": false,
+        "unread": false,
+        "lastVisitedAt": 1791298500000,
+        "lastRun": { "startedAt": 1791298500000 },
+        "autoSettle": true,
+        "workspace": { "mode": "local", "projectRoot": "/Users/owner/Developer/Projects/atlas", "owned": false },
+        "titleSource": "user",
+        "turns": [
+          {
+            "ordinal": 0,
+            "sentAt": 1791190800000,
+            "promptDigest": "971ad67d98611a46",
+            "hasStart": true,
+            "hasEnd": true,
+            "state": "done",
+            "filesChanged": 0,
+            "added": 0,
+            "removed": 0
+          },
+          {
+            "ordinal": 1,
+            "sentAt": 1791298500000,
+            "promptDigest": "6def2534bbfcef51",
+            "hasStart": true,
+            "hasEnd": false,
+            "state": "running"
+          }
+        ]
+      },
+      {
+        "key": "codex#019a3c5e-7d21-7c30-9f4e-2b6d8a1c4e90",
+        "section": "active",
+        "createdAt": 1791295200000,
+        "activeOrder": "Zz",
+        "woke": false,
+        "unread": true,
+        "lastVisitedAt": 1791297000000,
+        "lastRun": { "startedAt": 1791297000000, "endedAt": 1791297730000, "outcome": "failed" },
+        "autoSettle": false,
+        "workspace": {
+          "mode": "worktree",
+          "projectRoot": "/Users/owner/Developer/Projects/atlas",
+          "worktreePath": "/Users/owner/Developer/Projects/.interface-worktrees/fix-the-flaky-login-test-3f9a2c",
+          "branch": "iface/fix-the-flaky-login-test-3f9a2c",
+          "baseRef": "main",
+          "owned": true,
+          "missing": false,
+          "kept": "dirty"
+        },
+        "pullRequest": {
+          "url": "https://github.com/owner/atlas/pull/482",
+          "number": 482,
+          "state": "open",
+          "checkedAt": 1791298500000
+        },
+        "titleSource": "prompt",
+        "turns": [
+          {
+            "ordinal": 0,
+            "sentAt": 1791295200000,
+            "promptDigest": "4b886b8719e00bff",
+            "hasStart": true,
+            "hasEnd": true,
+            "state": "done",
+            "filesChanged": 3,
+            "added": 41,
+            "removed": 12
+          },
+          {
+            "ordinal": 1,
+            "sentAt": 1791297000000,
+            "promptDigest": "6def2534bbfcef51",
+            "hasStart": true,
+            "hasEnd": true,
+            "state": "failed",
+            "filesChanged": 1,
+            "added": 18,
+            "removed": 0
+          }
+        ]
+      },
+      {
+        "key": "codex#019a3d70-1b42-7e55-8c11-5f3a9d2e7b04",
+        "section": "snoozed",
+        "createdAt": 1791297730000,
+        "activeOrder": "a1",
+        "snoozedUntil": 1791363600000,
+        "woke": false,
+        "unread": false,
+        "lastVisitedAt": 1791298000000,
+        "lastRun": { "startedAt": 1791297800000, "endedAt": 1791297900000, "outcome": "interrupted" },
+        "autoSettle": true,
+        "workspace": {
+          "mode": "worktree",
+          "projectRoot": "/Users/owner/Developer/Projects/atlas",
+          "worktreePath": "/Users/owner/Developer/Projects/.interface-worktrees/fix-the-flaky-login-test-3f9a2c",
+          "branch": "iface/fix-the-flaky-login-test-3f9a2c",
+          "baseRef": "main",
+          "owned": false
+        },
+        "lineage": {
+          "parent": "codex#019a3c5e-7d21-7c30-9f4e-2b6d8a1c4e90",
+          "relation": "fork",
+          "keptTurns": 1,
+          "at": 1791297730000
+        },
+        "titleSource": "prompt",
+        "turns": [
+          {
+            "ordinal": 0,
+            "sentAt": 1791297800000,
+            "promptDigest": "6def2534bbfcef51",
+            "hasStart": true,
+            "hasEnd": false,
+            "state": "interrupted"
+          }
+        ]
+      },
+      {
+        "key": "claude#c8e1f2a3-4b5c-4d6e-8f70-91a2b3c4d5e6",
+        "section": "settled",
+        "createdAt": 1790848800000,
+        "settledAt": 1791014400000,
+        "settledReason": "idle",
+        "woke": false,
+        "unread": false,
+        "lastVisitedAt": 1790942400000,
+        "lastRun": { "startedAt": 1790848800000, "endedAt": 1790848860000, "outcome": "completed" },
+        "autoSettle": true,
+        "workspace": { "mode": "none", "projectRoot": "", "owned": false },
+        "titleSource": "prompt",
+        "turns": [
+          {
+            "ordinal": 0,
+            "sentAt": 1790848800000,
+            "promptDigest": "3eabbba6647ab816",
+            "hasStart": false,
+            "hasEnd": false,
+            "state": "done"
+          }
+        ]
+      }
+    ]
+  },
+  "response": {
+    "view": {
+      "version": 1,
+      "revision": 119,
+      "now": 1791298800000,
+      "settings": { "autoSettleDays": 0, "settleOnMerge": true, "generatedTitles": true, "trackPullRequests": true },
+      "threads": [
+        {
+          "key": "codex#019a3e01-5c6d-7f80-a1b2-c3d4e5f60718",
+          "section": "active",
+          "createdAt": 1791298800000,
+          "activeOrder": "Zy",
+          "woke": false,
+          "unread": false,
+          "autoSettle": true,
+          "workspace": {
+            "mode": "worktree",
+            "projectRoot": "/Users/owner/Developer/Projects/atlas",
+            "worktreePath": "/Users/owner/Developer/Projects/.interface-worktrees/fix-the-flaky-login-test-3f9a2c",
+            "branch": "iface/fix-the-flaky-login-test-3f9a2c",
+            "baseRef": "main",
+            "owned": true
+          },
+          "lineage": {
+            "parent": "codex#019a3c5e-7d21-7c30-9f4e-2b6d8a1c4e90",
+            "relation": "edit",
+            "keptTurns": 1,
+            "at": 1791298800000
+          },
+          "titleSource": "generated",
+          "turns": []
+        }
+      ]
+    },
+    "prepared": {
+      "token": "prep-7c2e9a41d0b35f68",
+      "cwd": "/Users/owner/Developer/Projects/.interface-worktrees/fix-the-flaky-login-test-3f9a2c",
+      "workspace": {
+        "mode": "worktree",
+        "projectRoot": "/Users/owner/Developer/Projects/atlas",
+        "worktreePath": "/Users/owner/Developer/Projects/.interface-worktrees/fix-the-flaky-login-test-3f9a2c",
+        "branch": "iface/fix-the-flaky-login-test-3f9a2c",
+        "baseRef": "main",
+        "owned": true
+      }
+    },
+    "branches": {
+      "current": "main",
+      "defaultBranch": "main",
+      "branches": ["main", "release/0.4", "iface/fix-the-flaky-login-test-3f9a2c"]
+    },
+    "worktrees": [
+      {
+        "path": "/Users/owner/Developer/Projects/.interface-worktrees/fix-the-flaky-login-test-3f9a2c",
+        "branch": "iface/fix-the-flaky-login-test-3f9a2c",
+        "ownerKey": "codex#019a3c5e-7d21-7c30-9f4e-2b6d8a1c4e90"
+      },
+      { "path": "/Users/owner/Developer/Projects/atlas-hotfix" }
+    ],
+    "diff": {
+      "scope": "turn",
+      "base": "refs/interface/threads/e1599cbb28c98fa5/1/start",
+      "head": "refs/interface/threads/e1599cbb28c98fa5/1/end",
+      "files": [
+        {
+          "path": "src/auth/retry.ts",
+          "oldPath": "src/auth/backoff.ts",
+          "status": "renamed",
+          "added": 6,
+          "removed": 2,
+          "binary": false,
+          "patch": "@@ -1,4 +1,8 @@\n-export const RETRIES = 3;\n+export const RETRIES = 5;\n"
+        },
+        {
+          "path": "test/login.test.ts",
+          "status": "added",
+          "added": 12,
+          "removed": 0,
+          "binary": false,
+          "patch": "@@ -0,0 +1,12 @@\n+import { login } from \"../src/auth\";\n"
+        },
+        {
+          "path": ".env.local",
+          "status": "modified",
+          "added": 1,
+          "removed": 1,
+          "binary": false,
+          "omitted": "sensitive"
+        },
+        {
+          "path": "assets/logo.png",
+          "status": "deleted",
+          "added": 0,
+          "removed": 0,
+          "binary": true,
+          "omitted": "binary"
+        }
+      ],
+      "truncated": true
+    },
+    "restore": {
+      "restored": 3,
+      "recoveryRef": "refs/interface/threads/e1599cbb28c98fa5/recovery/1791298800000"
+    },
+    "key": "codex#019a3e01-5c6d-7f80-a1b2-c3d4e5f60718",
+    "prompt": "Now add a regression test for the retry path"
+  }
+}

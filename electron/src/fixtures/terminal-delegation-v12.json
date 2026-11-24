@@ -1,0 +1,108 @@
+{
+  "protocolVersion": 12,
+  "channel": "iface:readTerminalDelegation",
+  "request": {
+    "id": "11111111-1111-4111-8111-111111111111",
+    "generation": 2,
+    "taskId": "worker-1"
+  },
+  "view": {
+    "version": 3,
+    "available": true,
+    "workflows": [
+      {
+        "id": "workflow-1",
+        "title": "Fix validation and update examples",
+        "decision": "Delegated",
+        "reason": null,
+        "state": "In progress",
+        "hookObserved": true,
+        "parallelTools": 2,
+        "checks": [],
+        "tasks": [
+          {
+            "id": "worker-1",
+            "title": "examples",
+            "model": "opencode-go/glm-5.3-flash",
+            "state": "Ready for review",
+            "notes": null,
+            "files": [
+              "guide.md"
+            ],
+            "elapsedMs": 1200,
+            "usage": {
+              "inputTokens": 50,
+              "outputTokens": 10,
+              "reasoningTokens": null,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "costUsd": null
+            },
+            "activity": {
+              "entries": [
+                {
+                  "sequence": 1,
+                  "kind": "status",
+                  "text": "Working\u2026"
+                },
+                {
+                  "sequence": 2,
+                  "kind": "tool",
+                  "text": "read \u00b7 completed"
+                },
+                {
+                  "sequence": 3,
+                  "kind": "message",
+                  "text": "I found the missing examples. Updating guide.md now."
+                },
+                {
+                  "sequence": 4,
+                  "kind": "tool",
+                  "text": "edit \u00b7 completed"
+                }
+              ],
+              "truncated": false
+            },
+            "terminal": {
+              "id": "22222222-2222-4222-8222-222222222222",
+              "generation": 1,
+              "title": "OpenCode worker",
+              "root": "/private/worker",
+              "cwd": "/private/worker",
+              "state": "running",
+              "size": {
+                "columns": 90,
+                "rows": 30
+              },
+              "launch": {
+                "version": 1,
+                "profileId": "opencode"
+              },
+              "createdAt": "2026-09-08T00:00:00.000Z",
+              "updatedAt": "2026-09-08T00:00:00.000Z"
+            }
+          }
+        ]
+      }
+    ],
+    "detail": {
+      "version": 2,
+      "task": {
+        "state": "completed"
+      },
+      "resultSha256": "frozen-result",
+      "result": {
+        "summary": "Updated examples; parent checks required",
+        "changes": [
+          {
+            "path": "guide.md",
+            "before": "Before\n",
+            "after": "Proposed\n",
+            "beforeSha256": "baseline",
+            "sourceChanged": false
+          }
+        ]
+      }
+    }
+  }
+}

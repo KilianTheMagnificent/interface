@@ -1,0 +1,13 @@
+.workflow-controls { width: 100%; font-size: var(--text-ui); color: var(--fg-muted); }
+.workflow-controls > summary { cursor: pointer; padding: 8px 0; }
+.workflow-controls-body { display: flex; flex-direction: column; gap: 8px; padding: 8px 0; }
+.workflow-controls-body p { margin: 0; line-height: var(--lh-ui); }
+.workflow-controls-body label { display: flex; flex-wrap: wrap; gap: 6px; color: var(--fg); }
+.workflow-controls-body label span { color: var(--fg-dim); }
+.workflow-controls-body :is(textarea, input, select) { box-sizing: border-box; max-width: 100%; border: 1px solid var(--border); border-radius: var(--radius-control); padding: 6px 8px; color: var(--fg); background: var(--input-bg); font: inherit; }
+.workflow-controls-body textarea { resize: vertical; min-height: 42px; }
+.workflow-controls-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.workflow-controls-actions input[type="number"] { width: 75px; }
+.workflow-setup-log { overflow-wrap: anywhere; }
+.workflow-setup-log section { display: flex; flex-direction: column; gap: 4px; padding-top: 8px; }
+.workflow-setup-log pre { white-space: pre-wrap; overflow: auto; max-height: 240px; font-size: var(--text-meta); }

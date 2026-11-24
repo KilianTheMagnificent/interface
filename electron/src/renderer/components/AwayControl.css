@@ -1,0 +1,83 @@
+/* Away is one split button: the coffee starts a loop while you are away, the
+   narrow chevron configures it. The inner corners square off so the two hover
+   fills meet, and a hairline divides the halves while pointer or focus is in
+   the group. Sync stays the update check's glyph. */
+.away-toolbar { display: flex; align-items: center; }
+.away-toolbar > .workspace-icon-btn:first-child { border-start-end-radius: 0; border-end-end-radius: 0; }
+.away-toolbar .away-options { position: relative; width: 16px; min-width: 16px; padding: 0;
+  border-start-start-radius: 0; border-end-start-radius: 0; }
+.away-toolbar .away-options::before { content: ""; position: absolute; inset-block: 25%; left: 0;
+  width: var(--border-w); background: var(--border); opacity: 0; }
+.away-toolbar:is(:hover, :focus-within) .away-options::before { opacity: 1; }
+.away-count { font-size: var(--text-meta); }
+.away-backdrop { position: fixed; inset: 0; z-index: 1200; background: rgb(0 0 0 / 45%); display: grid; place-items: center; padding: 20px; }
+
+/* THE PANEL (review B3): the loops, each opening its thread, over the start
+   form drawn like the New thread card — the project, the objective in a
+   rounded card whose foot carries the shared model picker, the limits and a
+   round Start, and the quiet line under the card. Neutral ink; the project's
+   own hue only where the New thread card wears it (the card's edge, Start). */
+.away-panel { width: min(640px, 100%); max-height: 92vh; overflow: auto; color: var(--fg); background: var(--widget-bg); border: var(--border-w) solid var(--border); border-radius: var(--radius-overlay); box-shadow: var(--overlay-shadow); }
+.away-head { display: flex; justify-content: space-between; align-items: start; gap: 12px; padding: 18px 20px 6px; }
+.away-panel h2 { margin: 0 0 4px; font-size: var(--text-h2); font-weight: var(--wght-medium); color: var(--fg-strong); }
+.away-head p { margin: 0; color: var(--fg-dim); font-size: var(--text-ui); }
+.away-close { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; color: var(--fg-dim); background: transparent; border: 0; border-radius: var(--radius-control); cursor: pointer; }
+.away-close:hover { color: var(--fg-strong); background: var(--row-hover); }
+.away-body { display: grid; gap: 18px; padding: 12px 20px 18px; }
+.away-panel p { margin: 0; line-height: var(--lh-ui); overflow-wrap: anywhere; }
+.away-panel :is(button, input, textarea):focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.away-label { margin: 0 0 6px; font-size: var(--text-meta); font-weight: var(--wght-medium); letter-spacing: var(--track-caps); text-transform: uppercase; color: var(--fg-dim); }
+.away-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.away-loops ul { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
+.away-loop { display: flex; align-items: center; gap: 6px; }
+.away-loop-open { display: flex; flex: 1 1 auto; align-items: center; gap: 10px; min-width: 0; min-height: 44px; padding: 4px 8px; font: inherit; text-align: left; color: var(--fg); background: transparent; border: 0; border-radius: var(--radius-container); cursor: pointer; }
+.away-loop-open:hover:not(:disabled) { background: var(--row-hover); }
+.away-loop-open:disabled { cursor: default; }
+.away-loop-text { display: grid; flex: 1 1 auto; min-width: 0; }
+.away-loop-title, .away-loop-meta { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.away-loop-title { font-size: var(--text-body); }
+.away-loop:not(.is-active) .away-loop-title { color: var(--fg-muted); }
+.away-loop-meta { font-size: var(--text-ui); color: var(--fg-dim); }
+.away-loop-go { flex: none; color: var(--fg-dim); }
+.away-stop { flex: none; min-height: 28px; padding: 0 10px; font: inherit; font-size: var(--text-ui); color: var(--danger-fg); background: transparent; border: var(--border-w) solid var(--border); border-radius: var(--radius-container); cursor: pointer; }
+.away-stop:hover:not(:disabled) { background: var(--row-hover); }
+.away-stop:disabled { color: var(--fg-faint); cursor: default; }
+
+.away-start { display: grid; gap: 10px; isolation: isolate; }
+.away-project-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-width: 0; }
+.away-project { display: inline-flex; align-items: center; gap: 7px; max-width: 100%; height: 32px; padding: 0 10px 0 6px; font: inherit; font-size: var(--text-body); color: color-mix(in srgb, var(--project-h, var(--fg)) 60%, var(--fg-strong)); background: color-mix(in srgb, var(--project-h, var(--fg-dim)) 14%, transparent); border: 0; border-radius: var(--radius-overlay); cursor: pointer; }
+.away-project:hover:not(:disabled) { background: color-mix(in srgb, var(--project-h, var(--fg-dim)) 20%, transparent); }
+.away-project-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.away-path { flex: 1 1 160px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--text-ui); color: var(--fg-dim); }
+.away-link { padding: 0; font: inherit; font-size: var(--text-ui); color: var(--fg-muted); background: transparent; border: 0; cursor: pointer; text-decoration: underline; text-decoration-color: var(--border); text-underline-offset: 3px; }
+.away-link:hover:not(:disabled) { color: var(--fg-strong); }
+.away-link:disabled { color: var(--fg-faint); cursor: default; }
+
+/* The objective's card: the New thread card's prompt card, its edge running
+   from the project's hue to its second hue. */
+.away-card { position: relative; z-index: 1; display: grid; background: var(--material-surface); border: var(--border-w) solid var(--border); border-radius: calc(var(--radius-composer) * 1.25); }
+.away-start:not(.project-hue-none) .away-card { border-color: transparent; background: linear-gradient(var(--material-surface), var(--material-surface)) padding-box, linear-gradient(115deg, color-mix(in srgb, var(--project-h) 60%, transparent), color-mix(in srgb, var(--project-h2) 45%, transparent)) border-box; box-shadow: 0 0 34px -16px color-mix(in srgb, var(--project-h) 45%, transparent); }
+.away-card:has(textarea:focus-visible) { border-color: var(--focus); }
+.away-card textarea { width: 100%; min-height: 72px; box-sizing: border-box; padding: 14px 16px 6px; font: inherit; line-height: var(--lh-prose); color: var(--fg); background: transparent; border: 0; resize: vertical; }
+.away-card textarea:focus-visible { outline: none; }
+.away-card-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 2px; padding: 4px 8px 8px; }
+.away-chip .app-select-trigger, .away-number { height: 28px; padding: 0 9px; border-radius: var(--radius-container); font-size: var(--text-ui); }
+.away-model, .away-model .app-select-trigger { min-width: 0; }
+.away-number { display: inline-flex; align-items: center; gap: 4px; color: var(--fg-dim); }
+.away-number:hover { background: var(--row-hover); }
+.away-number input { width: 4.2ch; padding: 0; font: inherit; text-align: right; color: var(--fg); background: transparent; border: 0; appearance: textfield; }
+.away-number input::-webkit-inner-spin-button { appearance: none; }
+.away-sep { flex: none; width: var(--border-w); height: 16px; margin: 0 4px; background: var(--border); }
+.away-submit { display: grid; place-items: center; width: 30px; height: 30px; margin-left: auto; padding: 0; color: var(--accent-fg); background: var(--accent); border: 0; border-radius: 50%; cursor: pointer; }
+.away-start:not(.project-hue-none) .away-submit:not(:disabled) { color: light-dark(white, #0e0e0d); background: linear-gradient(135deg, var(--project-h), var(--project-h2)); }
+.away-submit:disabled { color: var(--fg-faint); background: var(--row-hover); cursor: default; }
+.away-panel .away-drawer { margin: -18px 14px 0; padding: 22px 12px 8px; font-size: var(--text-ui); color: var(--fg-dim); background: color-mix(in srgb, var(--fg) 3%, transparent); border: var(--border-w) solid var(--border); border-top: 0; border-radius: 0 0 var(--radius-container) var(--radius-container); }
+.away-actions { display: flex; justify-content: flex-end; }
+.away-pending { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.away-pending button { min-height: 28px; padding: 0 10px; font: inherit; font-size: var(--text-ui); color: var(--fg); background: transparent; border: var(--border-w) solid var(--border); border-radius: var(--radius-container); cursor: pointer; }
+.away-hint { color: var(--fg-dim); font-size: var(--text-ui); }
+.away-panel [role="alert"] { color: var(--danger-fg); }
+@media (max-width: 600px) { .away-backdrop { padding: 8px; } .away-body, .away-head { padding-inline: 14px; } }
+/* The model picker's list is portaled to the body: above the dialog it opens from. */
+.app-select-popover.away-model-popover { z-index: 1300; }

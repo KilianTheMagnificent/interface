@@ -1,0 +1,54 @@
+/* Owner-selected material strength is independent of palette and chrome style.
+   These overrides are inactive at zero, preserving the settled solid surfaces. */
+:root { --terminal-glass-active: 0; }
+:root[data-glass="true"],
+:root[data-glass="true"] body,
+:root[data-glass="true"] .app-grid { background: transparent; }
+
+:root[data-sidebar-glass="true"] .sidebar {
+  background: color-mix(in srgb, var(--material-chrome) var(--sidebar-surface-opacity), transparent);
+}
+:root[data-sidebar-glass="true"] .sidebar .group-header-row { background-color: transparent; }
+:root[data-sidebar-glass="true"] .sidebar .group > .session-items {
+  clip-path: inset(var(--sticky-header-clip, 0px) 0 0);
+}
+
+:root[data-terminal-glass="true"] { --terminal-glass-active: 1; }
+:root[data-terminal-glass="true"] .workspace-shell:has(.workspace-surface:not(.is-hidden) .terminal-center),
+:root[data-terminal-glass="true"] .workspace-content:has(> .workspace-surface:not(.is-hidden) .terminal-center),
+:root[data-terminal-glass="true"] .terminal-center,
+:root[data-terminal-glass="true"] .terminal-workspace,
+:root[data-terminal-glass="true"] .terminal-split,
+:root[data-terminal-glass="true"] .terminal-pane-body,
+:root[data-terminal-glass="true"] .terminal-view,
+:root[data-terminal-glass="true"] .terminal-xterm,
+:root[data-terminal-glass="true"] .terminal-xterm .xterm .xterm-viewport {
+  background: transparent;
+}
+:root[data-terminal-glass="true"] .terminal-pane {
+  background: color-mix(in srgb, var(--terminal-content-bg) var(--terminal-surface-opacity), transparent);
+}
+/* The lifted header hierarchy remains visible at every material strength. */
+:root[data-terminal-glass="true"] .terminal-pane-head {
+  background: color-mix(in srgb, var(--terminal-header-bg) var(--terminal-head-surface-opacity), transparent);
+}
+:root[data-terminal-glass="true"] .terminal-pane.is-focused .terminal-pane-head {
+  background: color-mix(in srgb, var(--terminal-header-bg-focused) var(--terminal-head-surface-opacity), transparent);
+}
+:root[data-terminal-glass="true"] .terminal-pane-card {
+  background: color-mix(in srgb, var(--terminal-content-bg) var(--terminal-surface-opacity), transparent);
+}
+
+/* Honor the OS accessibility preference without overwriting saved slider values. */
+@media (prefers-reduced-transparency: reduce) {
+  :root[data-terminal-glass="true"] { --terminal-glass-active: 0; }
+  :root[data-glass="true"] body { background: var(--editor-bg); }
+  :root[data-glass="true"] .app-grid { background: var(--workbench-canvas); }
+  :root[data-sidebar-glass="true"] .sidebar { background: var(--material-chrome); }
+  :root[data-sidebar-glass="true"] .sidebar .group-header-row { background-color: var(--chrome-bg); }
+  :root[data-sidebar-glass="true"] .sidebar .group > .session-items { clip-path: none; }
+  :root[data-terminal-glass="true"] .terminal-pane,
+  :root[data-terminal-glass="true"] .terminal-pane-card { background: var(--terminal-content-bg); }
+  :root[data-terminal-glass="true"] .terminal-pane-head { background: var(--terminal-header-bg); }
+  :root[data-terminal-glass="true"] .terminal-pane.is-focused .terminal-pane-head { background: var(--terminal-header-bg-focused); }
+}

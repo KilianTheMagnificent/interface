@@ -1,0 +1,109 @@
+{
+  "default": {
+    "version": 2,
+    "terminalFontSize": 11.5,
+    "pinnedWorkspaces": []
+  },
+  "accepted": [
+    {
+      "version": 2,
+      "terminalFontSize": 11.5,
+      "pinnedWorkspaces": []
+    },
+    {
+      "version": 2,
+      "terminalFontSize": 10,
+      "pinnedWorkspaces": []
+    },
+    {
+      "version": 2,
+      "terminalFontSize": 12,
+      "pinnedWorkspaces": []
+    },
+    {
+      "version": 2,
+      "terminalFontSize": 20.5,
+      "pinnedWorkspaces": []
+    },
+    {
+      "version": 2,
+      "terminalFontSize": 26,
+      "pinnedWorkspaces": [
+        "workspace-a"
+      ]
+    }
+  ],
+  "rejected": [
+    null,
+    {},
+    {
+      "version": 1,
+      "terminalFontSize": 20,
+      "pinnedWorkspaces": []
+    },
+    {
+      "version": 3,
+      "terminalFontSize": 20,
+      "pinnedWorkspaces": []
+    },
+    {
+      "version": 2,
+      "terminalFontSize": 9.5,
+      "pinnedWorkspaces": []
+    },
+    {
+      "version": 2,
+      "terminalFontSize": 26.5,
+      "pinnedWorkspaces": []
+    },
+    {
+      "version": 2,
+      "terminalFontSize": 11.25,
+      "pinnedWorkspaces": []
+    },
+    {
+      "version": 2,
+      "terminalFontSize": "11.5",
+      "pinnedWorkspaces": []
+    },
+    {
+      "version": 2,
+      "terminalFontSize": 20,
+      "pinnedWorkspaces": [
+        "a",
+        "a"
+      ]
+    },
+    {
+      "version": 2,
+      "terminalFontSize": 20,
+      "pinnedWorkspaces": [
+        "bad/path"
+      ]
+    },
+    {
+      "version": 2,
+      "terminalFontSize": 20,
+      "pinnedWorkspaces": [],
+      "extra": true
+    }
+  ],
+  "legacyViews": [
+    {
+      "current": { "version": 2, "terminalFontSize": 11.5, "pinnedWorkspaces": ["w-1"] },
+      "legacy": { "version": 1, "terminalFontSize": 12, "pinnedWorkspaces": ["w-1"] }
+    },
+    {
+      "current": { "version": 2, "terminalFontSize": 10, "pinnedWorkspaces": [] },
+      "legacy": { "version": 1, "terminalFontSize": 12, "pinnedWorkspaces": [] }
+    },
+    {
+      "current": { "version": 2, "terminalFontSize": 12.5, "pinnedWorkspaces": [] },
+      "legacy": { "version": 1, "terminalFontSize": 13, "pinnedWorkspaces": [] }
+    },
+    {
+      "current": { "version": 2, "terminalFontSize": 20, "pinnedWorkspaces": [] },
+      "legacy": { "version": 1, "terminalFontSize": 20, "pinnedWorkspaces": [] }
+    }
+  ]
+}

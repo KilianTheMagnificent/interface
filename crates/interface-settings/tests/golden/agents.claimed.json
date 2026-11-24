@@ -1,0 +1,56 @@
+{
+  "version": 2,
+  "revision": 3,
+  "agents": [
+    {
+      "id": "one",
+      "name": "one",
+      "engine": "codex",
+      "model": "",
+      "effort": "",
+      "instructions": "Be precise.",
+      "color": "teal",
+      "shape": "droplet"
+    }
+  ],
+  "assignments": {},
+  "routines": [
+    {
+      "id": "r",
+      "agentId": "one",
+      "name": "Report",
+      "prompt": "Write a report",
+      "cwd": "/fixture",
+      "enabled": true,
+      "startAtMs": 1000,
+      "intervalMinutes": 5,
+      "nextRunAtMs": 301000
+    }
+  ],
+  "runs": [
+    {
+      "id": "scheduled:r:1000",
+      "routineId": "r",
+      "agentId": "one",
+      "name": "Report",
+      "scheduledAtMs": 1000,
+      "updatedAtMs": 1000,
+      "status": "starting",
+      "sessionKey": null,
+      "detail": "",
+      "profile": {
+        "id": "one",
+        "name": "one",
+        "engine": "codex",
+        "model": "",
+        "effort": "",
+        "instructions": "Be precise.",
+        "color": "teal",
+        "shape": "droplet"
+      },
+      "prompt": "Write a report",
+      "cwd": "/fixture",
+      "began": false
+    }
+  ]
+}

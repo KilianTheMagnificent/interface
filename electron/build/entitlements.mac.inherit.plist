@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Code nested inside Interface.app: the Electron helper apps and frameworks.
+  Their permission requests are attributed to Interface.app, which holds the
+  device and personal-information entitlements (entitlements.mac.plist).
+  The executables in Contents/Resources/bin get their own from sign-mac.cjs.
+-->
+<plist version="1.0">
+  <dict>
+    <!-- Renderer and GPU helpers run V8 and compile shaders at run time. -->
+    <key>com.apple.security.cs.allow-jit</key>
+    <true/>
+    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <true/>
+  </dict>
+</plist>

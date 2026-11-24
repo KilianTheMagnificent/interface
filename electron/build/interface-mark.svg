@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- Monochrome Interface mark (The Fold), one-colour master. Takes its colour
+       from CSS `color`. Keep the under-pass open: the break either side of the
+       centre is the mark. Artwork bounds ≈ 212..900; keep ~100 units clear. -->
+  <g transform="translate(-18 12) translate(512 512) scale(0.92) translate(-512 -512)"
+     fill="none" stroke="currentColor" stroke-width="96" stroke-linecap="butt" stroke-linejoin="miter">
+    <path d="M 256 256 L 672 672 L 864 480 L 704 320 L 585.5 438.5"/>
+    <path d="M 438.5 585.5 L 256 768"/>
+  </g>
+</svg>

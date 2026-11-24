@@ -1,0 +1,18 @@
+{
+  "protocol": 43,
+  "requests": [
+    { "details": true },
+    { "refresh": true, "details": true }
+  ],
+  "profiles": [
+    { "id": "shell", "label": "Terminal", "available": true },
+    { "id": "claude", "engine": "claude", "label": "Claude Code", "available": true,
+      "version": "2.1.300 (Claude Code)" },
+    { "id": "codex", "engine": "codex", "label": "Codex", "available": false,
+      "unavailableReason": "Codex CLI was not found in the login shell or a supported install location.",
+      "installHint": "Install it with `npm install -g @openai/codex`, then press Refresh." },
+    { "id": "omp", "engine": "acp:omp", "label": "OMP", "available": false,
+      "unavailableReason": "OMP CLI was not found in the login shell or a supported install location.",
+      "installHint": "Install OMP so `omp` runs in your login shell, then press Refresh." }
+  ]
+}

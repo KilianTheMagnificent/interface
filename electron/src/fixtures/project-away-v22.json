@@ -1,0 +1,55 @@
+{
+  "commands": [
+    {
+      "version": 1,
+      "command": {
+        "kind": "inspect"
+      }
+    },
+    {
+      "version": 1,
+      "command": {
+        "kind": "start",
+        "runId": "away-fixture",
+        "cwd": "/fixture/project",
+        "options": null
+      }
+    },
+    {
+      "version": 1,
+      "command": {
+        "kind": "save",
+        "cwd": "/fixture/another",
+        "options": {
+          "objective": "Fix the fixture and run its existing tests.",
+          "provider": "codex",
+          "model": null,
+          "durationSeconds": 3600,
+          "maxIterations": 12
+        }
+      }
+    },
+    {
+      "version": 1,
+      "command": {
+        "kind": "stop",
+        "runId": "away-fixture"
+      }
+    }
+  ],
+  "snapshot": {
+    "version": 1,
+    "revision": 2,
+    "defaults": {
+      "objective": "Fix the fixture and run its existing tests.",
+      "provider": "codex",
+      "model": null,
+      "durationSeconds": 3600,
+      "maxIterations": 12
+    },
+    "presets": [],
+    "runs": [],
+    "storageUncertain": false,
+    "cancelledStarts": []
+  }
+}

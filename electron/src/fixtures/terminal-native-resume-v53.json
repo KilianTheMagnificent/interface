@@ -1,0 +1,4 @@
+[
+  {"profile":"gemini","id":"agy-d2d9dfef-c119-4df6-8827-2bad4e79eda6","providerId":"d2d9dfef-c119-4df6-8827-2bad4e79eda6","resumeArg":"--conversation"},
+  {"profile":"muse","id":"muse-01a15add-7a55-74d1-bf33-5d8d5502c449","providerId":"01a15add-7a55-74d1-bf33-5d8d5502c449","resumeArg":"resume"}
+]

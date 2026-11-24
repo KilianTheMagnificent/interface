@@ -1,0 +1,22 @@
+{
+  "protocolVersion": 7,
+  "profile": {
+    "id": "omp",
+    "engine": "acp:omp",
+    "label": "OMP",
+    "available": true
+  },
+  "request": {
+    "id": "2f56fa6c-e114-4e88-bb31-6878c8cc3702",
+    "cwd": "/tmp/project",
+    "size": {
+      "columns": 100,
+      "rows": 30
+    },
+    "title": "OMP",
+    "launch": {
+      "version": 1,
+      "profileId": "omp"
+    }
+  }
+}

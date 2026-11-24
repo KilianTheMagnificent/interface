@@ -1,0 +1,25 @@
+/* T3 Chat: T3 Code's T3 Chat palette.
+
+   Ported from TN Code by docs/theme-examples/tn-code/port-themes.mjs; change
+   it there, not here. Copy it to ~/.config/interface/themes/ and pick it in
+   Settings › Appearance. The format is in docs/THEMES.md. */
+:root {
+  --theme-kind: light;
+
+  /* Key colours: everything else is worked out from these. */
+  --theme-background: #fdf7fd;
+  --theme-panel: #f2e1f4;
+  --theme-raised: #fdfafd;
+  --theme-text: #501854;
+  --theme-accent: #db2777;
+  --theme-selection: #db2777;
+  --theme-screen: #fdf7fd;
+  --theme-screen-text: #501854;
+
+  /* Meaning colours, and the few tokens TN Code names outright. */
+  --theme-danger: #f7086c;
+  --theme-warning: #f59e0b;
+  --border: #eee1ed;
+  --accent-fg: #ffffff;
+  --accent-text: #ac1668;
+}

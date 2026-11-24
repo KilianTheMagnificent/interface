@@ -1,0 +1,90 @@
+{
+  "protocolVersion": 14,
+  "commands": [
+    {
+      "kind": "read"
+    },
+    {
+      "kind": "importLegacy",
+      "agents": [
+        {
+          "id": "research",
+          "name": "Research",
+          "engine": "codex",
+          "model": "",
+          "effort": "",
+          "instructions": "Cite primary sources.",
+          "color": "teal",
+          "shape": "star"
+        }
+      ],
+      "assignments": {}
+    },
+    {
+      "kind": "saveAgent",
+      "expectedRevision": 0,
+      "profile": {
+        "id": "research",
+        "name": "Research",
+        "engine": "codex",
+        "model": "",
+        "effort": "",
+        "instructions": "Cite primary sources.",
+        "color": "teal",
+        "shape": "star"
+      }
+    },
+    {
+      "kind": "saveRoutine",
+      "expectedRevision": 1,
+      "routine": {
+        "id": "morning",
+        "agentId": "research",
+        "name": "Morning brief",
+        "prompt": "Summarize the project.",
+        "cwd": "/fixture/project",
+        "enabled": false,
+        "startAtMs": 1788958800000,
+        "intervalMinutes": 1440,
+        "nextRunAtMs": 1788958800000
+      }
+    },
+    {
+      "kind": "runNow",
+      "expectedRevision": 2,
+      "routineId": "morning",
+      "requestId": "once"
+    }
+  ],
+  "state": {
+    "version": 1,
+    "revision": 3,
+    "agents": [
+      {
+        "id": "research",
+        "name": "Research",
+        "engine": "codex",
+        "model": "",
+        "effort": "",
+        "instructions": "Cite primary sources.",
+        "color": "teal",
+        "shape": "star"
+      }
+    ],
+    "assignments": {},
+    "routines": [
+      {
+        "id": "morning",
+        "agentId": "research",
+        "name": "Morning brief",
+        "prompt": "Summarize the project.",
+        "cwd": "/fixture/project",
+        "enabled": false,
+        "startAtMs": 1788958800000,
+        "intervalMinutes": 1440,
+        "nextRunAtMs": 1788958800000
+      }
+    ],
+    "runs": []
+  }
+}

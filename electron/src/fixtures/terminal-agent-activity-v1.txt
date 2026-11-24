@@ -1,0 +1,48 @@
+# Terminal activity rules the renderer (src/renderer/terminal-activity.ts) and
+# crates/interface-terminal (osc_title.rs decorations; workspace_sleep.rs Codex
+# titles, OSC 9 and input wake; screen.rs terminal reports) each implement.
+# Tab-separated: rule, class, sample. In a sample, \xHH is one byte and
+# U+XXXX..U+YYYY an inclusive code point range. glyph rows list every leading
+# title glyph that means work (spinner) or only names the agent (brand).
+glyph	spinner	U+2800..U+28FF
+glyph	spinner	●
+glyph	spinner	○
+glyph	spinner	◐
+glyph	spinner	◓
+glyph	spinner	◑
+glyph	spinner	◒
+glyph	spinner	◆
+glyph	spinner	▪
+glyph	spinner	★
+glyph	spinner	*
+glyph	spinner	⏳
+glyph	spinner	⚡
+glyph	brand	✳
+glyph	brand	✻
+glyph	brand	✽
+glyph	brand	·
+glyph	brand	•
+osc9	waiting	Approval requested: npm test
+osc9	waiting	Approval requested by memory
+osc9	waiting	  APPROVAL REQUESTED: padded and shouting
+osc9	waiting	Codex wants to edit src/main.rs
+osc9	waiting	Codex wants to edit 3 files
+osc9	waiting	Plan mode prompt: Ship it
+osc9	idle	Agent turn complete
+osc9	idle	Renamed foo to bar.
+osc9	idle	Plan mode: not a prompt
+osc9	idle	Approval was granted
+input	reply	\x1b[I
+input	reply	\x1b[O
+input	reply	\x1b[?1;2c
+input	reply	\x1b[>0;276;0c
+input	reply	\x1b[?2026;2$y
+input	reply	\x1b[?0u
+input	human	a
+input	human	\x0d
+input	human	\x1b
+input	human	\x1b[A
+input	human	\x1b[Ihello
+input	human	\x1b[<0;10;5M
+input	human	\x1b[200~pasted\x1b[201~
+input	human	\x1b[1;2R

@@ -1,0 +1,45 @@
+/* The owner-selected working wave for Refined Chat and Agent surfaces. */
+.working-wave, .working-refined-only { display:none; }
+.working-indicator { --working-wave-duration:1.5s; }
+:root:not([data-chrome="cli"]) .conv-working:not(.terminal-pane *) span.working-indicator,
+:root:not([data-chrome="cli"]) .agent-task-status span.working-indicator {
+  display:inline-flex; flex:none; align-items:center; justify-content:center;
+  width:16px; height:16px; padding:0; border:0; border-radius:0;
+  background:transparent; box-shadow:none; color:var(--status-working);
+  animation:none; transform:none; opacity:1; line-height:1;
+}
+:root:not([data-chrome="cli"]) .conv-working:not(.terminal-pane *) span.working-indicator-large { width:24px; height:24px; }
+:root:not([data-chrome="cli"]) .conv-working:not(.terminal-pane *) span.working-indicator::before,
+:root:not([data-chrome="cli"]) .agent-task-status span.working-indicator::before { display:none; content:none; animation:none; }
+:root:not([data-chrome="cli"]) .conv-working:not(.terminal-pane *) span.working-indicator > :not(.working-wave),
+:root:not([data-chrome="cli"]) .agent-task-status span.working-indicator > :not(.working-wave) { display:none; }
+:root:not([data-chrome="cli"]) .conv-working:not(.terminal-pane *) .working-wave,
+:root:not([data-chrome="cli"]) .agent-task-status .working-wave {
+  display:flex; width:100%; height:100%; align-items:center; justify-content:center; gap:var(--working-wave-gap, 1.5px);
+}
+.working-wave > span {
+  flex:none; width:2px; height:13px; border-radius:999px; background:currentColor;
+  transform-origin:center;
+  animation:working-wave var(--working-wave-duration, 1.5s) steps(9) infinite;
+  animation-play-state:var(--ambient-play-state);
+}
+.working-indicator-large { --working-wave-gap:2px; }
+.working-indicator-large .working-wave > span { width:3px; height:18px; }
+.working-wave > span:nth-child(1) { animation-delay:calc(var(--working-wave-duration, 1.5s) * -.8); }
+.working-wave > span:nth-child(2) { animation-delay:calc(var(--working-wave-duration, 1.5s) * -.65); }
+.working-wave > span:nth-child(3) { animation-delay:calc(var(--working-wave-duration, 1.5s) * -.5); }
+.working-wave > span:nth-child(4) { animation-delay:calc(var(--working-wave-duration, 1.5s) * -.35); }
+.working-wave > span:nth-child(5) { animation-delay:calc(var(--working-wave-duration, 1.5s) * -.2); }
+@keyframes working-wave {
+  0%, 100% { transform:scaleY(.27); opacity:.5; }
+  50% { transform:scaleY(1); opacity:1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root .working-wave > span { animation:none; opacity:1; transform:scaleY(.4); }
+  :root .working-wave > span:nth-child(2),
+  :root .working-wave > span:nth-child(4) { transform:scaleY(.7); }
+}
+
+:root:not([data-chrome="cli"]) .agent-task-status {
+  display:inline-flex; align-items:center; gap:6px;
+}

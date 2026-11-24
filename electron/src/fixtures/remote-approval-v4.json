@@ -1,0 +1,20 @@
+{
+  "observation": {
+    "version": 4,
+    "cursor": 100,
+    "screen": {
+      "lines": ["Would you like to run the following command?", "", "  $ printf 'hello'", "", "› 1. Yes, proceed (y)", "  2. No, and tell Codex what to do differently (esc)", "Press enter to confirm or esc to cancel"],
+      "cursorRow": 4, "cursorColumn": 0, "atBottom": true, "bracketedPaste": true, "ghostText": false
+    }
+  },
+  "response": {
+    "version": 4,
+    "cursor": 100,
+    "screen": {
+      "lines": ["Would you like to run the following command?", "", "  $ printf 'hello'", "", "› 1. Yes, proceed (y)", "  2. No, and tell Codex what to do differently (esc)", "Press enter to confirm or esc to cancel"],
+      "cursorRow": 4, "cursorColumn": 0, "atBottom": true, "bracketedPaste": true, "ghostText": false
+    },
+    "approvalId": "fixture-screen-id", "decision": "allowOnce"
+  },
+  "snapshot": { "version": 4, "approval": { "id": "fixture-screen-id", "title": "Would you like to run the following command?", "detail": "$ printf 'hello'", "canAllowOnce": true } }
+}

@@ -1,0 +1,11 @@
+{
+  "command": { "command": "prepare" },
+  "view": {
+    "version": 1,
+    "phase": "checkpointing",
+    "sessions": [
+      { "id": "terminal:one", "title": "My task", "phase": "waiting", "detail": "Finding a stopping point" }
+    ],
+    "detail": "Waiting for every model to save its handoff."
+  }
+}

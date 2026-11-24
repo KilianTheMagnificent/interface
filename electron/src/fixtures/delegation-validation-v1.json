@@ -1,0 +1,42 @@
+{
+  "mcpResultVersion": 3,
+  "tool": "delegate_validate",
+  "request": {
+    "taskId": "proposal-task",
+    "resultSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "plan": {
+      "version": 1,
+      "files": [
+        "src/value.js",
+        "test/value.test.js",
+        "package.json"
+      ],
+      "protectedFiles": [
+        "test/value.test.js",
+        "package.json"
+      ],
+      "checks": [
+        [
+          "node",
+          "--test",
+          "test/value.test.js"
+        ]
+      ]
+    }
+  },
+  "workerReport": {
+    "version": 1,
+    "outcome": "needsContext",
+    "summary": "Need the parser's actual behavior",
+    "missingFiles": [
+      "src/normalize.js"
+    ]
+  },
+  "review": {
+    "taskId": "proposal-task",
+    "resultSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "verdict": "approved",
+    "acceptUnreportedChanges": true,
+    "notes": "Inspected complete file edits and passing host validation despite malformed reporting."
+  }
+}

@@ -1,0 +1,141 @@
+{
+  "protocolVersion": 72,
+  "commands": [
+    {
+      "kind": "folderTrust",
+      "folder": "/Users/fixture/Downloads/cloned-tool"
+    },
+    {
+      "kind": "trustFolder",
+      "folder": "/Users/fixture/Downloads/cloned-tool/src",
+      "trust": true
+    },
+    {
+      "kind": "trustFolder",
+      "folder": "/Users/fixture/Downloads/cloned-tool",
+      "trust": false
+    }
+  ],
+  "responses": [
+    {
+      "view": {
+        "version": 1,
+        "revision": 7,
+        "now": 1791298800000,
+        "settings": {
+          "autoSettleDays": 3,
+          "settleOnMerge": true,
+          "generatedTitles": false,
+          "trackPullRequests": true
+        },
+        "threads": []
+      },
+      "folderTrust": {
+        "folder": "/Users/fixture/Downloads/cloned-tool",
+        "state": "unasked"
+      }
+    },
+    {
+      "view": {
+        "version": 1,
+        "revision": 8,
+        "now": 1791298800000,
+        "settings": {
+          "autoSettleDays": 3,
+          "settleOnMerge": true,
+          "generatedTitles": false,
+          "trackPullRequests": true
+        },
+        "threads": []
+      },
+      "folderTrust": {
+        "folder": "/Users/fixture/Downloads/cloned-tool",
+        "state": "trusted"
+      }
+    },
+    {
+      "view": {
+        "version": 1,
+        "revision": 8,
+        "now": 1791298800000,
+        "settings": {
+          "autoSettleDays": 3,
+          "settleOnMerge": true,
+          "generatedTitles": false,
+          "trackPullRequests": true
+        },
+        "threads": []
+      },
+      "folderTrust": {
+        "folder": "/Users/fixture/Downloads/cloned-tool",
+        "state": "declined"
+      }
+    }
+  ],
+  "view": {
+    "version": 1,
+    "revision": 9,
+    "now": 1791298800000,
+    "settings": {
+      "autoSettleDays": 3,
+      "settleOnMerge": true,
+      "generatedTitles": false,
+      "trackPullRequests": true
+    },
+    "threads": [
+      {
+        "key": "claude#6c1d2e3f-4a5b-4c6d-8e7f-90a1b2c3d4e5",
+        "section": "active",
+        "createdAt": 1791212400000,
+        "activeOrder": "V",
+        "woke": false,
+        "unread": false,
+        "autoSettle": true,
+        "workspace": {
+          "mode": "local",
+          "projectRoot": "/Users/fixture/Downloads/cloned-tool",
+          "owned": false
+        },
+        "turns": [],
+        "folderTrust": {
+          "folder": "/Users/fixture/Downloads/cloned-tool",
+          "asked": false
+        }
+      },
+      {
+        "key": "claude#7d2e3f4a-5b6c-4d7e-8f90-a1b2c3d4e5f6",
+        "section": "active",
+        "createdAt": 1791212400000,
+        "activeOrder": "W",
+        "woke": false,
+        "unread": false,
+        "autoSettle": true,
+        "workspace": {
+          "mode": "local",
+          "projectRoot": "/Users/fixture/Downloads/other-tool",
+          "owned": false
+        },
+        "turns": [],
+        "folderTrust": {
+          "folder": "/Users/fixture/Downloads/other-tool",
+          "asked": true
+        }
+      },
+      {
+        "key": "codex#0199f2a4-7c1e-7d30-9a5b-1c2d3e4f5a6b",
+        "section": "active",
+        "createdAt": 1791212400000,
+        "activeOrder": "X",
+        "woke": false,
+        "unread": false,
+        "autoSettle": true,
+        "workspace": {
+          "mode": "local",
+          "projectRoot": "/Users/fixture/Downloads/cloned-tool",
+          "owned": false
+        },
+        "turns": []
+      }
+    ]
+  }
+}

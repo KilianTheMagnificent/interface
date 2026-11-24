@@ -1,0 +1,162 @@
+{
+  "protocolVersion": 47,
+  "commands": [
+    {
+      "version": 1,
+      "command": {
+        "kind": "start",
+        "runId": "0199f2a4-away-run-2",
+        "cwd": "/Users/fixture/Developer/Projects/atlas",
+        "options": {
+          "objective": "Fix the flaky login test and keep the suite green.",
+          "provider": "codex",
+          "model": "gpt-5.6-terra",
+          "durationSeconds": 3600,
+          "maxIterations": 6,
+          "reviewer": "claude"
+        }
+      }
+    },
+    {
+      "version": 1,
+      "command": {
+        "kind": "save",
+        "cwd": "/Users/fixture/Developer/Projects/atlas",
+        "options": {
+          "objective": "Fix the flaky login test and keep the suite green.",
+          "provider": "codex",
+          "model": "gpt-5.6-terra",
+          "durationSeconds": 3600,
+          "maxIterations": 6,
+          "reviewer": "claude"
+        }
+      }
+    }
+  ],
+  "snapshot": {
+    "version": 1,
+    "revision": 10,
+    "defaults": {
+      "objective": "Fix the flaky login test and keep the suite green.",
+      "provider": "codex",
+      "model": "gpt-5.6-terra",
+      "durationSeconds": 3600,
+      "maxIterations": 6
+    },
+    "presets": [
+      {
+        "cwd": "/Users/fixture/Developer/Projects/atlas",
+        "options": {
+          "objective": "Fix the flaky login test and keep the suite green.",
+          "provider": "codex",
+          "model": "gpt-5.6-terra",
+          "durationSeconds": 3600,
+          "maxIterations": 6,
+          "reviewer": "claude"
+        }
+      }
+    ],
+    "runs": [
+      {
+        "id": "0199f2a4-away-run",
+        "cwd": "/Users/fixture/Developer/Projects/atlas",
+        "options": {
+          "objective": "Fix the flaky login test and keep the suite green.",
+          "provider": "codex",
+          "model": "gpt-5.6-terra",
+          "durationSeconds": 3600,
+          "maxIterations": 6,
+          "reviewer": "claude"
+        },
+        "startedAtMs": 1791298000000,
+        "deadlineAtMs": 1791301600000,
+        "state": "running",
+        "detail": "Fresh review · iteration 1/6",
+        "turns": [
+          {
+            "iteration": 1,
+            "role": "work",
+            "sessionKey": "codex#0199f2a4-7c1e-7d30-9a5b-1c2d3e4f5a6b",
+            "state": "completed",
+            "report": "Worked.\nAWAY_RESULT {\"outcome\":\"continue\",\"summary\":\"Fixed the race in login.test.ts.\",\"checks\":[\"npm test -- login: 14 passed\"]}",
+            "threadTurn": 0
+          },
+          {
+            "iteration": 1,
+            "role": "review",
+            "sessionKey": "codex#0199f2a4-review",
+            "state": "started",
+            "report": ""
+          }
+        ],
+        "thread": {
+          "key": "codex#0199f2a4-7c1e-7d30-9a5b-1c2d3e4f5a6b",
+          "worktree": "/Users/fixture/Developer/Projects/.interface-worktrees/away-fix-the-flaky-1a2b3c",
+          "branch": "iface/away-fix-the-flaky-1a2b3c"
+        }
+      }
+    ],
+    "storageUncertain": false,
+    "cancelledStarts": []
+  },
+  "threadAway": {
+    "runId": "0199f2a4-away-run",
+    "state": "completed",
+    "detail": "No justified work remains.",
+    "provider": "codex",
+    "model": "gpt-5.6-terra",
+    "reviewer": "claude",
+    "objective": "Fix the flaky login test and keep the suite green.",
+    "startedAt": 1791298000000,
+    "deadlineAt": 1791301600000,
+    "maxIterations": 6,
+    "rounds": [
+      {
+        "iteration": 1,
+        "role": "work",
+        "state": "completed",
+        "turn": 0,
+        "verdict": "continue",
+        "summary": "Fixed the race in login.test.ts.",
+        "checks": [
+          "npm test -- login: 14 passed"
+        ]
+      },
+      {
+        "iteration": 1,
+        "role": "review",
+        "state": "completed",
+        "sessionKey": "codex#0199f2a4-review",
+        "verdict": "revise",
+        "summary": "The retry hides the race; await the session instead.",
+        "checks": [
+          "read src/login.ts"
+        ]
+      },
+      {
+        "iteration": 2,
+        "role": "work",
+        "state": "completed",
+        "turn": 1,
+        "verdict": "continue",
+        "summary": "Awaited the session; removed the retry."
+      },
+      {
+        "iteration": 2,
+        "role": "review",
+        "state": "completed",
+        "sessionKey": "codex#0199f2a4-review-2",
+        "verdict": "complete",
+        "summary": "No justified work remains.",
+        "checks": [
+          "npm test: 212 passed"
+        ]
+      },
+      {
+        "iteration": 3,
+        "role": "work",
+        "state": "cancelled"
+      }
+    ]
+  }
+}

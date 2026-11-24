@@ -1,0 +1,88 @@
+{
+  "channel": "iface:providerAccounts",
+  "protocol": 60,
+  "requests": [
+    { "command": "read" },
+    { "command": "refresh" },
+    { "command": "refresh", "provider": "codex" },
+    { "command": "add", "provider": "claude", "label": "Work" },
+    { "command": "rename", "provider": "claude", "account": "acct-0123456789ab", "label": "Work laptop" },
+    { "command": "setDefault", "provider": "claude", "account": "acct-0123456789ab" },
+    { "command": "setDefault", "provider": "claude", "account": "default" },
+    { "command": "remove", "provider": "grok", "account": "acct-0123456789ac" },
+    { "command": "remove", "provider": "grok", "account": "acct-0123456789ac", "deleteDirectory": true }
+  ],
+  "refusedRequests": [
+    { "command": "add", "provider": "qwen", "label": "Work" },
+    { "command": "add", "provider": "claude", "label": "   " },
+    { "command": "rename", "provider": "claude", "account": "../x", "label": "Work" },
+    { "command": "remove", "provider": "claude" },
+    { "command": "read", "provider": "claude" },
+    { "command": "signOut", "provider": "claude" }
+  ],
+  "view": {
+    "version": 1,
+    "providers": [
+      {
+        "provider": "claude",
+        "engine": "claude",
+        "accounts": [
+          { "id": "default", "label": "Default", "isDefault": false, "signIn": "signedIn", "identity": "me@example.test" },
+          {
+            "id": "acct-0123456789ab",
+            "label": "Work",
+            "isDefault": true,
+            "signIn": "signedOut",
+            "directory": "/Users/me/Library/Application Support/Interface/accounts/claude/acct-0123456789ab",
+            "createdAt": 1763164800000
+          }
+        ]
+      },
+      {
+        "provider": "codex",
+        "engine": "codex",
+        "accounts": [{ "id": "default", "label": "Default", "isDefault": true, "signIn": "unknown" }]
+      },
+      {
+        "provider": "grok",
+        "engine": "acp:grok",
+        "accounts": [{ "id": "default", "label": "Default", "isDefault": true, "signIn": "unknown" }]
+      }
+    ],
+    "notice": "Added Work."
+  },
+  "launch": { "cwd": "/Users/me/project", "prompt": "Hello", "kind": "code", "account": "acct-0123456789ab" },
+  "usage": {
+    "engine": "claude",
+    "available": true,
+    "plan": "Max",
+    "windows": [{ "label": "5h", "utilization": 62.5, "resetsAt": "2026-11-15T18:00:00.000Z" }],
+    "account": "acct-0123456789ab",
+    "accountLabel": "Work"
+  },
+  "signInTerminal": {
+    "id": "8c3f6b5e-4a1d-4f2e-9b7a-2d6c1e0f3a47",
+    "cwd": "/Users/me",
+    "size": { "columns": 80, "rows": 24 },
+    "title": "Sign in to Claude (Work)",
+    "launch": { "version": 1, "profileId": "claude" },
+    "signIn": true,
+    "account": "acct-0123456789ab"
+  },
+  "continueWith": {
+    "kind": "continueWith",
+    "key": "claude#0b1c2d3e-4f50-4617-8293-a4b5c6d7e8f9",
+    "engine": "claude",
+    "account": "acct-0123456789ab"
+  },
+  "thread": {
+    "key": "claude#0b1c2d3e-4f50-4617-8293-a4b5c6d7e8f9",
+    "section": "active",
+    "createdAt": 1763164800000,
+    "woke": false,
+    "unread": false,
+    "autoSettle": true,
+    "turns": [],
+    "account": "acct-0123456789ab"
+  }
+}

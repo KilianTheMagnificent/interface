@@ -1,0 +1,53 @@
+{
+  "invitation": {
+    "version": 6,
+    "invitation": {
+      "version": 5,
+      "kind": "interfacePairing",
+      "macId": "698bea63dc44a344663ff1429aea10842df27b6b991ef25866b2c6c02cdcc5be",
+      "macName": "Studio Mac",
+      "profile": "production",
+      "publicKey": "046b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c2964fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5",
+      "invitationId": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+      "issuedAt": 1789142400,
+      "expiresAt": 1789142700,
+      "relayOrigin": "https://relay.example.com"
+    },
+    "nearbyOrigins": [
+      "http://10.42.0.10:58747",
+      "http://192.168.1.10:65535"
+    ]
+  },
+  "qr": "interface-pair:v6:{\"invitation\":{\"expiresAt\":1789142700,\"invitationId\":\"0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef\",\"issuedAt\":1789142400,\"kind\":\"interfacePairing\",\"macId\":\"698bea63dc44a344663ff1429aea10842df27b6b991ef25866b2c6c02cdcc5be\",\"macName\":\"Studio Mac\",\"profile\":\"production\",\"publicKey\":\"046b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c2964fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5\",\"relayOrigin\":\"https://relay.example.com\",\"version\":5},\"nearbyOrigins\":[\"http://10.42.0.10:58747\",\"http://192.168.1.10:65535\"],\"version\":6}",
+  "admin": {
+    "action": "pairDirect",
+    "version": 6
+  },
+  "validNearbyOrigins": [
+    "http://10.0.0.1:1024",
+    "http://172.16.0.2:1234",
+    "http://172.31.255.254:65535",
+    "http://192.168.0.1:5000",
+    "http://169.254.1.2:5000"
+  ],
+  "invalidNearbyOrigins": [
+    "http://127.0.0.1:58747",
+    "http://8.8.8.8:58747",
+    "http://172.32.0.1:58747",
+    "http://100.64.0.1:58747",
+    "http://mac.local:58747",
+    "https://10.0.0.1:58747",
+    "http://10.0.0.1:80",
+    "http://10.0.0.1:65536",
+    "http://10.0.0.1:058747",
+    "http://010.0.0.1:58747",
+    "http://10.0.0.1:58747/",
+    "http://10.0.0.1:58747?x=y",
+    "http://10.0.0.1:58747#x",
+    "http://user@10.0.0.1:58747",
+    "http://[::1]:58747",
+    "http://10.0.0.1:58747\\@evil.test",
+    "http://10.0.1:58747",
+    "http://10.0.0.256:58747"
+  ]
+}

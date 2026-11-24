@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "revision": 1,
+  "attention": [
+    {
+      "id": "done:t:1:1",
+      "kind": "finished",
+      "target": {
+        "kind": "terminal",
+        "terminalId": "t",
+        "generation": 1
+      },
+      "title": "Review result",
+      "place": "project",
+      "at": 1,
+      "provenance": "terminal-hook",
+      "seen": false,
+      "resolved": false
+    }
+  ],
+  "tasks": [],
+  "drafts": [],
+  "branches": []
+}

@@ -1,0 +1,141 @@
+/* A Browser tab fills its pane's screen: the address bar, then the page. The
+   page itself is not in the pane. It lives in a page layer and is anchored
+   over .browser-pane-slot, because a <webview> that leaves the document
+   reloads, and panes move whenever the layout changes.
+   Drawn like the agent overview (owner, 2026-10-14): a tools row with a
+   rounded search field and pill chips, then the page as a rounded card.
+   Fills are tinted from the screen's own text: a screen may be dark inside
+   light chrome. */
+.browser-pane {
+  --browser-pane-inset: 10px;
+  display: flex; flex-direction: column; width: 100%; height: 100%; min-height: 0; container-type: inline-size;
+  color: var(--fg); font-size: var(--text-ui); background: var(--terminal-content-bg);
+}
+.browser-pane-bar {
+  display: flex; flex: none; align-items: center; gap: 2px;
+  padding: var(--browser-pane-inset) var(--browser-pane-inset) var(--browser-pane-inset)
+    calc(var(--browser-pane-inset) - 4px);
+}
+.browser-pane-bar .terminal-center-action { width: 30px; height: 30px; }
+.browser-pane-bar .terminal-center-action:hover:not(:disabled) {
+  color: var(--fg-strong); background: color-mix(in srgb, var(--fg) 8%, transparent);
+}
+.browser-pane-bar .terminal-center-action:disabled { cursor: default; color: var(--fg-faint); }
+/* The overview's search box: 34px, rounded, a leading glyph. */
+.browser-pane-field {
+  position: relative; display: flex; flex: 1 1 auto; align-items: center; gap: 7px; min-width: 0;
+  height: 34px; margin: 0 4px; padding: 0 11px; box-sizing: border-box; overflow: hidden; cursor: text;
+  color: var(--fg-dim); background: color-mix(in srgb, var(--fg) 5%, transparent);
+  border-radius: var(--radius-container); box-shadow: inset 0 0 0 var(--border-w) var(--border);
+}
+.browser-pane-field:focus-within { box-shadow: inset 0 0 0 var(--border-w) var(--focus); }
+.browser-pane-field.is-invalid { box-shadow: inset 0 0 0 var(--border-w) var(--danger-fg); }
+.browser-pane-field > .codicon { flex: none; font-size: var(--icon-size-sm); }
+.browser-pane-address {
+  flex: 1 1 auto; min-width: 0; padding: 0; font: inherit; color: var(--fg);
+  background: transparent; border: 0; outline: 0;
+}
+/* The field draws the focus edge; the app's ring would double it inside. */
+.browser-pane-address:focus-visible { outline: none; }
+.browser-pane-address::placeholder { color: var(--fg-dim); }
+/* Loading runs along the field's lower edge, so the page never shifts. */
+.browser-pane-progress {
+  position: absolute; right: 0; bottom: 0; left: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--focus), transparent);
+  background-size: 50% 100%; background-repeat: no-repeat;
+  animation: browser-pane-progress 1.1s steps(13) infinite;
+  animation-play-state: var(--ambient-play-state);
+}
+@keyframes browser-pane-progress { from { background-position: -50% 0; } to { background-position: 150% 0; } }
+/* The page's card. The page is drawn over the slot with the same corners. */
+.browser-pane-body {
+  position: relative; flex: 1; min-height: 0; margin: 0 var(--browser-pane-inset) var(--browser-pane-inset);
+  border-radius: var(--radius-container);
+  background: color-mix(in srgb, var(--fg) 3%, transparent);
+  box-shadow: inset 0 0 0 var(--border-w) var(--border);
+}
+.browser-pane-slot { position: absolute; inset: 0; }
+/* A covered or background tab, a flipped card and the launcher take the
+   slot's box away, so its page parks as a background tab's does (hidden and
+   throttled). A hidden slot alone only hid the page's paint: it kept running. */
+[inert] .browser-pane-slot { display: none; }
+.browser-pane-notice {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 12px; padding: 24px; text-align: center; color: var(--fg-muted);
+}
+.browser-pane-notice > .codicon { font-size: var(--text-display); color: var(--fg-faint); }
+.browser-pane-notice > p { max-width: 36ch; margin: 0; line-height: var(--lh-prose); }
+.browser-pane-choices { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+/* Pills, as the overview's filter chips. */
+.browser-pane-choice,
+.browser-pane-server {
+  display: inline-flex; align-items: center; height: 28px; padding: 0 12px; font: inherit;
+  color: var(--fg-muted); cursor: pointer;
+  background: color-mix(in srgb, var(--fg) 4%, transparent); border: 0; border-radius: var(--radius-pill);
+  box-shadow: inset 0 0 0 var(--border-w) var(--border);
+}
+.browser-pane-choice:hover,
+.browser-pane-server:hover { color: var(--fg); background: color-mix(in srgb, var(--fg) 9%, transparent); }
+.browser-pane-choice:focus-visible,
+.browser-pane-server:focus-visible { outline: var(--focus-ring-w) solid var(--focus); }
+/* A dev server running in the workspace, one click from any page. */
+.browser-pane-server { flex: 0 1 auto; min-width: 0; max-width: 40%; margin-right: 2px; }
+.browser-pane-server-name { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+@container (max-width: 360px) { .browser-pane-server { display: none; } }
+.browser-pane-status {
+  flex: none; margin: 0; padding: 0 var(--browser-pane-inset) var(--browser-pane-inset); color: var(--danger-fg);
+}
+
+/* Point and fix: Pick and Region are the bar's pills; pressed while picking. */
+.browser-pane-point { flex: none; margin-right: 2px; }
+.browser-pane-point[aria-pressed="true"] {
+  color: var(--fg-strong); background: color-mix(in srgb, var(--focus) 18%, transparent);
+  box-shadow: inset 0 0 0 var(--border-w) var(--focus);
+}
+.browser-pane-point:disabled { cursor: default; color: var(--fg-faint); }
+.browser-pane-viewport { flex: none; margin-right: 2px; }
+/* The width preset reads as the bar's third pill. */
+.browser-pane-viewport .app-select-trigger {
+  height: 28px; padding: 0 10px; border: 0; border-radius: var(--radius-pill); font-size: var(--text-ui);
+  background: color-mix(in srgb, var(--fg) 4%, transparent); box-shadow: inset 0 0 0 var(--border-w) var(--border);
+}
+@container (max-width: 420px) { .browser-pane-viewport { display: none; } }
+.browser-pane-hint {
+  flex: none; margin: 0; padding: 0 var(--browser-pane-inset) 8px; color: var(--fg-muted);
+  font-size: var(--text-meta); line-height: var(--lh-ui);
+}
+/* The capture, before it goes anywhere: picture, plain words, comment, thread. */
+.browser-point-card {
+  display: flex; flex: none; gap: 10px; max-height: 45%; overflow-y: auto;
+  margin: 0 var(--browser-pane-inset) 8px; padding: 8px;
+  border-radius: var(--radius-container); background: var(--surface);
+  box-shadow: inset 0 0 0 var(--border-w) var(--border);
+}
+.browser-point-thumb {
+  flex: none; align-self: flex-start; max-width: 120px; max-height: 90px; object-fit: contain;
+  border-radius: var(--radius-control); background: white;
+  box-shadow: 0 0 0 var(--border-w) var(--border);
+}
+.browser-point-main { display: flex; flex: 1 1 auto; flex-direction: column; gap: 6px; min-width: 0; }
+.browser-point-summary { margin: 0; color: var(--fg-strong); line-height: var(--lh-ui); overflow-wrap: anywhere; }
+.browser-point-selector {
+  overflow: hidden; color: var(--fg-muted); font-family: var(--font-mono); font-size: var(--text-meta);
+  white-space: nowrap; text-overflow: ellipsis;
+}
+.browser-point-comment {
+  display: block; box-sizing: border-box; width: 100%; min-height: 44px; max-height: 120px; field-sizing: content;
+  padding: 6px 8px; resize: none; font: inherit; color: var(--fg-strong);
+  background: color-mix(in srgb, var(--fg) 4%, transparent); border: 0; border-radius: var(--radius-control);
+  box-shadow: inset 0 0 0 var(--border-w) var(--border); outline: 0;
+}
+.browser-point-comment:focus-visible { box-shadow: inset 0 0 0 var(--border-w) var(--focus); }
+.browser-point-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.browser-point-foot > .terminal-center-action { width: 28px; height: 28px; }
+.browser-point-target .app-select-trigger { max-width: 200px; }
+.browser-point-spacer { flex: 1 1 auto; }
+.browser-point-foot > .btn { flex: none; height: 28px; white-space: nowrap; }
+.browser-point-error { margin: 0; color: var(--danger-fg); font-size: var(--text-meta); }
+
+@media (prefers-reduced-motion: reduce) {
+  .browser-pane-progress { animation: none; background: var(--focus); opacity: 0.5; }
+}

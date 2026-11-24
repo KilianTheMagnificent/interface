@@ -1,0 +1,29 @@
+/* Every attachment drop — terminal, chat and the new-session composer —
+   shows the owner's reference cue: a selection-tinted glow behind one dark,
+   borderless pill. No wash over the content and no dashed box. */
+.drop-indicator {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  background: radial-gradient(ellipse 80% 55% at center, var(--terminal-drop-bg), transparent);
+}
+.drop-indicator-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px 10px 16px;
+  color: var(--fg-strong);
+  background: color-mix(in srgb, var(--dropdown-bg) 94%, transparent);
+  border-radius: var(--radius-pill);
+  box-shadow: 0 8px 28px var(--overlay-shadow-color);
+  font-family: var(--font-ui);
+  font-size: var(--text-label);
+  font-weight: var(--wght-strong);
+  line-height: var(--lh-tight);
+  white-space: nowrap;
+}
+.drop-indicator-pill .codicon { font-size: var(--text-nav); }

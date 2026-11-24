@@ -1,0 +1,307 @@
+/* Looks (2026-11-15). A theme file that sets --theme-backdrop or --theme-scene
+   paints one backdrop under the whole window, and every pane, thread and the
+   sidebar becomes glass over it, so the picture runs unbroken behind them.
+   appearance.ts adds the backdrop element and data-theme-look="backdrop" while
+   such a file is painted; nothing here applies to a built-in palette or to a
+   theme file without a backdrop.
+
+   The look's tokens sit in the interface-palette layer like every other token,
+   so a plain :root rule in the theme file wins. docs/THEMES.md lists them. */
+@layer interface-palette {
+  :root[data-theme="custom-dark"],
+  :root[data-theme="custom-light"] {
+    /* Any CSS background: a colour, gradients, a data: image. */
+    --theme-backdrop: none;
+    /* A picture laid over it, sized to cover: url("data:image/svg+xml;base64,…"). */
+    --theme-scene: none;
+    /* A fragment shader drawn under the scene: url("data:x-shader/x-fragment;base64,…"),
+       with an optional picture for it, its canvas pixels per CSS pixel, its
+       frames a second and the second its pattern opens on (theme-shader.ts). */
+    --theme-shader: none;
+    --theme-shader-image: none;
+    --theme-shader-scale: 0.5;
+    --theme-shader-rate: 20;
+    --theme-shader-start: 0;
+    /* Any CSS background drawn over the art, under the interface. */
+    --theme-backdrop-veil: none;
+    --theme-backdrop-blur: 0px;
+    /* How far the backdrop shows through panels, and through terminal screens. */
+    --theme-glass: 26%;
+    --theme-glass-screen: 14%;
+    /* Frosting on the panels themselves. Costly over a moving backdrop. */
+    --theme-glass-blur: 0px;
+  }
+}
+
+/* Meaning colours (2026-11-15). A theme file may set --theme-danger,
+   --theme-success, --theme-warning and --theme-pro: status lights, diffs,
+   access modes and the terminal's red, green, yellow and magenta follow them,
+   so panes and threads agree. Unset, every token keeps the value theme.css
+   gives it (the fallbacks below repeat those), and an --ansi-* left without
+   its meaning colour is empty, which terminal-palettes.ts fills from its
+   built-in set. The selector outranks theme.css's theme-file blocks inside
+   the layer; a theme file's plain :root rule still wins over both. */
+@layer interface-palette {
+  :root[data-theme-file][data-theme="custom-dark"] {
+    --status-failed: var(--theme-danger, #f2708f);
+    --danger-fg: var(--theme-danger, #f2708f);
+    --mode-danger: var(--theme-danger, #f2708f);
+    --diff-removed: var(--theme-danger, #e6888f);
+    --diff-removed-bg: color-mix(in srgb, var(--theme-danger, #e6888f) 10.2%, transparent);
+    --diff-added: var(--theme-success, #a3be8c);
+    --diff-added-bg: color-mix(in srgb, var(--theme-success, #a3be8c) 10.2%, transparent);
+    --mode-accept: var(--theme-success, #a8c98f);
+    --status-waiting: var(--theme-warning, #efb14a);
+    --mode-auto: var(--theme-pro, #c9a9f5);
+  }
+  :root[data-theme-file][data-theme="custom-light"] {
+    --status-failed: var(--theme-danger, #b4234d);
+    --danger-fg: var(--theme-danger, #b4234d);
+    --mode-danger: var(--theme-danger, #a8214a);
+    --diff-removed: var(--theme-danger, #b4234d);
+    --diff-removed-bg: color-mix(in srgb, var(--theme-danger, #b4234d) 7.85%, transparent);
+    --diff-added: var(--theme-success, #206c3f);
+    --diff-added-bg: color-mix(in srgb, var(--theme-success, #206c3f) 7.85%, transparent);
+    --mode-accept: var(--theme-success, #1c6539);
+    --status-waiting: var(--theme-warning, #8a5a0e);
+    --mode-auto: var(--theme-pro, #6b3fa0);
+  }
+  :root[data-theme-file][data-theme="custom-dark"],
+  :root[data-theme-file][data-theme="custom-light"] {
+    --ansi-red: var(--theme-danger);
+    --ansi-bright-red: var(--theme-danger);
+    --ansi-green: var(--theme-success);
+    --ansi-bright-green: var(--theme-success);
+    --ansi-yellow: var(--theme-warning);
+    --ansi-bright-yellow: var(--theme-warning);
+    --ansi-magenta: var(--theme-pro);
+    --ansi-bright-magenta: var(--theme-pro);
+  }
+}
+
+.theme-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+  background: var(--theme-background, var(--editor-bg));
+}
+.theme-backdrop-art {
+  position: absolute;
+  inset: 0;
+  background: var(--theme-backdrop, none);
+  /* The scene and layers stack inside the art: a file reorders them with z-index. */
+  isolation: isolate;
+}
+/* Blurred only when the file asks (theme-look.ts sets data-blur): a filter of
+   blur(0px) is still composited as one on every redraw. Oversized by the blur
+   so its soft edge falls outside the window. */
+.theme-backdrop[data-blur] .theme-backdrop-art {
+  inset: calc(-2 * var(--theme-backdrop-blur, 0px));
+  filter: blur(var(--theme-backdrop-blur, 0px));
+}
+.theme-backdrop-scene,
+.theme-backdrop-layer,
+.theme-backdrop-veil {
+  position: absolute;
+  inset: 0;
+}
+.theme-backdrop-scene { background: var(--theme-scene, none) center / cover no-repeat; }
+/* The shader's canvas is smaller than the window and stretched over it. */
+.theme-backdrop-shader {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+.theme-backdrop-shader[hidden] { display: none; }
+.theme-backdrop-veil { background: var(--theme-backdrop-veil, none); }
+
+/* The sidebar's frost (owner, 2026-11-16: shown four treatments for the
+   sidebar over a live background, "I quite like the frost glass look. Try to
+   build it while being as battery friendly as possible"). A second, still
+   copy of the art sits exactly under the sidebar and is blurred here;
+   theme-look.ts brings it up to the moving picture twice a second. A
+   backdrop-filter on the sidebar itself would blur what is behind it again on
+   every frame: measured in the hands-free app over Kiln with two panes, the
+   graphics process went from about 6% of a core to about 10% that way, and
+   stays at about 6% this way.
+
+   The box takes the sidebar's own place and size (anchor positioning, so no
+   script measures the page), and clips the copy to it. The pane inside is the
+   size of the window, a little larger so the blur has picture to draw on at
+   the window's edge, and stays put however the box moves. */
+.theme-backdrop-frost {
+  position: fixed;
+  z-index: -1;
+  left: anchor(--interface-sidebar left, 0px);
+  top: anchor(--interface-sidebar top, 0px);
+  width: anchor-size(--interface-sidebar width, 0px);
+  height: anchor-size(--interface-sidebar height, 0px);
+  clip-path: inset(0 round var(--theme-frost-radius, 10px));
+  pointer-events: none;
+}
+.theme-backdrop-frost-pane {
+  position: fixed;
+  inset: -64px;
+  background: var(--theme-background, var(--editor-bg));
+  filter: blur(26px) saturate(1.25);
+}
+.theme-backdrop-frost-pane > .theme-backdrop-art,
+.theme-backdrop-frost-pane > .theme-backdrop-veil { inset: 64px; }
+
+:root[data-theme-look="backdrop"] {
+  --terminal-glass-active: 1;
+  --look-panel-fill: calc(100% - var(--theme-glass));
+  --look-screen-fill: calc(100% - var(--theme-glass-screen));
+  /* The sidebar is frosted glass: a little clearer than a panel, and never
+     clearer than the theme file made its panels. */
+  --look-sidebar-fill: max(56%, var(--look-panel-fill));
+  --look-frost: var(--theme-glass-blur);
+}
+
+/* The canvas: the backdrop itself, in the gutters and behind the toolbar. */
+:root[data-theme-look="backdrop"] .app-grid,
+:root[data-theme-look="backdrop"] .workspace-toolbar,
+:root[data-theme-look="backdrop"] .workspace-shell,
+:root[data-theme-look="backdrop"] .workspace-content,
+:root[data-theme-look="backdrop"] .workspace-grid,
+:root[data-theme-look="backdrop"] .statusbar,
+:root[data-theme-look="backdrop"] .canvas-coordination,
+:root[data-theme-look="backdrop"] .terminal-center,
+:root[data-theme-look="backdrop"] .terminal-workspace,
+:root[data-theme-look="backdrop"] .terminal-split,
+:root[data-theme-look="backdrop"] .terminal-pane-body,
+:root[data-theme-look="backdrop"] .terminal-view,
+:root[data-theme-look="backdrop"] .terminal-xterm,
+:root[data-theme-look="backdrop"] .terminal-xterm .xterm .xterm-viewport,
+:root[data-theme-look="backdrop"] .conv {
+  background: transparent;
+}
+
+/* The sidebar: frosted glass over the still, blurred copy of the art above.
+   Its box is the frost's anchor. */
+:root[data-theme-look="backdrop"] .app-grid > .sidebar { anchor-name: --interface-sidebar; }
+:root[data-theme-look="backdrop"] .sidebar {
+  background: color-mix(in srgb, var(--material-chrome) var(--look-sidebar-fill), transparent);
+}
+/* Stowed, the sidebar comes back over the work rather than over the picture
+   (peeking, or the narrow window's drawer): it is solid there, and the frost
+   is not drawn. */
+:root[data-theme-look="backdrop"] .app-grid.no-sidebar > .sidebar { background: var(--material-chrome); }
+:root:has(.app-grid.no-sidebar) .theme-backdrop-frost { display: none; }
+@media (max-width: 840px) {
+  :root[data-theme-look="backdrop"] .sidebar { background: var(--material-chrome); }
+  .theme-backdrop-frost { display: none; }
+}
+
+/* Panels: pane frames and heads, a thread's page. */
+:root[data-theme-look="backdrop"] .sidebar .group-header-row { background-color: transparent; }
+:root[data-theme-look="backdrop"] .sidebar .group > .session-items {
+  clip-path: inset(var(--sticky-header-clip, 0px) 0 0);
+}
+:root[data-theme-look="backdrop"] .workspace-tile {
+  background: color-mix(in srgb, var(--workbench-panel) var(--look-panel-fill), transparent);
+}
+/* Pages whose words would otherwise sit on the bare picture: an empty
+   surface, the new-thread page, the workspace launcher. */
+:root[data-theme-look="backdrop"] .workspace-hero,
+:root[data-theme-look="backdrop"] .workspace-composer-panel,
+:root[data-theme-look="backdrop"] .terminal-launcher {
+  background: color-mix(in srgb, var(--workbench-panel) var(--look-panel-fill), transparent);
+  border-radius: 10px;
+}
+:root[data-theme-look="backdrop"] .workspace-tile-head {
+  background: color-mix(in srgb, var(--editor-bg) var(--look-panel-fill), transparent);
+}
+:root[data-theme-look="backdrop"] .terminal-pane-head {
+  background: color-mix(in srgb, var(--terminal-header-bg) var(--look-panel-fill), transparent);
+}
+:root[data-theme-look="backdrop"] .terminal-pane.is-focused .terminal-pane-head {
+  background: color-mix(in srgb, var(--terminal-header-bg-focused) var(--look-panel-fill), transparent);
+}
+
+/* The selected pane, the way Rex shows it (owner, 2026-11-15: "it's hard to
+   see the contrast between the pane I have selected and just the background";
+   shown a brighter ring instead, the owner asked for Rex's way). Rex keeps the
+   active pane at full strength and fades the others: measured in the owner's
+   Rex, an inactive pane's text sits at 71% of the active pane's, and no ring
+   is drawn. So over a backdrop every pane but the selected one fades what is
+   in its head and its screen to that. The frame's glass and edge are left
+   alone, so the picture behind a faded pane is no brighter. A pane waiting on
+   the human keeps full strength: it is asking to be looked at. */
+:root[data-theme-look="backdrop"] .terminal-pane-head > *,
+:root[data-theme-look="backdrop"] .terminal-pane-body {
+  transition: opacity var(--motion-base) var(--ease-standard);
+}
+:root[data-theme-look="backdrop"] .terminal-pane:not(.is-focused):not(:has(> .terminal-pane-head .terminal-tab-status.is-waiting)) > .terminal-pane-head > *,
+:root[data-theme-look="backdrop"] .terminal-pane:not(.is-focused):not(:has(> .terminal-pane-head .terminal-tab-status.is-waiting)) > .terminal-pane-body {
+  opacity: 0.71;
+}
+
+/* Screens: terminal text keeps more of its own ground than a panel does. */
+:root[data-theme-look="backdrop"] .terminal-pane,
+:root[data-theme-look="backdrop"] .terminal-pane-card {
+  background: color-mix(in srgb, var(--terminal-content-bg) var(--look-screen-fill), transparent);
+}
+
+/* The sidebar's own material (theme.css, .is-floating) is a blur of zero too. */
+:root[data-theme-look="backdrop"]:not([data-theme-frost]) .sidebar {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+/* Frosting, only when the file sets --theme-glass-blur above zero
+   (theme-look.ts sets data-theme-frost). Written as blur(0px) it made every
+   panel a separately composited surface: measured 2026-11-15 with two panes
+   open, that cost 3 points of a core on each redraw at rest and up to 7 under
+   a moving backdrop, for nothing seen. */
+:root[data-theme-look="backdrop"][data-theme-frost] .sidebar,
+:root[data-theme-look="backdrop"][data-theme-frost] .workspace-tile,
+:root[data-theme-look="backdrop"][data-theme-frost] .workspace-hero,
+:root[data-theme-look="backdrop"][data-theme-frost] .workspace-composer-panel,
+:root[data-theme-look="backdrop"][data-theme-frost] .terminal-launcher,
+:root[data-theme-look="backdrop"][data-theme-frost] .terminal-pane {
+  -webkit-backdrop-filter: blur(var(--look-frost));
+  backdrop-filter: blur(var(--look-frost));
+}
+
+/* The backdrop's animations are always held here, and theme-look.ts steps
+   their clocks thirty times a second (fifteen on the battery) while the
+   backdrop may move: a loop left to run makes Chromium draw the whole window
+   at the display's refresh rate. It stops stepping while Interface is not the
+   app in front, under macOS Reduce motion, when Settings turns moving
+   backdrops off, and on the battery after a minute without input. A theme
+   file's rules cannot outrank this. */
+.theme-backdrop,
+.theme-backdrop *,
+.theme-backdrop *::before,
+.theme-backdrop *::after,
+.theme-backdrop-frost *,
+.theme-backdrop-frost *::before,
+.theme-backdrop-frost *::after { animation-play-state: paused !important; }
+
+/* macOS Reduce transparency: panels and screens go solid; the backdrop stays
+   in the gutters. Terminals paint their own ground again. */
+@media (prefers-reduced-transparency: reduce) {
+  :root[data-theme-look="backdrop"] {
+    --terminal-glass-active: 0;
+    --look-panel-fill: 100%;
+    --look-screen-fill: 100%;
+    --look-sidebar-fill: 100%;
+    --look-frost: 0px;
+  }
+  .theme-backdrop-frost { display: none; }
+  :root[data-theme-look="backdrop"][data-theme-frost] .sidebar,
+  :root[data-theme-look="backdrop"][data-theme-frost] .workspace-tile,
+  :root[data-theme-look="backdrop"][data-theme-frost] .workspace-hero,
+  :root[data-theme-look="backdrop"][data-theme-frost] .workspace-composer-panel,
+  :root[data-theme-look="backdrop"][data-theme-frost] .terminal-launcher,
+  :root[data-theme-look="backdrop"][data-theme-frost] .terminal-pane {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "profiles": [
+    {
+      "slug": "local-agent",
+      "displayName": "Local Agent",
+      "executablePath": "/opt/local/bin/agent",
+      "args": [
+        "acp",
+        "stdio"
+      ]
+    },
+    {
+      "slug": "second-agent",
+      "displayName": "Local Agent",
+      "executablePath": "/opt/local/bin/agent",
+      "args": [
+        "--mode=\"quoted\"",
+        ""
+      ]
+    }
+  ]
+}

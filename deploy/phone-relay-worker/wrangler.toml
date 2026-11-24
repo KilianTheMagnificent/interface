@@ -1,0 +1,18 @@
+# Interface phone relay on Cloudflare Workers. See README.md before deploying.
+name = "interface-relay"
+main = "build/index.js"
+compatibility_date = "2026-10-01"
+
+[build]
+command = "worker-build --release"
+
+[[durable_objects.bindings]]
+name = "RELAY"
+class_name = "Relay"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Relay"]
+
+# ALLOWED_MACS is a secret (`wrangler secret put ALLOWED_MACS`), so the Mac
+# identity never lands in this file. Local runs read it from .dev.vars.

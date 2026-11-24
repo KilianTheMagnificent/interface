@@ -1,0 +1,51 @@
+{
+  "version": 2,
+  "reviews": [
+    {
+      "id": "5a25396ce0772478d82331c84ea0752975ce09b54445bdc78a21cd74f8e469eb",
+      "revision": 1,
+      "snapshot": {
+        "root": "/project",
+        "path": "report.md",
+        "byteLength": 3,
+        "revision": "cba06b5736faf67e54b07b561eae94395e774c517a7d910a54369e1263ccfbd4",
+        "content": {
+          "kind": "text",
+          "format": "markdown",
+          "sha256": "cba06b5736faf67e54b07b561eae94395e774c517a7d910a54369e1263ccfbd4"
+        }
+      },
+      "anchor": {
+        "kind": "file"
+      },
+      "note": "",
+      "threadKey": null,
+      "task": "",
+      "updatedAt": 1,
+      "delivery": null
+    },
+    {
+      "id": "157d10c7fc612c186e02c3f10e7f889e0529ca2537040d837d843c87da3b71b0",
+      "revision": 1,
+      "snapshot": {
+        "root": "/project",
+        "path": "chart.png",
+        "byteLength": 12,
+        "revision": "8dc580175969db9757b7c06c3118570db35acd52f55f97c9220e4e1edbbfc693",
+        "content": {
+          "kind": "image",
+          "mediaType": "image/png",
+          "sha256": "8dc580175969db9757b7c06c3118570db35acd52f55f97c9220e4e1edbbfc693"
+        }
+      },
+      "anchor": {
+        "kind": "file"
+      },
+      "note": "",
+      "threadKey": null,
+      "task": "",
+      "updatedAt": 2,
+      "delivery": null
+    }
+  ]
+}

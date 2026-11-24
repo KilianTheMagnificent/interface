@@ -1,0 +1,24 @@
+/* Apple Dark: TN Code's Apple theme, dark side.
+
+   Ported from TN Code by docs/theme-examples/tn-code/port-themes.mjs; change
+   it there, not here. Copy it to ~/.config/interface/themes/ and pick it in
+   Settings › Appearance. The format is in docs/THEMES.md. */
+:root {
+  --theme-kind: dark;
+
+  /* Key colours: everything else is worked out from these. */
+  --theme-background: #1e1e20;
+  --theme-panel: #2a2a2f;
+  --theme-raised: #2c2c30;
+  --theme-text: #f5f5f7;
+  --theme-accent: #0a84ff;
+  --theme-selection: #0a84ff;
+  --theme-screen: #1e1e20;
+  --theme-screen-text: #f5f5f7;
+
+  /* Meaning colours, and the few tokens TN Code names outright. */
+  --theme-danger: #ff453a;
+  --theme-warning: #ff9f0a;
+  --border: #38383d;
+  --accent-fg: #ffffff;
+}

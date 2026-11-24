@@ -1,0 +1,55 @@
+{
+  "protocolVersion": 49,
+  "commands": [
+    {
+      "kind": "reviewCommit",
+      "key": "claude#review"
+    },
+    {
+      "kind": "commitSelected",
+      "key": "claude#review",
+      "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "message": "Selected changes",
+      "choices": [
+        {
+          "path": "src/main.rs",
+          "hunks": [
+            0
+          ]
+        },
+        {
+          "path": "shell.txt"
+        }
+      ]
+    }
+  ],
+  "review": {
+    "revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "files": [
+      {
+        "path": "src/main.rs",
+        "status": "modified",
+        "attributed": true,
+        "hunks": [
+          {
+            "id": 0,
+            "patch": "@@ -1 +1 @@\n-old\n+new\n"
+          }
+        ]
+      },
+      {
+        "path": "shell.txt",
+        "status": "added",
+        "attributed": false,
+        "hunks": []
+      },
+      {
+        "path": ".env",
+        "status": "added",
+        "attributed": false,
+        "hunks": [],
+        "blocked": "Excluded path: review and commit it in a terminal."
+      }
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 2,
+  "sequence": 2,
+  "records": {
+    "<TASK>": {
+      "taskId": "<TASK>",
+      "owner": "claude",
+      "request": {
+        "schemaVersion": 1,
+        "requestId": "pinned",
+        "kind": "analysis",
+        "title": "Total",
+        "brief": "Add 4, 3 and 5",
+        "acceptanceCriteria": [],
+        "readFiles": [],
+        "model": "opencode/muse-spark-1.3-contributor-free",
+        "wallSeconds": 180,
+        "maxSteps": 16
+      },
+      "packetSha256": "e01fc4a07185b3ff72db4670ef34af7cbeb118e6fbd2e5fede7063fc4a19c89c",
+      "files": {},
+      "parentTaskId": null,
+      "state": "running",
+      "effect": "unknown",
+      "error": null,
+      "result": null,
+      "resultSha256": null,
+      "sequence": 2,
+      "createdAt": "<CREATED>",
+      "received": false,
+      "review": null,
+      "elapsedMs": null,
+      "fingerprint": "89527206bcad6167ca42ff267c8b20988a126b0e1755a14ff0661afd20c542bd"
+    }
+  },
+  "mutations": {}
+}

@@ -1,0 +1,15 @@
+{
+  "protocol": 48,
+  "requests": [
+    { "details": true, "paneTools": { "profileId": "grok", "enabled": true } },
+    { "paneTools": { "profileId": "gemini", "enabled": false } }
+  ],
+  "profiles": [
+    { "id": "grok", "engine": "acp:grok", "label": "Grok", "available": true,
+      "version": "grok 1.0.30", "paneTools": "on" },
+    { "id": "gemini", "engine": "acp:gemini", "label": "Antigravity", "available": true,
+      "version": "1.3.5", "paneTools": "off" },
+    { "id": "grok", "engine": "acp:grok", "label": "Grok", "available": true, "paneTools": "taken" },
+    { "id": "gemini", "engine": "acp:gemini", "label": "Antigravity", "available": true, "paneTools": "unknown" }
+  ]
+}

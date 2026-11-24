@@ -1,0 +1,22 @@
+{
+  "protocolVersion": 54,
+  "profile": {
+    "id": "kimi",
+    "engine": "acp:kimi",
+    "label": "Kimi Code",
+    "available": true
+  },
+  "request": {
+    "id": "3f2b8c1d-7e4a-4b9f-8d26-5a1c0e9b4f73",
+    "cwd": "/tmp/project",
+    "size": {
+      "columns": 100,
+      "rows": 30
+    },
+    "title": "Kimi Code",
+    "launch": {
+      "version": 1,
+      "profileId": "kimi"
+    }
+  }
+}

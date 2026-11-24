@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "revision": 3,
+  "specs": {},
+  "calendars": {},
+  "tasks": [
+    {
+      "id": "1",
+      "agentId": "a",
+      "sessionKey": null,
+      "goal": "Produce report",
+      "spec": {
+        "expectedOutput": "",
+        "artifacts": [],
+        "inputs": [],
+        "budget": {
+          "wallSeconds": 1800,
+          "noProgressSeconds": 600,
+          "maxActions": 200,
+          "maxReportedTokens": null
+        },
+        "readOnly": false,
+        "allowOpaqueShellCommands": false
+      },
+      "roots": [
+        "/project"
+      ],
+      "cwd": "/project",
+      "startedAtMs": 1000,
+      "deadlineAtMs": 1801000,
+      "progressAtMs": 1000,
+      "progressSha256": "",
+      "began": false,
+      "actions": 0,
+      "reportedTokens": null,
+      "execution": "unknown",
+      "verification": "unverified",
+      "inputEvidence": [],
+      "artifacts": [],
+      "detail": "Host stopped during this task. No work was replayed.",
+      "nextAction": "Inspect provider history and artifacts, then acknowledge the uncertain task.",
+      "stopRequested": true,
+      "notes": []
+    }
+  ],
+  "history": {},
+  "facts": {},
+  "toolCalls": {
+    "1": {
+      "call": {
+        "fingerprint": "c96c6d5be8d08a12e7b5cdc1b207fa6b2430974c86803d8891675e76fd992c20",
+        "result": null
+      }
+    }
+  },
+  "pendingApprovals": [],
+  "expiredApprovals": [],
+  "actionIds": {},
+  "consultations": {}
+}

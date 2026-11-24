@@ -1,0 +1,19 @@
+[package]
+name = "interface-common"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+# Safe syscall wrappers: the effective uid and process-group signals without
+# spawning /usr/bin/id or /bin/kill, and poll for captured pipes. Already in
+# the lock file.
+rustix = { workspace = true, features = ["event", "process"] }
+
+[dev-dependencies]
+tempfile.workspace = true
+uuid.workspace = true
+
+[lints]
+workspace = true

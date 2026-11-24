@@ -1,0 +1,22 @@
+{
+  "protocolVersion": 38,
+  "commands": [
+    {
+      "kind": "startAgentTask",
+      "agentId": "research",
+      "text": "Summarize the open issues in this project.",
+      "cwd": "/fixture/project",
+      "requestId": "4d7a1c52-9b0e-4c1f-8a6e-0f6b2f3e9a11",
+      "title": "Summarize the open issues",
+      "model": "sonnet",
+      "effort": "high"
+    },
+    {
+      "kind": "startAgentTask",
+      "agentId": "research",
+      "text": "Draft release notes.",
+      "cwd": "/fixture/project",
+      "requestId": "0c8e2b7d-5f3a-4e19-9d2c-7b1a6e4f8c30"
+    }
+  ]
+}

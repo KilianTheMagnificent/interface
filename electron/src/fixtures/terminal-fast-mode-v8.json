@@ -1,0 +1,12 @@
+{
+  "protocolVersion": 8,
+  "titleConfig": "tui.terminal_title=[\"spinner\",\"app-name\",\"fast-mode\",\"model\",\"status\",\"thread\"]",
+  "keyConfig": "tui.keymap.global.toggle_fast_mode=[\"shift-f12\"]",
+  "toggleKey": "\u001b[24;2~",
+  "mode": {
+    "version": 1,
+    "model": "gpt-6-astra",
+    "enabled": true,
+    "ready": true
+  }
+}

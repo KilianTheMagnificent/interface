@@ -1,0 +1,23 @@
+[package]
+name = "engine-acp"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+async-trait.workspace = true
+interface-common = { path = "../interface-common" }
+interface-contracts = { path = "../interface-contracts" }
+interface-engine = { path = "../interface-engine" }
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+
+[dev-dependencies]
+interface-engine = { path = "../interface-engine", features = ["test-support"] }
+tempfile.workspace = true
+
+[lints]
+workspace = true

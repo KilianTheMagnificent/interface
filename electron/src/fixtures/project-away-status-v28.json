@@ -1,0 +1,11 @@
+{
+  "request": { "version": 2, "command": { "kind": "status" } },
+  "response": {
+    "version": 2,
+    "revision": 7,
+    "storageUncertain": false,
+    "activeRuns": [{ "id": "active-run", "cwd": "/fixture/project" }],
+    "runIds": ["completed-run", "active-run"],
+    "cancelledStarts": ["cancelled-start"]
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "protocolVersion": 57,
+  "commands": [
+    {
+      "kind": "setSettings",
+      "settings": {
+        "autoSettleDays": 3,
+        "settleOnMerge": true,
+        "generatedTitles": false,
+        "trackPullRequests": true,
+        "teamTools": false
+      }
+    }
+  ],
+  "view": {
+    "version": 1,
+    "revision": 21,
+    "now": 1791298800000,
+    "settings": {
+      "autoSettleDays": 3,
+      "settleOnMerge": true,
+      "generatedTitles": false,
+      "trackPullRequests": true,
+      "teamTools": false
+    },
+    "threads": [
+      {
+        "key": "claude#7c1d2e3f-4051-4a62-8b73-d8e9f0a1b2c3",
+        "section": "active",
+        "createdAt": 1791298790000,
+        "woke": false,
+        "unread": true,
+        "autoSettle": true,
+        "lastRun": {
+          "startedAt": 1791298790000
+        },
+        "workspace": {
+          "mode": "local",
+          "projectRoot": "/Users/fixture/Developer/Projects/atlas",
+          "branch": "main",
+          "owned": false
+        },
+        "lineage": {
+          "parent": "claude#5b0c1d2e-3f40-4a51-8b62-c7d8e9f0a1b2",
+          "relation": "child",
+          "keptTurns": 0,
+          "at": 1791298790000
+        },
+        "titleSource": "prompt",
+        "turns": [
+          {
+            "ordinal": 0,
+            "sentAt": 1791298790000,
+            "promptDigest": "1a2b3c4d5e6f7a8b",
+            "hasStart": true,
+            "hasEnd": false,
+            "state": "running"
+          }
+        ]
+      },
+      {
+        "key": "claude#5b0c1d2e-3f40-4a51-8b62-c7d8e9f0a1b2",
+        "section": "active",
+        "createdAt": 1791212400000,
+        "woke": false,
+        "unread": false,
+        "lastVisitedAt": 1791298700000,
+        "autoSettle": true,
+        "lastRun": {
+          "startedAt": 1791298000000
+        },
+        "workspace": {
+          "mode": "local",
+          "projectRoot": "/Users/fixture/Developer/Projects/atlas",
+          "branch": "main",
+          "owned": false
+        },
+        "turns": [
+          {
+            "ordinal": 0,
+            "sentAt": 1791298000000,
+            "promptDigest": "9d1e2f3a4b5c6d7e",
+            "hasStart": true,
+            "hasEnd": false,
+            "state": "running"
+          }
+        ]
+      }
+    ]
+  }
+}

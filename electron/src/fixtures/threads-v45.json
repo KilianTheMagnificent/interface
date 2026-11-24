@@ -1,0 +1,125 @@
+{
+  "protocolVersion": 45,
+  "view": {
+    "version": 1,
+    "revision": 12,
+    "now": 1791299600000,
+    "settings": {
+      "autoSettleDays": 3,
+      "settleOnMerge": true,
+      "generatedTitles": false,
+      "trackPullRequests": true
+    },
+    "threads": [
+      {
+        "key": "codex#0199f2a4-7c1e-7d30-9a5b-1c2d3e4f5a6b",
+        "section": "active",
+        "createdAt": 1791298000500,
+        "activeOrder": "V",
+        "woke": false,
+        "unread": true,
+        "lastRun": {
+          "startedAt": 1791298900000,
+          "endedAt": 1791299500000,
+          "outcome": "completed"
+        },
+        "autoSettle": true,
+        "workspace": {
+          "mode": "worktree",
+          "projectRoot": "/Users/fixture/Developer/Projects/atlas",
+          "worktreePath": "/Users/fixture/Developer/Projects/.interface-worktrees/away-fix-the-flaky-1a2b3c",
+          "branch": "iface/away-fix-the-flaky-1a2b3c",
+          "baseRef": "main",
+          "owned": true,
+          "missing": false
+        },
+        "titleSource": "user",
+        "turns": [
+          {
+            "ordinal": 0,
+            "sentAt": 1791298001000,
+            "promptDigest": "3b1f0c9e2a7d4e55",
+            "hasStart": true,
+            "hasEnd": true,
+            "state": "done",
+            "endedAt": 1791298600000,
+            "filesChanged": 2,
+            "added": 14,
+            "removed": 3
+          },
+          {
+            "ordinal": 1,
+            "sentAt": 1791298900000,
+            "promptDigest": "9c2e5a1b7f3d0e44",
+            "hasStart": true,
+            "hasEnd": true,
+            "state": "done",
+            "endedAt": 1791299500000,
+            "filesChanged": 1,
+            "added": 4,
+            "removed": 9
+          }
+        ],
+        "away": {
+          "runId": "0199f2a4-away-run",
+          "state": "completed",
+          "detail": "No justified work remains.",
+          "provider": "codex",
+          "model": "gpt-5.6-terra",
+          "objective": "Fix the flaky login test and keep the suite green.",
+          "startedAt": 1791298000000,
+          "deadlineAt": 1791301600000,
+          "maxIterations": 6,
+          "rounds": [
+            {
+              "iteration": 1,
+              "role": "work",
+              "state": "completed",
+              "turn": 0,
+              "verdict": "continue",
+              "summary": "Fixed the race in login.test.ts.",
+              "checks": [
+                "npm test -- login: 14 passed"
+              ]
+            },
+            {
+              "iteration": 1,
+              "role": "review",
+              "state": "completed",
+              "sessionKey": "codex#0199f2a4-review",
+              "verdict": "revise",
+              "summary": "The retry hides the race; await the session instead.",
+              "checks": [
+                "read src/login.ts"
+              ]
+            },
+            {
+              "iteration": 2,
+              "role": "work",
+              "state": "completed",
+              "turn": 1,
+              "verdict": "continue",
+              "summary": "Awaited the session; removed the retry."
+            },
+            {
+              "iteration": 2,
+              "role": "review",
+              "state": "completed",
+              "sessionKey": "codex#0199f2a4-review-2",
+              "verdict": "complete",
+              "summary": "No justified work remains.",
+              "checks": [
+                "npm test: 212 passed"
+              ]
+            },
+            {
+              "iteration": 3,
+              "role": "work",
+              "state": "cancelled"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

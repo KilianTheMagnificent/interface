@@ -1,0 +1,18 @@
+/* Team tools (protocol 57): the threads this thread's agent started, as one
+   quiet line above the composer, on the transcript's measure. Plain words and
+   a small status dot; each title opens its thread. */
+.started-threads { display:flex; align-items:center; flex-wrap:wrap; gap:4px 10px; box-sizing:border-box;
+  width:min(calc(100% - 2 * var(--conv-gutter)), var(--conv-measure)); margin:0 auto 6px;
+  font-size:var(--text-ui); color:var(--fg-dim); }
+.started-threads-label { flex:none; }
+.started-threads-item { display:inline-flex; align-items:center; gap:5px; max-width:220px; padding:0;
+  font:inherit; color:var(--fg-muted); background:none; border:0; cursor:pointer; }
+.started-threads-item:hover { color:var(--fg); text-decoration:underline; }
+.started-threads-item:focus-visible { outline:var(--focus-ring-w) solid var(--focus); outline-offset:2px; }
+.started-threads-title { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.started-threads-mark { flex:none; width:6px; height:6px; border-radius:50%; background:var(--fg-dim); }
+.started-threads-mark.is-running { background:var(--focus); }
+.started-threads-mark.is-needsYou { background:var(--warning-fg, var(--focus)); }
+.started-threads-mark.is-failed { background:var(--danger-fg); }
+.started-threads-mark.is-stopped { background:transparent; border:1px solid var(--fg-dim); box-sizing:border-box; }
+.started-threads-more { flex:none; }

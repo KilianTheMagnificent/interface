@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMax slice">
+  <title>Dawn over a calm sea</title>
+  <defs>
+    <radialGradient id="sun" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff6d8"/><stop offset=".55" stop-color="#ffdf9e"/><stop offset="1" stop-color="#ffc98a"/></radialGradient>
+    <radialGradient id="glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffd9a0" stop-opacity=".75"/><stop offset=".45" stop-color="#ffc9a8" stop-opacity=".32"/><stop offset="1" stop-color="#ffc9a8" stop-opacity="0"/></radialGradient>
+    <linearGradient id="w1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bcd9e6"/><stop offset="1" stop-color="#9cc3d6"/></linearGradient>
+    <linearGradient id="w2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fc8da"/><stop offset="1" stop-color="#7fb0c8"/></linearGradient>
+    <linearGradient id="w3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#84b6cc"/><stop offset="1" stop-color="#6298b4"/></linearGradient>
+    <linearGradient id="w4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6ea5bf"/><stop offset="1" stop-color="#4f86a4"/></linearGradient>
+  </defs>
+  <style>
+    .cloud { fill: #fffaf0; fill-opacity: .86; animation: cloud 160s linear infinite; }
+    @keyframes cloud { from { transform: translateX(-420px); } to { transform: translateX(1900px); } }
+    .sun { animation: rise 60s ease-in-out infinite alternate; }
+    @keyframes rise { from { transform: translateY(16px); } to { transform: translateY(-14px); } }
+    .glow { animation: breathe 11s ease-in-out infinite alternate; }
+    @keyframes breathe { from { opacity: .7; } to { opacity: 1; } }
+    .wave { animation: slide 24s linear infinite; }
+    .wave.b { animation-duration: 17s; animation-direction: reverse; }
+    .wave.c { animation-duration: 12s; }
+    .wave.d { animation-duration: 9s; animation-direction: reverse; }
+    @keyframes slide { from { transform: translateX(0); } to { transform: translateX(-400px); } }
+    .bob { animation: bob 7s ease-in-out infinite alternate; transform-origin: 470px 690px; }
+    @keyframes bob { from { transform: translateY(-3px) rotate(-2.2deg); } to { transform: translateY(4px) rotate(2.4deg); } }
+    .gull { animation: glide 60s linear infinite; }
+    @keyframes glide { from { transform: translate(-500px, 40px); } to { transform: translate(1700px, -90px); } }
+    .wing { fill: none; stroke: #5d6f7c; stroke-width: 2.4; stroke-linecap: round; animation: flap 1.3s ease-in-out infinite alternate; }
+    .wing.r { animation-name: flap-r; }
+    @keyframes flap { from { transform: rotate(16deg); } to { transform: rotate(-20deg); } }
+    @keyframes flap-r { from { transform: rotate(-16deg); } to { transform: rotate(20deg); } }
+    .glint { fill: #fff3d0; opacity: 0; animation: glint 5s ease-in-out infinite; }
+    @keyframes glint { 0%, 100% { opacity: 0; } 50% { opacity: .8; } }
+  </style>
+  <circle class="glow" cx="1310" cy="560" r="430" fill="url(#glow)"/>
+  <g class="sun"><circle cx="1310" cy="560" r="92" fill="url(#sun)"/></g>
+  <g class="cloud" style="animation-duration:140s;animation-delay:-33s"><path transform="translate(240 150) scale(1.0)" d="M-90 0a90 22 0 1 0 180 0a90 22 0 1 0 -180 0M-110 8a60 16 0 1 0 120 0a60 16 0 1 0 -120 0M-15 10a70 17 0 1 0 140 0a70 17 0 1 0 -140 0M-36 -14a46 18 0 1 0 92 0a46 18 0 1 0 -92 0"/></g><g class="cloud" style="animation-duration:190s;animation-delay:-20s"><path transform="translate(760 96) scale(0.7)" d="M-90 0a90 22 0 1 0 180 0a90 22 0 1 0 -180 0M-110 8a60 16 0 1 0 120 0a60 16 0 1 0 -120 0M-15 10a70 17 0 1 0 140 0a70 17 0 1 0 -140 0M-36 -14a46 18 0 1 0 92 0a46 18 0 1 0 -92 0"/></g><g class="cloud" style="animation-duration:120s;animation-delay:-48s"><path transform="translate(1220 190) scale(1.15)" d="M-90 0a90 22 0 1 0 180 0a90 22 0 1 0 -180 0M-110 8a60 16 0 1 0 120 0a60 16 0 1 0 -120 0M-15 10a70 17 0 1 0 140 0a70 17 0 1 0 -140 0M-36 -14a46 18 0 1 0 92 0a46 18 0 1 0 -92 0"/></g><g class="cloud" style="animation-duration:220s;animation-delay:-34s"><path transform="translate(1500 120) scale(0.6)" d="M-90 0a90 22 0 1 0 180 0a90 22 0 1 0 -180 0M-110 8a60 16 0 1 0 120 0a60 16 0 1 0 -120 0M-15 10a70 17 0 1 0 140 0a70 17 0 1 0 -140 0M-36 -14a46 18 0 1 0 92 0a46 18 0 1 0 -92 0"/></g><g class="cloud" style="animation-duration:260s;animation-delay:-17s"><path transform="translate(520 250) scale(0.5)" d="M-90 0a90 22 0 1 0 180 0a90 22 0 1 0 -180 0M-110 8a60 16 0 1 0 120 0a60 16 0 1 0 -120 0M-15 10a70 17 0 1 0 140 0a70 17 0 1 0 -140 0M-36 -14a46 18 0 1 0 92 0a46 18 0 1 0 -92 0"/></g>
+  <g class="gull" style="animation-duration:54s;animation-delay:-10s"><g transform="translate(300 300) scale(1.0)"><path class="wing" d="M0 0 Q-8 -8 -16 -2"/><path class="wing r" d="M0 0 Q8 -8 16 -2"/></g></g><g class="gull" style="animation-duration:54s;animation-delay:-10s"><g transform="translate(360 330) scale(0.7)"><path class="wing" d="M0 0 Q-8 -8 -16 -2"/><path class="wing r" d="M0 0 Q8 -8 16 -2"/></g></g><g class="gull" style="animation-duration:71s;animation-delay:-40s"><g transform="translate(900 240) scale(0.8)"><path class="wing" d="M0 0 Q-8 -8 -16 -2"/><path class="wing r" d="M0 0 Q8 -8 16 -2"/></g></g><g class="gull" style="animation-duration:63s;animation-delay:-22s"><g transform="translate(1300 360) scale(0.6)"><path class="wing" d="M0 0 Q-8 -8 -16 -2"/><path class="wing r" d="M0 0 Q8 -8 16 -2"/></g></g><g class="gull" style="animation-duration:63s;animation-delay:-22s"><g transform="translate(1340 340) scale(0.5)"><path class="wing" d="M0 0 Q-8 -8 -16 -2"/><path class="wing r" d="M0 0 Q8 -8 16 -2"/></g></g>
+  <path class="wave" d="M-400 1000 L-400 642.0 Q-300.0 649.0 -200.0 642.0 Q-100.0 635.0 0.0 642.0 Q100.0 649.0 200.0 642.0 Q300.0 635.0 400.0 642.0 Q500.0 649.0 600.0 642.0 Q700.0 635.0 800.0 642.0 Q900.0 649.0 1000.0 642.0 Q1100.0 635.0 1200.0 642.0 Q1300.0 649.0 1400.0 642.0 Q1500.0 635.0 1600.0 642.0 Q1700.0 649.0 1800.0 642.0 Q1900.0 635.0 2000.0 642.0 Q2100.0 649.0 2200.0 642.0 Q2300.0 635.0 2400.0 642.0 Q2500.0 649.0 2600.0 642.0 Q2700.0 635.0 2800.0 642.0 Q2900.0 649.0 3000.0 642.0 Q3100.0 635.0 3200.0 642.0 Q3300.0 649.0 3400.0 642.0 Q3500.0 635.0 3600.0 642.0 L3600.0 1000 Z" fill="url(#w1)"/>
+  <g class="bob">
+    <path d="M410 690 L530 690 L512 712 L426 712 Z" fill="#7a4a3a"/>
+    <path d="M470 688 L470 590" stroke="#5e4034" stroke-width="3" stroke-linecap="round"/>
+    <path d="M474 596 L474 682 L528 682 Z" fill="#fff7ea"/>
+    <path d="M466 606 L466 682 L424 682 Z" fill="#f6d9b8"/>
+  </g>
+  <path class="wave b" d="M-400 1000 L-400 706.0 Q-300.0 716.0 -200.0 706.0 Q-100.0 696.0 0.0 706.0 Q100.0 716.0 200.0 706.0 Q300.0 696.0 400.0 706.0 Q500.0 716.0 600.0 706.0 Q700.0 696.0 800.0 706.0 Q900.0 716.0 1000.0 706.0 Q1100.0 696.0 1200.0 706.0 Q1300.0 716.0 1400.0 706.0 Q1500.0 696.0 1600.0 706.0 Q1700.0 716.0 1800.0 706.0 Q1900.0 696.0 2000.0 706.0 Q2100.0 716.0 2200.0 706.0 Q2300.0 696.0 2400.0 706.0 Q2500.0 716.0 2600.0 706.0 Q2700.0 696.0 2800.0 706.0 Q2900.0 716.0 3000.0 706.0 Q3100.0 696.0 3200.0 706.0 Q3300.0 716.0 3400.0 706.0 Q3500.0 696.0 3600.0 706.0 L3600.0 1000 Z" fill="url(#w2)"/>
+  <path class="wave c" d="M-400 1000 L-400 788.0 Q-300.0 801.0 -200.0 788.0 Q-100.0 775.0 0.0 788.0 Q100.0 801.0 200.0 788.0 Q300.0 775.0 400.0 788.0 Q500.0 801.0 600.0 788.0 Q700.0 775.0 800.0 788.0 Q900.0 801.0 1000.0 788.0 Q1100.0 775.0 1200.0 788.0 Q1300.0 801.0 1400.0 788.0 Q1500.0 775.0 1600.0 788.0 Q1700.0 801.0 1800.0 788.0 Q1900.0 775.0 2000.0 788.0 Q2100.0 801.0 2200.0 788.0 Q2300.0 775.0 2400.0 788.0 Q2500.0 801.0 2600.0 788.0 Q2700.0 775.0 2800.0 788.0 Q2900.0 801.0 3000.0 788.0 Q3100.0 775.0 3200.0 788.0 Q3300.0 801.0 3400.0 788.0 Q3500.0 775.0 3600.0 788.0 L3600.0 1000 Z" fill="url(#w3)"/>
+  <g><path class="glint" style="animation-duration:3.5s;animation-delay:-0.0s" d="M1397 843h60v2h-60zM1526 785h55v2h-55zM1321 870h109v2h-109zM1468 923h74v2h-74zM1408 922h85v2h-85zM1245 812h43v2h-43z"/><path class="glint" style="animation-duration:4.2s;animation-delay:-0.9s" d="M1472 899h72v2h-72zM1546 700h14v2h-14zM1283 816h75v2h-75zM1241 920h41v2h-41zM1056 912h54v2h-54zM1235 693h21v2h-21z"/><path class="glint" style="animation-duration:4.9s;animation-delay:-1.8s" d="M1442 827h25v2h-25zM1269 950h121v2h-121zM1103 698h21v2h-21zM1321 908h29v2h-29zM1261 859h103v2h-103zM1217 867h98v2h-98z"/><path class="glint" style="animation-duration:5.6s;animation-delay:-2.7s" d="M1305 714h15v2h-15zM1171 826h76v2h-76zM1211 751h52v2h-52zM1126 774h28v2h-28zM1243 846h91v2h-91zM1283 643h26v2h-26z"/><path class="glint" style="animation-duration:6.3s;animation-delay:-3.6s" d="M1446 651h22v2h-22zM1298 935h117v2h-117zM1533 889h57v2h-57zM1623 879h65v2h-65zM977 930h39v2h-39z"/><path class="glint" style="animation-duration:7.0s;animation-delay:-4.5s" d="M1131 945h65v2h-65zM1199 784h44v2h-44zM1359 928h122v2h-122zM1019 808h72v2h-72zM1508 648h26v2h-26z"/></g>
+  <path class="wave d" d="M-400 1000 L-400 884.0 Q-300.0 900.0 -200.0 884.0 Q-100.0 868.0 0.0 884.0 Q100.0 900.0 200.0 884.0 Q300.0 868.0 400.0 884.0 Q500.0 900.0 600.0 884.0 Q700.0 868.0 800.0 884.0 Q900.0 900.0 1000.0 884.0 Q1100.0 868.0 1200.0 884.0 Q1300.0 900.0 1400.0 884.0 Q1500.0 868.0 1600.0 884.0 Q1700.0 900.0 1800.0 884.0 Q1900.0 868.0 2000.0 884.0 Q2100.0 900.0 2200.0 884.0 Q2300.0 868.0 2400.0 884.0 Q2500.0 900.0 2600.0 884.0 Q2700.0 868.0 2800.0 884.0 Q2900.0 900.0 3000.0 884.0 Q3100.0 868.0 3200.0 884.0 Q3300.0 900.0 3400.0 884.0 Q3500.0 868.0 3600.0 884.0 L3600.0 1000 Z" fill="url(#w4)"/>
+</svg>

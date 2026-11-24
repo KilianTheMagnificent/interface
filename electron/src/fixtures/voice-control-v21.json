@@ -1,0 +1,133 @@
+{
+  "requests": [
+    {
+      "version": 1,
+      "command": {
+        "kind": "inspect"
+      }
+    },
+    {
+      "version": 1,
+      "command": {
+        "kind": "begin",
+        "runId": "run-1",
+        "cwd": "/project",
+        "durationSeconds": 1800,
+        "maxActions": 64
+      }
+    },
+    {
+      "version": 1,
+      "command": {
+        "kind": "message",
+        "runId": "run-1",
+        "requestId": "request-1",
+        "text": "Review this project"
+      }
+    },
+    {
+      "version": 1,
+      "command": {
+        "kind": "stop",
+        "runId": "run-1"
+      }
+    },
+    {
+      "version": 1,
+      "command": {
+        "kind": "quiet",
+        "runId": "run-1",
+        "quiet": true
+      }
+    },
+    {
+      "version": 1,
+      "command": {
+        "kind": "endConversation",
+        "runId": "run-1"
+      }
+    },
+    {
+      "version": 1,
+      "command": {
+        "kind": "approve",
+        "runId": "run-1",
+        "requestId": "approval-reply-1",
+        "approvalId": "approval-1",
+        "allow": false
+      }
+    }
+  ],
+  "snapshot": {
+    "version": 1,
+    "revision": 3,
+    "runs": [
+      {
+        "id": "run-1",
+        "cwd": "/project",
+        "startedAtMs": 1000,
+        "deadlineAtMs": 1801000,
+        "maxActions": 64,
+        "state": "active",
+        "sessionKey": "claude#voice-1",
+        "quiet": false,
+        "conversationOpen": true,
+        "targets": [
+          {
+            "kind": "pane",
+            "id": "pane-1",
+            "generation": 2
+          }
+        ],
+        "controlledTargets": [],
+        "stops": [],
+        "receipts": [
+          {
+            "action": {
+              "requestId": "request-1",
+              "tool": "message",
+              "input": {
+                "text": "Review this project"
+              }
+            },
+            "state": "accepted",
+            "detail": "Accepted by the session; completion is not confirmed.",
+            "result": {}
+          }
+        ],
+        "notes": [
+          {
+            "role": "user",
+            "text": "Review this project"
+          }
+        ],
+        "approvals": [
+          {
+            "id": "approval-1",
+            "description": "An exact action needs owner approval.",
+            "sessionKey": "claude#voice-1",
+            "providerApprovalId": "approval-1"
+          }
+        ],
+        "coordinatorBusy": false,
+        "observations": [],
+        "pendingUpdates": []
+      }
+    ],
+    "storageUncertain": false,
+    "audioConnected": false
+  },
+  "paneScreen": {
+    "cursor": "9007199254740993",
+    "screen": {
+      "lines": [
+        "\u276f "
+      ],
+      "cursorRow": 0,
+      "cursorColumn": 2,
+      "atBottom": true,
+      "bracketedPaste": true,
+      "ghostText": false
+    }
+  }
+}

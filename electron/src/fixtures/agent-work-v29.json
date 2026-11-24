@@ -1,0 +1,203 @@
+{
+  "protocolVersion": 29,
+  "commands": [
+    {
+      "kind": "work",
+      "agentId": "research",
+      "command": {
+        "action": "read"
+      }
+    },
+    {
+      "kind": "work",
+      "agentId": "research",
+      "command": {
+        "action": "configure",
+        "expectedRevision": 0,
+        "spec": {
+          "expectedOutput": "A validated report",
+          "artifacts": [
+            {
+              "path": "report.json",
+              "format": "json",
+              "contains": null
+            }
+          ],
+          "inputs": [
+            {
+              "path": "input.json",
+              "maxAgeSeconds": 3600
+            }
+          ],
+          "budget": {
+            "wallSeconds": 1800,
+            "noProgressSeconds": 600,
+            "maxActions": 200,
+            "maxReportedTokens": null
+          },
+          "readOnly": false,
+          "allowOpaqueShellCommands": false,
+          "consultation": {
+            "model": "codex/fixture-model",
+            "files": [
+              "selected.txt"
+            ],
+            "writableFiles": [],
+            "maxChildren": 1
+          }
+        }
+      }
+    },
+    {
+      "kind": "work",
+      "agentId": "research",
+      "command": {
+        "action": "verify",
+        "taskId": "task-1"
+      }
+    },
+    {
+      "kind": "work",
+      "agentId": "research",
+      "command": {
+        "action": "stop",
+        "taskId": "task-1"
+      }
+    },
+    {
+      "kind": "work",
+      "agentId": "research",
+      "command": {
+        "action": "acknowledge",
+        "taskId": "task-1"
+      }
+    },
+    {
+      "kind": "work",
+      "agentId": "research",
+      "command": {
+        "action": "restoreMemory",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "expectedSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      }
+    },
+    {
+      "kind": "work",
+      "agentId": "research",
+      "command": {
+        "action": "proposeFact",
+        "fact": {
+          "id": "fact-1",
+          "text": "Use primary sources",
+          "source": "Owner conversation",
+          "observedAtMs": 1000,
+          "expiresAtMs": null,
+          "supersedes": null,
+          "state": "proposed"
+        }
+      }
+    },
+    {
+      "kind": "work",
+      "agentId": "research",
+      "command": {
+        "action": "confirmFact",
+        "id": "fact-1"
+      }
+    },
+    {
+      "kind": "calendar",
+      "agentId": "research",
+      "command": {
+        "action": "read",
+        "routineId": "daily"
+      }
+    },
+    {
+      "kind": "calendar",
+      "agentId": "research",
+      "command": {
+        "action": "save",
+        "expectedRevision": 0,
+        "routineId": "daily",
+        "schedule": {
+          "timezone": "America/Chicago",
+          "weekdays": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "hour": 9,
+          "minute": 0,
+          "missed": "skip",
+          "pauseOnFailure": true
+        }
+      }
+    },
+    {
+      "kind": "calendar",
+      "agentId": "research",
+      "command": {
+        "action": "preview",
+        "schedule": {
+          "timezone": "America/Chicago",
+          "weekdays": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "hour": 9,
+          "minute": 0,
+          "missed": "skip",
+          "pauseOnFailure": true
+        },
+        "afterMs": 1000
+      }
+    }
+  ],
+  "view": {
+    "version": 1,
+    "revision": 0,
+    "spec": {
+      "expectedOutput": "A validated report",
+      "artifacts": [
+        {
+          "path": "report.json",
+          "format": "json",
+          "contains": null
+        }
+      ],
+      "inputs": [
+        {
+          "path": "input.json",
+          "maxAgeSeconds": 3600
+        }
+      ],
+      "budget": {
+        "wallSeconds": 1800,
+        "noProgressSeconds": 600,
+        "maxActions": 200,
+        "maxReportedTokens": null
+      },
+      "readOnly": false,
+      "allowOpaqueShellCommands": false
+    },
+    "tasks": [],
+    "memoryHistory": [],
+    "facts": [
+      {
+        "id": "fact-1",
+        "text": "Use primary sources",
+        "source": "Owner conversation",
+        "observedAtMs": 1000,
+        "expiresAtMs": null,
+        "supersedes": null,
+        "state": "proposed"
+      }
+    ]
+  }
+}

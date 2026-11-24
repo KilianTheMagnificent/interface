@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- Interface app icon: The Fold (2026-08-28).
+
+       One stroke on a 45° grid. It runs out along y = x, turns twice into a
+       square hook, and returns along x + y = 1024, passing UNDER itself once at
+       dead centre — the fold is the interface, one surface meeting itself. The
+       mark is chiral (not its own mirror image), drawn at one weight with
+       mitred square terminals, and sits at ~76% of the plate. White on an
+       emerald tile with the subtle vertical gradient the Claude and ChatGPT
+       macOS icons use; emerald is the saturated hue no neighbour in the Dock
+       holds (black: Cursor, Wispr Flow; white: ChatGPT; orange: Claude).
+
+       Geometry on the 1024 canvas before the final transform: outbound
+       (256,256)→(672,672); hook →(864,480)→(704,320); return on x + y = 1024
+       broken 104 either side of (512,512), then →(256,768). Stroke 96, butt
+       caps, mitre joins; scaled 0.92 about the centre and nudged (−18,+12) to
+       the optical centre. build/interface-mark.svg is the one-colour master.
+
+       Chosen 2026-08-28 over three earlier rounds (strings, lyre, orrery,
+       bands, converge; pinwheel, windmill, meander, step, fault) reviewed on a
+       design canvas beside the real Cursor / ChatGPT / Claude / Wispr Flow
+       icons. Conventions kept: 1024 canvas, outer 100px transparent for
+       macOS's own shadow, 824 plate at rx 186 (what Claude.app and ChatGPT.app
+       ship), no blur. Regenerate build/icon.icns with `node scripts/make-icon.mjs`. -->
+  <defs>
+    <linearGradient id="face" x1="512" y1="100" x2="512" y2="924" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#128a55"/><stop offset="1" stop-color="#0b6b41"/>
+    </linearGradient>
+  </defs>
+  <rect x="100" y="100" width="824" height="824" rx="186" fill="url(#face)"/>
+  <g transform="translate(-18 12) translate(512 512) scale(0.92) translate(-512 -512)"
+     fill="none" stroke="#ffffff" stroke-width="96" stroke-linecap="butt" stroke-linejoin="miter">
+    <path d="M 256 256 L 672 672 L 864 480 L 704 320 L 585.5 438.5"/>
+    <path d="M 438.5 585.5 L 256 768"/>
+  </g>
+</svg>

@@ -1,0 +1,75 @@
+{
+  "protocolVersion": 66,
+  "events": [
+    {
+      "kind": "usage.updated",
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "rateLimited": { "message": "Rate limit reached", "resetsAt": "2026-11-15T21:10:00.000Z" }
+    },
+    {
+      "kind": "usage.updated",
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "rateLimited": { "message": "Rate limit reached" }
+    }
+  ],
+  "commands": [
+    { "kind": "resumeAtReset", "key": "claude#6c1d2e3f-4a5b-4c6d-8e7f-90a1b2c3d4e5" },
+    {
+      "kind": "resumeAtReset",
+      "key": "claude#6c1d2e3f-4a5b-4c6d-8e7f-90a1b2c3d4e5",
+      "prompt": "Then run the migration on staging."
+    }
+  ],
+  "view": {
+    "version": 1,
+    "revision": 44,
+    "now": 1794772800000,
+    "settings": {
+      "autoSettleDays": 3,
+      "settleOnMerge": true,
+      "generatedTitles": false,
+      "trackPullRequests": true
+    },
+    "threads": [
+      {
+        "key": "claude#6c1d2e3f-4a5b-4c6d-8e7f-90a1b2c3d4e5",
+        "section": "active",
+        "createdAt": 1794686400000,
+        "activeOrder": "V",
+        "woke": false,
+        "unread": false,
+        "autoSettle": true,
+        "turns": [],
+        "schedules": {
+          "schedules": [
+            {
+              "id": "s-5e6f7a8b9c0d",
+              "prompt": "Continue from where you stopped.",
+              "when": { "kind": "once", "at": 1794777060000 },
+              "enabled": true,
+              "createdAt": 1794772800000,
+              "nextAt": 1794777060000,
+              "setBy": "owner",
+              "paused": false,
+              "kind": "resume"
+            }
+          ]
+        },
+        "limit": { "resetsAt": "2026-11-15T21:10:00.000Z" }
+      },
+      {
+        "key": "codex#0199f2a4-7c1e-7d30-9a5b-1c2d3e4f5a6b",
+        "section": "active",
+        "createdAt": 1794686400000,
+        "activeOrder": "W",
+        "woke": false,
+        "unread": false,
+        "autoSettle": true,
+        "turns": [],
+        "limit": {}
+      }
+    ]
+  }
+}

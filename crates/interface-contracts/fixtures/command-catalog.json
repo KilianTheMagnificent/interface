@@ -1,0 +1,428 @@
+[
+  {
+    "id": "iface:sessions",
+    "name": "sessions",
+    "aliases": [],
+    "description": "Pick a known session",
+    "arguments": [],
+    "example": "/sessions",
+    "target": "selected session or workspace",
+    "effect": "inspect",
+    "requiredCapability": null
+  },
+  {
+    "id": "iface:new",
+    "name": "new",
+    "aliases": [],
+    "description": "Return to the new-session composer",
+    "arguments": [],
+    "example": "/new",
+    "target": "new-session launch draft",
+    "effect": "draft",
+    "requiredCapability": null
+  },
+  {
+    "id": "iface:cwd",
+    "name": "cwd",
+    "aliases": [],
+    "description": "Choose a launch directory with completion",
+    "arguments": [],
+    "example": "/cwd",
+    "target": "new-session launch draft",
+    "effect": "draft",
+    "requiredCapability": null
+  },
+  {
+    "id": "iface:engine",
+    "name": "engine",
+    "aliases": [],
+    "description": "Choose a launch engine",
+    "arguments": [],
+    "example": "/engine",
+    "target": "new-session launch draft",
+    "effect": "draft",
+    "requiredCapability": null
+  },
+  {
+    "id": "iface:resume",
+    "name": "resume",
+    "aliases": [],
+    "description": "Resume this session or an id prefix",
+    "arguments": [
+      {
+        "name": "session",
+        "required": false,
+        "description": "Stored session ID prefix"
+      }
+    ],
+    "example": "/resume",
+    "target": "selected stored session",
+    "effect": "provider",
+    "requiredCapability": "resume"
+  },
+  {
+    "id": "iface:model",
+    "name": "model",
+    "aliases": [],
+    "description": "Choose the provider model",
+    "arguments": [
+      {
+        "name": "model",
+        "required": false,
+        "description": "Provider model ID; omit to browse"
+      }
+    ],
+    "example": "/model",
+    "target": "selected session or launch draft",
+    "effect": "provider",
+    "requiredCapability": "models"
+  },
+  {
+    "id": "iface:effort",
+    "name": "effort",
+    "aliases": [],
+    "description": "Choose reasoning effort",
+    "arguments": [
+      {
+        "name": "effort",
+        "required": false,
+        "description": "Provider reasoning effort; omit to browse"
+      }
+    ],
+    "example": "/effort",
+    "target": "selected session or launch draft",
+    "effect": "provider",
+    "requiredCapability": "effort"
+  },
+  {
+    "id": "iface:fast",
+    "name": "fast",
+    "aliases": [],
+    "description": "Toggle fast mode when the selected model supports it",
+    "arguments": [
+      {
+        "name": "value",
+        "required": false,
+        "description": "Omit to browse supported values"
+      }
+    ],
+    "example": "/fast",
+    "target": "selected session or launch draft",
+    "effect": "provider",
+    "requiredCapability": "configuration"
+  },
+  {
+    "id": "iface:access",
+    "name": "access",
+    "aliases": [],
+    "description": "Choose the provider permission mode",
+    "arguments": [
+      {
+        "name": "value",
+        "required": false,
+        "description": "Omit to browse supported values"
+      }
+    ],
+    "example": "/access",
+    "target": "selected session or launch draft",
+    "effect": "provider",
+    "requiredCapability": "configuration"
+  },
+  {
+    "id": "iface:consult",
+    "name": "consult",
+    "aliases": [],
+    "description": "Ask another model, then return its answer here",
+    "arguments": [],
+    "example": "/consult",
+    "target": "selected session and explicit peer model",
+    "effect": "provider",
+    "requiredCapability": "collaboration"
+  },
+  {
+    "id": "iface:handoff",
+    "name": "handoff",
+    "aliases": [],
+    "description": "Transfer this project to another model",
+    "arguments": [],
+    "example": "/handoff",
+    "target": "selected session and explicit destination",
+    "effect": "preview",
+    "requiredCapability": "handoff"
+  },
+  {
+    "id": "iface:collab",
+    "name": "collab",
+    "aliases": [],
+    "description": "Review, approve, deny, or cancel model requests",
+    "arguments": [],
+    "example": "/collab",
+    "target": "explicit collaboration request",
+    "effect": "provider",
+    "requiredCapability": "collaboration"
+  },
+  {
+    "id": "iface:peer",
+    "name": "peer",
+    "aliases": [],
+    "description": "Accept or discard held peer advice",
+    "arguments": [],
+    "example": "/peer",
+    "target": "explicit collaboration request",
+    "effect": "provider",
+    "requiredCapability": "collaboration"
+  },
+  {
+    "id": "iface:steers",
+    "name": "steers",
+    "aliases": [
+      "receipts"
+    ],
+    "description": "Inspect steering attempts for this session",
+    "arguments": [],
+    "example": "/steers",
+    "target": "selected session delivery receipts",
+    "effect": "inspect",
+    "requiredCapability": null
+  },
+  {
+    "id": "iface:commands",
+    "name": "commands",
+    "aliases": [],
+    "description": "Browse provider slash commands",
+    "arguments": [],
+    "example": "/commands",
+    "target": "selected session or workspace",
+    "effect": "inspect",
+    "requiredCapability": null
+  },
+  {
+    "id": "iface:queue",
+    "name": "queue",
+    "aliases": [
+      "send later",
+      "follow-up"
+    ],
+    "description": "View, edit, or remove an unsent follow-up",
+    "arguments": [],
+    "example": "/queue",
+    "target": "unsent follow-up for selected session",
+    "effect": "draft",
+    "requiredCapability": null
+  },
+  {
+    "id": "iface:details",
+    "name": "details",
+    "aliases": [],
+    "description": "Open the latest tool call details",
+    "arguments": [],
+    "example": "/details",
+    "target": "selected session or workspace",
+    "effect": "inspect",
+    "requiredCapability": null
+  },
+  {
+    "id": "iface:window",
+    "name": "window",
+    "aliases": [],
+    "description": "Inspect provider-reported context usage",
+    "arguments": [],
+    "example": "/window",
+    "target": "selected session or workspace",
+    "effect": "inspect",
+    "requiredCapability": null
+  },
+  {
+    "id": "iface:stop",
+    "name": "stop",
+    "aliases": [
+      "interrupt"
+    ],
+    "description": "Interrupt the active turn",
+    "arguments": [],
+    "example": "/stop",
+    "target": "active turn in selected session",
+    "effect": "provider",
+    "requiredCapability": "interrupt"
+  },
+  {
+    "id": "iface:notifications",
+    "name": "notifications",
+    "aliases": [],
+    "description": "Turn terminal notifications on or off",
+    "arguments": [],
+    "example": "/notifications",
+    "target": "this iface user configuration",
+    "effect": "configuration",
+    "requiredCapability": null
+  },
+  {
+    "id": "iface:diagnostics",
+    "name": "diagnostics",
+    "aliases": [],
+    "description": "Show sanitized diagnostics",
+    "arguments": [],
+    "example": "/diagnostics",
+    "target": "selected session or workspace",
+    "effect": "inspect",
+    "requiredCapability": null
+  },
+  {
+    "id": "iface:doctor",
+    "name": "doctor",
+    "aliases": [],
+    "description": "Show configured inventory; provider startup health is separate",
+    "arguments": [],
+    "example": "/doctor",
+    "target": "selected session or workspace",
+    "effect": "inspect",
+    "requiredCapability": null
+  },
+  {
+    "id": "iface:advisor",
+    "name": "advisor",
+    "aliases": [],
+    "description": "Review the last turn with another model, then hold the note",
+    "arguments": [],
+    "example": "/advisor",
+    "target": "selected session and explicit peer model",
+    "effect": "provider",
+    "requiredCapability": "collaboration"
+  },
+  {
+    "id": "iface:agents",
+    "name": "agents",
+    "aliases": [],
+    "description": "List and inspect provider-reported child agents",
+    "arguments": [],
+    "example": "/agents",
+    "target": "selected session or workspace",
+    "effect": "inspect",
+    "requiredCapability": null
+  },
+  {
+    "id": "iface:orchestrate",
+    "name": "orchestrate",
+    "aliases": [],
+    "description": "Inspect shared orchestration runs",
+    "arguments": [],
+    "example": "/orchestrate",
+    "target": "selected session or workspace",
+    "effect": "inspect",
+    "requiredCapability": null
+  },
+  {
+    "id": "iface:spawn",
+    "name": "spawn",
+    "aliases": [],
+    "description": "Start a named orchestrated agent",
+    "arguments": [
+      {
+        "name": "engine",
+        "required": true,
+        "description": "codex, claude, or acp:<profile>"
+      },
+      {
+        "name": "name",
+        "required": true,
+        "description": "Unique agent name"
+      },
+      {
+        "name": "--model",
+        "required": false,
+        "description": "Explicit provider model ID"
+      },
+      {
+        "name": "--effort",
+        "required": false,
+        "description": "Explicit provider reasoning effort"
+      },
+      {
+        "name": "prompt",
+        "required": true,
+        "description": "Bounded assignment"
+      }
+    ],
+    "example": "/spawn codex reviewer Inspect the changed files",
+    "target": "current project",
+    "effect": "startTask",
+    "requiredCapability": "orchestration"
+  },
+  {
+    "id": "iface:send",
+    "name": "send",
+    "aliases": [],
+    "description": "Send a durable message to an orchestrated agent",
+    "arguments": [
+      {
+        "name": "agent",
+        "required": true,
+        "description": "Exact agent name or ID"
+      },
+      {
+        "name": "message",
+        "required": true,
+        "description": "Message to send"
+      }
+    ],
+    "example": "/send reviewer Check the error handling",
+    "target": "named agent",
+    "effect": "provider",
+    "requiredCapability": "orchestration"
+  },
+  {
+    "id": "iface:inbox",
+    "name": "inbox",
+    "aliases": [],
+    "description": "Inspect an orchestrated agent's durable inbox",
+    "arguments": [],
+    "example": "/inbox",
+    "target": "selected session or workspace",
+    "effect": "inspect",
+    "requiredCapability": null
+  },
+  {
+    "id": "iface:monitor",
+    "name": "monitor",
+    "aliases": [],
+    "description": "Inspect the shared orchestration event timeline",
+    "arguments": [],
+    "example": "/monitor",
+    "target": "selected session or workspace",
+    "effect": "inspect",
+    "requiredCapability": null
+  },
+  {
+    "id": "iface:help",
+    "name": "help",
+    "aliases": [],
+    "description": "Show iface keybindings and commands",
+    "arguments": [],
+    "example": "/help",
+    "target": "selected session or workspace",
+    "effect": "inspect",
+    "requiredCapability": null
+  },
+  {
+    "id": "iface:quit",
+    "name": "quit",
+    "aliases": [],
+    "description": "Close providers and exit iface",
+    "arguments": [],
+    "example": "/quit",
+    "target": "this iface process and its owned provider attachments",
+    "effect": "stopOwnedProcesses",
+    "requiredCapability": null
+  },
+  {
+    "id": "iface:exit",
+    "name": "exit",
+    "aliases": [],
+    "description": "Close providers and exit iface",
+    "arguments": [],
+    "example": "/quit",
+    "target": "this iface process and its owned provider attachments",
+    "effect": "stopOwnedProcesses",
+    "requiredCapability": null
+  }
+]

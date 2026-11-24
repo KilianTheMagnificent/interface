@@ -1,0 +1,926 @@
+.composer-icon-btn {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--row-h);
+  height: var(--row-h);
+  padding: 0;
+  color: var(--fg-muted);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-control);
+  cursor: pointer;
+}
+.composer-icon-btn:hover:not([aria-disabled="true"]) {
+  color: var(--fg-strong); background: var(--row-hover);
+}
+.composer-icon-btn[aria-disabled="true"] { color:var(--fg-faint); cursor:default; }
+
+.composer-label { color: var(--fg-dim); font-size: var(--text-meta); }
+.composer-row { display: flex; align-items: center; gap: 6px; }
+
+.composer-ta::placeholder { color: var(--input-placeholder); }
+
+.composer-pill:hover { background: var(--row-hover); }
+/* The app's one focus ring, drawn INSIDE: these pills sit shoulder to shoulder
+   in the control row, so a ring outside the box would overlap its neighbour.
+   The offset is the shared token negated rather than a second number, which is
+   what keeps this the same indicator as every other control's. */
+.composer-pill:focus-within {
+  background: var(--row-hover);
+  outline: var(--focus-ring-w) solid var(--focus);
+  outline-offset: calc(-1 * var(--focus-ring-offset));
+}
+/* An armed danger mode repaints the whole pill, VALUE INCLUDED — the one word
+   that carries the warning must not be the one word that stays neutral. The
+   inset edge is the durable state signal on either light or dark surfaces. It
+   is a box-shadow rather than a border because .composer-pill
+   is content-box with a fixed height (24px, set in the launch-surface section
+   below), so a real border would grow the pill by 2px the moment it arms. The AppSelect access trigger already has a border,
+   so it takes the red there — one 1px red edge per pill, never two.
+   The danger word uses --danger-fg rather than the app's ordinary emphasis
+   color, so both meaning and boundary survive the light-theme conversion. */
+.composer-pill.composer-danger {
+  background: var(--danger-bg);
+  color: var(--danger-fg);
+  box-shadow: inset 0 0 0 var(--border-w) var(--danger-fg);
+}
+.composer-pill.composer-danger:hover,
+.composer-pill.composer-danger:focus-within { background: var(--danger-bg); }
+.composer-pill.composer-danger .composer-pill-v { color: var(--danger-fg); }
+/* Last, and it has to be: same specificity as the rule above, so source order is
+   what stops the bordered pill wearing a second ring inside its own edge. */
+.composer-pill-v {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--fg);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.composer-chevron {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  color: var(--fg-faint);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+/* Rotated, not swapped: the same 100ms disclosure affordance the sidebar's
+   group chevron uses. */
+.composer-chevron.is-collapsed { transform: rotate(-90deg); }
+/* Engine down. The codicon table assigns codicon-error to "failed session,
+   engine down" and reserves codicon-warning for rate limits; --danger-fg is the
+   text tier for that state (not --status-failed, which is glyph/rail-only).
+   theme.css's .statusbar-alert paints the same fact from the same source in the
+   same colour, so the status bar and this card cannot disagree. */
+.composer-warn { flex: none; color: var(--danger-fg); }
+
+/* AppSelect's generic trigger is deliberately neutral. These are the launch
+   card's denser metrics; every selector now shares the same control geometry. */
+.composer-effort-picker { flex: none; max-width: 132px; }
+/* Hidden: the toolbar shows the selected answer, not a field label (below).
+   The colour is declared ahead of the armed picker's rule of equal weight. */
+.composer-app-picker .app-select-prefix { display: none; color: var(--fg-muted); }
+.composer-effort-picker .app-select-value { max-width: 88px; }
+.composer-danger-picker .app-select-trigger,
+.composer-danger-picker .app-select-trigger:hover:not(:disabled),
+.composer-danger-picker .app-select-trigger[aria-expanded="true"] {
+  color: var(--danger-fg);
+  background: var(--danger-bg);
+  border-color: var(--danger-fg);
+}
+.composer-danger-picker .app-select-prefix { color: var(--danger-fg); }
+/* Two classes, not one, and deliberately: theme.css tints this same value with
+   a one-class .access-tone-danger rule, and an armed pill must win that by
+   SPECIFICITY rather than by which stylesheet the document happened to load
+   last. Both classes are always present together when armed, so the extra one
+   costs nothing and states the precedence where it is read. */
+.composer-danger-picker.composer-access-picker .app-select-value {
+  color: var(--danger-fg);
+}
+
+.composer-error { color: var(--danger-fg); font-size: var(--text-ui); }
+.composer-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--fg-muted);
+  font-size: var(--text-meta);
+}
+
+/* ---- the Session options panel -----------------------------------------
+   Progressive disclosure, inside the same box as the prompt: these controls
+   shape the session exactly as the pills do, so putting them in a second card
+   would say they are a different kind of decision. Collapsed by default; only
+   non-default choices are summarized on its trigger, so ordinary launches stay
+   quiet while changed settings remain visible.
+
+   THE PANEL SCROLLS, AND IT IS THE ONLY THING THAT GIVES. It carries no height
+   of its own: .composer-card's max-height is the whole budget (see the note
+   there), and this is the one shrinkable item in that flex chain, so it absorbs
+   the mode note, the engine-down note, the field errors and the tools group as
+   they appear, without any of them being counted anywhere.
+
+   min-height is a floor, not a size. The clamp this replaces had none, and at
+   vh 360 it resolved to zero: measured, the panel rendered as a 19px strip of
+   padding and border with every scoping control — permission bypass included — present
+   in the DOM and invisible. 100px is the measured height of one legend (15.4px)
+   plus one whole choice with its consequence line (65px) plus this panel's own
+   19px of padding and border: the smallest panel that still shows a complete
+   control rather than a sliver of one.
+
+   box-sizing so that floor means the element, not the element plus its padding
+   and border — the same trap the old max-height fell into. */
+.composer-scope {
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: column;
+  gap: 10px;
+  box-sizing: border-box;
+  width: min(780px, 100%);
+  min-height: 100px;
+  margin: 12px 0 0 auto;
+  padding: 18px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-top: var(--border-w) solid var(--border);
+  border-radius: 0 0 var(--radius-composer) var(--radius-composer);
+}
+.composer-group { display: flex; flex-direction: column; gap: 6px; margin: 0; padding: 0; border: 0; }
+.composer-legend { padding: 0; color: var(--fg-dim); font-size: var(--text-meta); font-weight: var(--wght-strong); }
+
+/* One choice: control, name, consequence. The consequence is not optional
+   decoration — "isolated" quietly means "no CLAUDE.md", and a user who learns
+   that from the agent's behaviour has been ambushed by their own tool. */
+.composer-choice { display: flex; align-items: flex-start; gap: 6px; cursor: pointer; }
+.composer-choice input { flex: none; margin: 2px 0 0; accent-color: var(--accent); }
+.composer-choice-body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.composer-choice-name { color: var(--fg); font-size: var(--text-ui); }
+/* --fg-dim, not --fg-faint: this is informational text and the token is
+   non-text only. 4.78:1 on --surface, and nothing here takes a hover wash. */
+.composer-choice-hint { color: var(--fg-dim); font-size: var(--text-meta); line-height: var(--lh-ui); }
+
+.composer-tools { display: flex; gap: 6px; }
+.composer-tool { display: flex; flex: 1 1 0; flex-direction: column; gap: 4px; min-width: 0; }
+.composer-tool-input {
+  min-width: 0;
+  height: var(--control-h);
+  padding: 0 8px;
+  color: var(--input-fg);
+  background: var(--input-bg);
+  border: var(--border-w) solid var(--input-border);
+  border-radius: var(--radius-control);
+  font-family: var(--font-mono);
+  font-size: var(--text-ui);
+}
+.composer-tool-input::placeholder { color: var(--input-placeholder); }
+
+/* Permission bypass. Bordered in the error colour and separated from everything
+   above it, because it is not one more setting in a list of settings — it is
+   the one control on this card that can lose the user their work. */
+.composer-fullaccess {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  border: var(--border-w) solid var(--danger-fg);
+  border-radius: var(--radius-control);
+}
+.composer-danger { color: var(--danger-fg); line-height: var(--lh-ui); }
+.composer-fullaccess .btn { display: inline-flex; align-items: center; align-self: flex-start; gap: 6px; }
+.composer-fullaccess-on { background: var(--danger-bg); }
+
+/* Labelled for a screen reader, absent for everyone else — the placeholder
+   carries the same words on screen. */
+.composer-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- focused agent launch surface ---------------------------------------
+   Canvas wordmark on top, flush prompt dock at the foot. Launch choices live
+   as pills on that dock — not as a form above it. */
+.workspace-composer-panel { justify-content: stretch; align-items: stretch; }
+/* The launch card fills its pane. Keep min-height:0 through the flex chain
+   so the scope panel can shrink and long errors remain reachable by scroll. */
+.composer-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-height: 0;
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  line-height: var(--lh-ui);
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  color: var(--fg);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-none);
+  animation: composer-arrive var(--motion-base) var(--ease-out) both;
+}
+.composer-dismiss {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+}
+/* min-height:0 on this and on .composer-box is what lets the card's max-height
+   reach the scope panel. Without both, each is a flex item whose automatic
+   minimum size is its own min-content height, the shrink stops here, and the
+   card scrolls its whole body instead of the panel giving way — measured: the
+   panel stayed at 534.16px and the card hid 69-375px of itself. */
+.composer-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+  gap: 0;
+  padding: 0;
+}
+.composer-intro {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  margin: 0;
+  padding: 24px 24px 32px;
+  text-align: center;
+}
+.composer-eyebrow { margin-bottom: 10px; color: var(--fg-dim); font-size: var(--text-meta); }
+.composer-intro h1 {
+  max-width: 28ch;
+  margin: 0;
+  color: var(--fg-strong);
+  font-size: var(--text-h1);
+  font-weight: var(--wght-strong);
+  line-height: var(--lh-tight);
+  letter-spacing: 0;
+}
+.composer-intro p {
+  max-width: 36em;
+  margin: 14px 0 0;
+  color: var(--fg-muted);
+  font-size: var(--text-body);
+  line-height: var(--lh-ui);
+}
+.composer-notice { flex: none; width: min(720px, calc(100% - 48px)); margin: 0 auto 10px; }
+.composer-notice:empty { display: none; }
+.composer-dock {
+  flex: none;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 18px 18px;
+}
+.composer-context-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  max-width: 160px;
+  height: 24px;
+  padding: 0 6px;
+  color: var(--fg-muted);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-control);
+  font: inherit;
+  cursor: pointer;
+}
+.composer-context-button:hover { color: var(--fg); background: var(--row-hover); }
+.composer-context-name {
+  max-width: 132px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The signature element. The surface stays visually still while typing; the
+   text caret carries focus, and the textarea inside the box is borderless. */
+.composer-box {
+  display: flex;
+  flex-direction: column;               /* see .composer-body */
+  width: 100%;
+  /* The 100% includes both borders. Without border-box this surface becomes
+     two pixels wider than the card and its right rounded edge is clipped by
+     the card's overflow boundary. */
+  box-sizing: border-box;
+  min-height: 0;
+  overflow: visible;
+  background: var(--material-surface);
+  border: var(--border-w) solid var(--border-strong);
+  border-radius: var(--radius-composer);
+  box-shadow: var(--composer-lift);
+}
+.composer-ta {
+  color: var(--fg);
+  background: transparent;
+  border: 0;
+  outline: none;
+  resize: none;
+  font-family: var(--font-ui);
+  min-height: 32px;
+  padding: 7px 12px 2px;
+  font-size: var(--text-prose);
+  line-height: var(--lh-ui);
+}
+/* KEYBOARD FOCUS ON THE PROMPT, AND ONLY ON THE PROMPT.
+   .composer-ta sets outline:none over a transparent background, so focus here
+   was a bare caret while every other field in the app takes the 1px --focus
+   edge (.context-value-input:focus, reused verbatim below).
+   Deliberately NOT :focus-within — this box also holds the model, access and
+   Session options controls, and lighting the whole surface when one of THOSE
+   takes focus is the selection box around the compound prompt surface this
+   card has already rejected (ui-components.test.ts asserts no such rule).
+   :has() scopes the edge to the one descendant it is actually describing.
+
+   :focus-visible, not :focus, because theme.css:851 makes that the app's rule
+   for exactly this element set — and because the prompt takes the caret the
+   moment the card opens. With :focus this edge was the card's RESTING
+   appearance: the widest surface in the app wearing the accent by default,
+   which is a permanent focus claim, not a focus indicator. The opening focus is
+   handed over with focusVisible:false (COMPOSER_QUIET_FOCUS) so it does not
+   light this rule; a click or a Tab back into the prompt does. */
+.composer-box:has(.composer-ta:focus-visible) {
+  border-color: var(--focus);
+  box-shadow: 0 0 0 1px var(--focus);
+}
+.composer-command-error {
+  display:flex; align-items:flex-start; gap:6px; margin:0 9px 4px; padding:6px 8px;
+  color:var(--danger-fg); background:var(--danger-bg);
+  border-radius:var(--radius-control); font-size:var(--text-meta); line-height:var(--lh-ui);
+}
+.composer-command-button {
+  width:24px; height:24px; color:var(--fg-muted); font-family:var(--font-mono);
+  font-size:var(--text-prose); font-weight:var(--wght-strong);
+}
+.composer-command-button:hover:not(:disabled):not([aria-disabled="true"]) {
+  color:var(--fg); background:var(--row-hover);
+}
+.composer-command-button:disabled,
+.composer-command-button[aria-disabled="true"] { color:var(--fg-faint); cursor:default; }
+.composer-context-items {
+  display:flex; align-items:center; min-width:0; min-height:var(--control-h);
+  padding:0 8px 4px; overflow:hidden;
+}
+.composer-context-items .prompt-context-chips { flex:1 1 auto; min-width:0; }
+/* Wraps rather than overflows: this pane is 420px and four pickers plus the
+   submit do not fit on one line. */
+.composer-controls {
+  display: flex;
+  min-height: 30px;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 2px 7px 6px;
+}
+.composer-control-row {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 4px;
+}
+.composer-control-primary { flex: 1 1 auto; }
+.composer-control-secondary {
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  max-width: 100%;
+  margin-left: auto;
+  padding-top: 0;
+  border-top: 0;
+}
+/* The accent, like every other primary action in the app — theme.css reserves
+   the electric blue for selection and focus. See .conv-send, which took the
+   same correction: the two Send controls are the same act on two surfaces. */
+.composer-submit {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
+  padding: 0;
+  gap: 0;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  color: var(--accent-fg);
+  background: var(--accent);
+  border: 0;
+}
+.composer-submit:hover:not(:disabled) { background: var(--accent-hover); }
+.composer-submit:disabled {
+  color: var(--fg-faint);
+  background: var(--surface-raised);
+  cursor: not-allowed;
+}
+.composer-submit-label { display: none; }
+.composer-actions {
+  display: inline-flex;
+  align-items: center;
+  margin-left: auto;
+  gap: 4px;
+}
+
+/* Cursor's toolbar shows the selected answer, not a repeated field label.
+   Explicit aria-labels still name every trigger for assistive technology. */
+.composer-app-picker { flex: 0 1 auto; max-width: 150px; }
+.composer-app-picker .app-select-trigger {
+  height: 24px;
+  gap: 3px;
+  padding: 0 5px;
+  border: 0;
+  border-radius: var(--radius-control);
+  font-size: var(--text-ui);
+  line-height: var(--lh-ui);
+}
+.composer-app-picker .app-select-value {
+  max-width: 128px;
+  color: var(--fg);
+  line-height: var(--lh-ui);
+}
+.composer-model-picker { min-width: 132px; max-width: 210px; }
+.composer-model-picker .app-select-trigger {
+  min-width: 132px;
+  gap: 6px;
+  padding: 0 5px;
+  background: transparent;
+  border: 0;
+}
+.composer-model-picker .app-select-trigger:hover:not(:disabled),
+.composer-model-picker .app-select-trigger[aria-expanded="true"] {
+  background: var(--row-hover);
+}
+.composer-model-picker .app-select-value { max-width: 188px; }
+.composer-access-picker { max-width: 142px; }
+.composer-access-picker .app-select-trigger { padding: 0 5px; }
+/* The New thread card's base-branch picker: the same trigger, a little wider
+   for a branch name. */
+.composer-branch-picker { max-width: 180px; }
+.composer-branch-picker .app-select-value { max-width: 150px; }
+.composer-thread-models { flex: none; }
+/* Session options keeps the same compact pill geometry as the picker triggers
+   beside it. Picker menus themselves are AppSelect portals: they use
+   Interface's overlay tokens instead of handing the choice to macOS.
+   --radius-control, like every other pointer target: the toolbar used to run on
+   a 6px literal that matched nothing else in the app. */
+.composer-pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 100%;
+  height: 24px;
+  padding: 0 5px;
+  color: var(--fg-muted);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-control);
+  font-size: var(--text-ui);
+}
+/* Session options is a real <button> (it toggles a panel) rather than a <span>
+   wrapping an invisible <select>, so it needs the font and cursor the others
+   inherit from their label. */
+.composer-pill-btn { font: inherit; font-size: var(--text-ui); cursor: pointer; }
+
+/* Provider copy gets two real text rows in the portal. Effort stays in the
+   adjacent effort picker instead of being concatenated into the description. */
+.composer-model-popover .app-select-option {
+  min-height: 38px;
+  padding: 6px 8px;
+  column-gap: 7px;
+}
+.composer-model-popover .app-select-copy { gap: 3px; }
+.composer-model-popover .app-select-option-heading { min-height: 16px; line-height: var(--lh-ui); }
+.composer-model-popover .app-select-option-label { line-height: var(--lh-ui); }
+.composer-model-popover .app-select-option-description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-height: var(--lh-ui);
+  white-space: normal;
+}
+
+/* ---- the New thread card (owner, 2026-10-23: the Code mode look) ---------
+   The Threads surface's card (Composer's `thread` prop) is one centred column,
+   at most 700px wide and centred top to bottom: the serif question beside the
+   still thinking mark; the chips that say where the thread runs (the project
+   as a quiet bordered chip with its hue square, a project's workspace as a
+   segmented control and the branch it works on); the prompt card, which is
+   the Threads composer's card with Start as the accent square; and a line of
+   hints. No aurora, no hued edge, picker or Start: a project's hue is its
+   square. Every rule is scoped to .composer-thread-card, so the Code and Agent
+   cards do not move. The pickers' own sheet (APP_SELECT_CSS) loads after this
+   one, so the overrides of its trigger out-rank it rather than racing it. */
+.composer-thread-card .composer-body {
+  justify-content: safe center;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 24px 24px 60px;
+  gap: 14px;
+  overflow-y: auto;
+}
+.composer-thread-card .composer-body > .composer-notice { width: 100%; margin: 0; }
+
+.composer-thread-headline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 0;
+  color: var(--fg-strong);
+  font-size: calc(var(--text-display) * 16 / 11);
+  font-weight: var(--wght-regular);
+  line-height: var(--lh-tight);
+  text-align: center;
+}
+/* The greeting is set in the reading serif, as the Claude app sets its own;
+   Bare CLI keeps its one terminal face. */
+:where(:root:not([data-chrome="cli"])) .composer-thread-headline {
+  font-family: var(--font-ui-serif);
+}
+.composer-thread-mark { flex: none; }
+.composer-thread-question { min-width: 0; }
+
+/* 36px under the question (the column's 14px gap and 22px of its own), 14px
+   over the prompt: the project, then a project's workspace. */
+.composer-thread-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 22px;
+}
+.composer-thread-project { min-width: 0; max-width: 100%; }
+/* The quiet bordered chip: the hue square, the name, the chevron. */
+.composer-thread-card .composer-thread-project .app-select-trigger {
+  height: 30px;
+  gap: 6px;
+  padding: 0 11px;
+  color: var(--fg);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-container);
+  box-shadow: inset 0 0 0 var(--border-w) var(--border);
+  font-size: var(--text-body);
+}
+.composer-thread-card .composer-thread-project .app-select-trigger:hover:not(:disabled),
+.composer-thread-card .composer-thread-project .app-select-trigger[aria-expanded="true"] {
+  color: var(--fg-strong);
+  background: var(--row-hover);
+}
+.composer-thread-card .composer-thread-project .app-select-leading { width: auto; height: auto; }
+.composer-thread-card .composer-thread-project .app-select-value {
+  max-width: 240px;
+  color: inherit;
+}
+/* The one place the card keeps a project's hue: an 8px square before its
+   name. No project is a hollow ring. */
+.composer-thread-hue {
+  display: inline-block;
+  flex: none;
+  width: 8px;
+  height: 8px;
+  background: var(--project-h);
+  border-radius: calc(var(--radius-control) * .625);
+}
+.composer-thread-hue.project-hue-none {
+  background: transparent;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px var(--fg-faint);
+}
+
+/* A project's workspace, beside it: Local checkout | New worktree | Existing…
+   as one segmented control, then the branch it works on — named for Local,
+   picked for a new worktree. The class keeps its name from the drawer it
+   was. Its line is the segments' description, for a screen reader; the
+   segments' titles say the same on hover. */
+.composer-thread-drawer {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 0;
+  max-width: 100%;
+  color: var(--fg-dim);
+  font-size: var(--text-body);
+}
+/* The segments wrap rather than overflow a narrow pane. */
+.composer-thread-segments {
+  display: flex;
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  max-width: 100%;
+  gap: 2px;
+  padding: 2px;
+  background: var(--row-hover);
+  border-radius: var(--radius-container);
+}
+.composer-thread-segment,
+.composer-thread-segments .composer-thread-existing .app-select-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 12px;
+  color: var(--fg-dim);
+  background: transparent;
+  border: 0;
+  border-radius: calc(var(--radius-container) - 2px);
+  font: inherit;
+  font-size: var(--text-body);
+  cursor: pointer;
+}
+.composer-thread-segment:not([aria-pressed="true"]):not([aria-disabled="true"]):hover {
+  color: var(--fg);
+  background: var(--row-hover);
+}
+.composer-thread-segment[aria-pressed="true"],
+.composer-thread-segments .composer-thread-existing.is-on .app-select-trigger {
+  color: var(--fg-strong);
+  background: var(--surface);
+  box-shadow: 0 0 0 var(--border-w) var(--border);
+}
+.composer-thread-segment[aria-disabled="true"] { color: var(--fg-faint); cursor: default; }
+.composer-thread-existing { min-width: 0; }
+.composer-thread-segments .composer-thread-existing .app-select-value {
+  max-width: 140px;
+  color: inherit;
+}
+.composer-thread-line {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+.composer-thread-drawer .composer-branch-picker { flex: none; }
+.composer-thread-card .composer-thread-drawer .composer-app-picker .app-select-trigger {
+  height: 30px;
+  padding: 0 11px;
+  color: var(--fg);
+  box-shadow: inset 0 0 0 var(--border-w) var(--border);
+}
+/* Local works on what the project has checked out: named, not offered. */
+.composer-thread-branch {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  max-width: 200px;
+  padding: 0 4px;
+  color: var(--fg-dim);
+}
+.composer-thread-branch-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The prompt: the Threads composer's card — the surface, the stronger
+   hairline (it is the page's one control), a 22px corner and a soft lift.
+   Keyboard focus still takes the focus edge. */
+.composer-thread-card .composer-dock { padding: 0; }
+.composer-thread-card .composer-box {
+  position: relative;
+  z-index: 1;
+  background: var(--surface);
+  border-color: var(--border-strong);
+  border-radius: calc(var(--radius-composer) * 11 / 7);
+}
+:where(:root:not([data-chrome="cli"])) .composer-thread-card .composer-box {
+  box-shadow: var(--composer-lift),
+    0 8px 24px color-mix(in srgb, var(--composer-lift-color) 75%, transparent);
+}
+.composer-thread-card .composer-ta {
+  padding: 18px 18px 0;
+  color: var(--fg-strong);
+  font-size: var(--text-prose);
+  line-height: var(--lh-prose);
+}
+/* 12px under the text and over the card's edge: "+" and "/", access and
+   Session options on the left; the model, the models Shift added, effort and
+   Start on the right. The left inset is the text's 18px less the "+" button's
+   own 6px. */
+.composer-thread-card .composer-controls { gap: 2px; padding: 12px; }
+.composer-thread-card .composer-control-row { gap: 2px; }
+.composer-thread-card .composer-control-primary { flex: 0 1 auto; }
+.composer-thread-card .composer-control-secondary {
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-left: auto;
+}
+/* The row's free space goes before the model chips, not between them and
+   Start, so the three sit together at the right end. */
+.composer-thread-card .composer-actions { margin-left: 0; }
+/* The footer's chips: 28px, borderless, dim words, a wash when hovered. */
+.composer-thread-card .composer-app-picker .app-select-trigger,
+.composer-thread-card .composer-pill {
+  height: 28px;
+  gap: 6px;
+  padding: 0 9px;
+  border-radius: var(--radius-container);
+  font-size: var(--text-body);
+}
+.composer-thread-card .composer-app-picker .app-select-trigger {
+  color: var(--fg-dim);
+  background: transparent;
+}
+.composer-thread-card .composer-app-picker .app-select-trigger:hover:not(:disabled),
+.composer-thread-card .composer-app-picker .app-select-trigger[aria-expanded="true"] {
+  color: var(--fg-strong);
+  background: var(--row-hover);
+}
+.composer-thread-card .composer-app-picker .app-select-value { color: inherit; }
+/* The model chip carries a faint wash of its provider's colour (the box names
+   the provider in data-provider), and its name in the body tier. */
+.composer-thread-card .composer-model-picker,
+.composer-thread-card .composer-model-picker .app-select-trigger { min-width: 0; }
+.composer-thread-card .composer-model-picker .app-select-trigger {
+  color: var(--fg);
+  background: color-mix(in srgb, var(--provider-accent) 10%, transparent);
+}
+.composer-thread-card .composer-model-picker .app-select-trigger:hover:not(:disabled),
+.composer-thread-card .composer-model-picker .app-select-trigger[aria-expanded="true"] {
+  color: var(--fg-strong);
+  background: color-mix(in srgb, var(--provider-accent) 16%, transparent);
+}
+/* The effort ladder keeps its own top-tier accent. */
+.composer-thread-card .composer-effort-picker.effort-picker-maximum .app-select-value,
+.composer-thread-card .composer-effort-picker.effort-picker-xhigh .app-select-value {
+  color: var(--accent-text);
+}
+/* The access chip carries the mode's colour on its shield, and on its words
+   only for the modes that end the conversation about approvals. */
+.composer-thread-card .composer-access-picker.access-tone-plan .app-select-leading {
+  color: var(--mode-plan);
+}
+.composer-thread-card .composer-access-picker.access-tone-accept .app-select-leading {
+  color: var(--mode-accept);
+}
+.composer-thread-card .composer-access-picker.access-tone-auto .app-select-leading {
+  color: var(--mode-auto);
+}
+.composer-thread-card .composer-access-picker.access-tone-danger .app-select-leading,
+.composer-thread-card .composer-access-picker.access-tone-danger .app-select-value {
+  color: var(--mode-danger);
+}
+/* An armed bypass repaints its whole chip, as on every other card. */
+.composer-thread-card .composer-danger-picker .app-select-trigger,
+.composer-thread-card .composer-danger-picker .app-select-trigger:hover:not(:disabled),
+.composer-thread-card .composer-danger-picker .app-select-trigger[aria-expanded="true"] {
+  color: var(--danger-fg);
+  background: var(--danger-bg);
+}
+.composer-thread-card .composer-danger-picker .app-select-value { color: var(--danger-fg); }
+.composer-thread-card .composer-command-button,
+.composer-thread-card .prompt-context-trigger {
+  width: 28px;
+  height: 28px;
+  color: var(--fg-dim);
+  border-radius: calc(var(--radius-control) * 1.75);
+}
+/* Session options is a gear here; the panel's disclosure is the gear itself,
+   and the label names only what was changed. */
+.composer-thread-card .composer-pill-btn .composer-chevron { display: none; }
+.composer-thread-card .composer-pill-v:empty { display: none; }
+/* Start: the accent square, with the accent's ink for its arrow. */
+.composer-thread-card .composer-submit {
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  border-radius: calc(var(--radius-control) * 2.25);
+}
+.composer-thread-card .composer-submit-glyph { stroke-width: 2; }
+
+/* The slash menu: a popover under the prompt, in the canvas's family — the
+   floating material, a hairline, a 16px corner and 34px rows, the command in
+   the body ink. Bare CLI keeps its terminal list. */
+:where(:root:not([data-chrome="cli"])) .composer-thread-card .provider-command-menu.is-inline {
+  position: absolute;
+  z-index: 7;
+  top: calc(100% + 10px);
+  right: 0;
+  left: 0;
+  max-height: min(320px, 40vh);
+  margin: 0;
+  padding: 8px;
+  border-color: var(--border);
+  border-radius: calc(var(--radius-container) * 2);
+}
+:where(:root:not([data-chrome="cli"])) .composer-thread-card .provider-command-menu-head {
+  padding: 6px 12px;
+  font-size: var(--text-ui);
+  font-weight: var(--wght-medium);
+}
+:where(:root:not([data-chrome="cli"])) .composer-thread-card .provider-command-option {
+  min-height: 34px;
+  padding: 8px 12px;
+  border-radius: var(--radius-container);
+}
+:where(:root:not([data-chrome="cli"])) .composer-thread-card .provider-command-name {
+  color: var(--fg);
+  font-weight: var(--wght-medium);
+}
+
+/* Below the card: the way out of a project, and the two ways to start. */
+.composer-thread-card .composer-dock > .composer-note,
+.composer-thread-card .composer-dock > .composer-error,
+.composer-thread-card .composer-dock > .composer-notice { width: auto; margin: 10px 6px 0; }
+.composer-thread-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  margin-top: 8px;
+  padding: 0 6px;
+  color: var(--fg-dim);
+  font-size: var(--text-ui);
+}
+.composer-thread-link {
+  min-height: 24px;
+  padding: 0;
+  color: var(--fg-dim);
+  background: transparent;
+  border: 0;
+  font: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--border-strong);
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.composer-thread-link:hover { color: var(--fg); text-decoration-color: currentColor; }
+.composer-thread-keys {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+.composer-thread-keys kbd {
+  padding: 0 4px;
+  color: var(--fg-dim);
+  border: var(--border-w) solid var(--border);
+  border-radius: var(--radius-control);
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  line-height: var(--lh-ui);
+}
+
+@keyframes composer-arrive {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@container (max-width: 620px) {
+  .composer-controls { align-items: stretch; flex-direction: column; }
+  .composer-control-row { flex-wrap: wrap; }
+  .composer-control-secondary { margin-left: 0; }
+  .composer-actions { margin-left: auto; }
+  .composer-context-name { max-width: 170px; }
+  .composer-thread-headline { gap: 12px; font-size: var(--text-display); }
+  .composer-thread-headline .composer-thread-mark { width: 28px; height: 28px; }
+}
+/* The viewport fallback for the container query above, byte-identical to it —
+   so it has to break at the same number. At 680 the two disagreed through the
+   whole 620-680px band: the card was already stacked by viewport while its own
+   container query still said one row. 620 is the container query's number and
+   the container query is the one that measures the thing being laid out. */
+@media (max-width: 620px) {
+  .composer-controls { align-items: stretch; flex-direction: column; }
+  .composer-control-row { flex-wrap: wrap; }
+  .composer-control-secondary { margin-left: 0; }
+  .composer-actions { margin-left: auto; }
+  .composer-context-name { max-width: 170px; }
+  .composer-thread-headline { gap: 12px; font-size: var(--text-display); }
+  .composer-thread-headline .composer-thread-mark { width: 28px; height: 28px; }
+}

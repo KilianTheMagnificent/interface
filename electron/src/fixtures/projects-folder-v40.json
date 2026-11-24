@@ -1,0 +1,28 @@
+{
+  "protocolVersion": 40,
+  "requests": [
+    { "projectsFolder": "read" },
+    { "projectsFolder": "choose", "selectedPath": "/Users/fixture/code" },
+    { "projectsFolder": "choose", "selectedPath": null }
+  ],
+  "views": [
+    {
+      "version": 1,
+      "path": "/Users/fixture/Developer/Projects",
+      "display": "~/Developer/Projects",
+      "source": "default"
+    },
+    {
+      "version": 1,
+      "path": "/Users/fixture/code",
+      "display": "~/code",
+      "source": "chosen"
+    },
+    {
+      "version": 1,
+      "path": "/Volumes/Work/projects",
+      "display": "/Volumes/Work/projects",
+      "source": "lastPicked"
+    }
+  ]
+}

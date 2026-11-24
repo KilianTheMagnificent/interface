@@ -1,0 +1,15 @@
+{
+  "protocol": 49,
+  "backgroundRequests": [{"kind":"read"},{"kind":"set","enabled":true}],
+  "backgroundResponse": {"enabled":true,"available":true},
+  "customizationRequests": [
+    {"kind":"read","root":"/project","provider":"codex"},
+    {"kind":"source","root":"/project","provider":"claude","path":"/project/CLAUDE.md"},
+    {"kind":"checkMcp","root":"/project","provider":"codex","path":"/provider/config.toml","name":"docs"}
+  ],
+  "customizationResponse": {
+    "provider":"codex", "userRoot":"/provider", "loaded":"unknown",
+    "inventory":{"root":"/project","entries":[{"kind":"mcp","name":"docs","detail":"stdio","scope":"user","sourcePath":"/provider/config.toml"}],"truncated":false},
+    "health":{"path":"/provider/config.toml","name":"docs","state":"ready","message":"initialize and ping answered"}
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "requests": [
+    {
+      "version": 1,
+      "kind": "read",
+      "key": "claude#one"
+    },
+    {
+      "version": 1,
+      "kind": "prepare",
+      "key": "claude#one",
+      "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "mode": "continue"
+    },
+    {
+      "version": 1,
+      "kind": "forget",
+      "key": "claude#one",
+      "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "version": 1,
+      "kind": "listPending",
+      "key": "pending-launches"
+    },
+    {
+      "version": 1,
+      "kind": "retainDrafts",
+      "key": "draft-attachments",
+      "paths": [
+        "/project/sketch.png"
+      ]
+    },
+    {
+      "version": 1,
+      "kind": "acknowledgeLaunch",
+      "key": "claude#one",
+      "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ],
+  "responses": [
+    {
+      "version": 1,
+      "receipt": {
+        "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "key": "claude#one",
+        "input": {
+          "text": "Make the report",
+          "context": [
+            {
+              "id": "image",
+              "kind": "file",
+              "label": "Sketch",
+              "value": "/project/sketch.png"
+            }
+          ]
+        },
+        "serialized": "Make the report with image context",
+        "delivery": "unknown",
+        "at": 12
+      },
+      "prepared": null
+    },
+    {
+      "version": 1,
+      "receipt": null,
+      "prepared": null,
+      "pending": [
+        {
+          "key": "pending-launch#example",
+          "id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "preview": "Make the report",
+          "delivery": "unknown"
+        },
+        {
+          "key": "pending-launch#accepted",
+          "id": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "preview": "Accepted launch",
+          "delivery": "accepted",
+          "sessionKey": "claude#one"
+        }
+      ]
+    }
+  ],
+  "input": {
+    "text": "Make the report",
+    "context": [
+      {
+        "id": "image",
+        "kind": "file",
+        "label": "Sketch",
+        "value": "/project/sketch.png"
+      }
+    ]
+  },
+  "launch": {
+    "engine": "claude",
+    "options": {
+      "cwd": "/project",
+      "prompt": "Make the report with image context"
+    },
+    "recovery": {
+      "text": "Make the report",
+      "context": [
+        {
+          "id": "image",
+          "kind": "file",
+          "label": "Sketch",
+          "value": "/project/sketch.png"
+        }
+      ]
+    }
+  },
+  "agentTask": {
+    "kind": "startAgentTask",
+    "agentId": "agent-a",
+    "text": "Make the report with image context",
+    "cwd": "/project",
+    "requestId": "task-request-a",
+    "recovery": {
+      "text": "Make the report",
+      "context": [
+        {
+          "id": "image",
+          "kind": "file",
+          "label": "Sketch",
+          "value": "/project/sketch.png"
+        }
+      ]
+    }
+  }
+}

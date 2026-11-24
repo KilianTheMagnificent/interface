@@ -1,0 +1,22 @@
+{
+  "protocolVersion": 35,
+  "profile": {
+    "id": "muse",
+    "engine": "acp:muse",
+    "label": "Muse Code",
+    "available": true
+  },
+  "request": {
+    "id": "6b0d3c8e-4f7a-4c1e-9a52-0d8e3f6a7b19",
+    "cwd": "/tmp/project",
+    "size": {
+      "columns": 100,
+      "rows": 30
+    },
+    "title": "Muse Code",
+    "launch": {
+      "version": 1,
+      "profileId": "muse"
+    }
+  }
+}

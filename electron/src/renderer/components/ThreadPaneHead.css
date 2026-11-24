@@ -1,0 +1,229 @@
+/* A Threads pane's head (owner, 2026-11-16: the TN Code look; the Code mode
+   look of 2026-10-23 and its two-line head of 2026-11-15 before it). A
+   toolbar title in two lines on the left: the thread's short title, bold, in
+   the display face, one line that never wraps, and under it one quiet 11px
+   line — the project's hue square and name, "on main", where edits land, then
+   the account, pull request and lineage, each after a quiet dot. On the right
+   the Changes button as a capsule and the more glyph on a circle (adapted
+   from TN Code's toolbar sheet; see ThreadTranscript.css). */
+.workspace-agent .workspace-tile-head {
+  gap: 8px;
+  height: auto;
+  min-height: 52px;
+  /* The status dot's 6px column, then the head's gap: the title starts 20px in. */
+  padding: 12px 16px 12px 6px;
+}
+/* The system face at macOS weights, in refined chrome; a console keeps its own. */
+:where(:root:not([data-chrome="cli"])) .workspace-tile.workspace-agent > .workspace-tile-head {
+  --font-ui: var(--tn-font);
+  --wght-regular: 400;
+  --wght-medium: 500;
+  --wght-strong: 600;
+  font-family: var(--font-ui);
+}
+.workspace-tile-heading {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+/* The title button wraps the title alone, so focusing a pane draws the app's
+   ordinary ring around the words (the button used to run the head's full
+   height, and the pane clipped its ring to two bars at the title's ends). */
+.workspace-agent .workspace-tile-title {
+  align-self: flex-start;
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-control);
+}
+.workspace-agent .workspace-tile-title:focus-visible {
+  outline: var(--focus-ring-w) solid var(--focus);
+  outline-offset: 1px;
+}
+.workspace-agent .workspace-tile-name {
+  font-size: var(--text-h3);
+  line-height: var(--lh-tight);
+}
+:where(:root:not([data-chrome="cli"])) .workspace-agent .workspace-tile-name {
+  font-family: var(--tn-font-display);
+  font-weight: var(--wght-heavy);
+}
+/* The second line: one row of dim words that gives way at its end. */
+.workspace-tile-where {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--tn-label-2);
+  font-size: var(--text-meta);
+  line-height: var(--lh-tight);
+  white-space: nowrap;
+}
+/* The project's letter tile, drawn as its hue square; a plain chat's is a
+   hollow ring. */
+.workspace-agent .workspace-tile-where > .project-tile {
+  width: 8px;
+  height: 8px;
+  overflow: hidden;
+  color: transparent;
+  background: var(--project-h);
+  border-radius: calc(var(--radius-control) * .625);
+  box-shadow: none;
+}
+.workspace-agent .workspace-tile-where > .project-tile.project-hue-none {
+  box-sizing: border-box;
+  background: transparent;
+  border: var(--border-w) solid var(--fg-dim);
+  border-radius: 50%;
+}
+.workspace-tile-project {
+  flex: none;
+  min-width: 0;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* What follows the project: its words keep their order and the line clips at
+   its end rather than wrapping. */
+.thread-head {
+  display: inline-flex;
+  flex: 0 1 auto;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.thread-head-dot { flex: none; color: var(--fg-faint); }
+.thread-head:first-child > .thread-head-dot:first-child { display: none; }
+@media (max-width: 720px) {
+  .workspace-tile-project { max-width: 100px; }
+}
+.thread-head-branch,
+.thread-head-where {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* A long branch name gives way first; where edits land keeps its words. */
+.thread-head-branch { flex-shrink: 4; }
+.thread-head-branch-name,
+.thread-head-parent {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* The provider account, in words like the rest of the line. */
+.thread-head-place {
+  flex: none;
+  color: var(--fg-dim);
+}
+.thread-head-branch.is-missing {
+  overflow: hidden;
+  color: var(--fg-dim);
+  background: transparent;
+  font-family: var(--font-ui);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.thread-head-lineage {
+  display: inline-flex;
+  flex: 0 1 auto;
+  align-items: center;
+  min-width: 0;
+  height: 20px;
+  padding: 0;
+  color: var(--fg-dim);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-control);
+  font: inherit;
+  font-size: var(--text-ui);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.thread-head-lineage:hover { color: var(--fg-strong); }
+.thread-head-lineage:focus-visible {
+  outline: var(--focus-ring-w) solid var(--focus);
+  outline-offset: 1px;
+}
+.thread-head-parent { margin-left: 3px; color: var(--fg-muted); }
+/* The pull request: its glyph and words, a link to the PR, plain like the
+   rest of the line. The state is a word in it, not a colour. It is short, so
+   it keeps its words and the branch name and lineage give up their room
+   first. */
+.thread-head-pr {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 4px;
+  height: 20px;
+  padding: 0;
+  color: var(--fg-muted);
+  background: transparent;
+  border-radius: var(--radius-control);
+  font-size: var(--text-ui);
+  line-height: var(--lh-tight);
+  text-decoration: none;
+  white-space: nowrap;
+}
+a.thread-head-pr:hover { color: var(--fg-strong); }
+a.thread-head-pr:focus-visible {
+  outline: var(--focus-ring-w) solid var(--focus);
+  outline-offset: 1px;
+}
+.thread-head-pr.is-closed { color: var(--fg-dim); }
+/* The Changes button: its glyph, the word and the thread's totals, a quiet
+   button with a hairline edge at rest and a filled one while the panel is
+   open. */
+.thread-head-changes {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+  height: 28px;
+  padding: 0 12px;
+  color: var(--fg);
+  background: var(--tn-fill);
+  border: 0;
+  border-radius: var(--radius-pill);
+  box-shadow: inset 0 0 0 .5px var(--tn-separator);
+  font: inherit;
+  font-size: var(--text-ui);
+  font-weight: var(--wght-medium);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.thread-head-changes:hover { color: var(--fg-strong); background: var(--tn-fill-strong); }
+.thread-head-changes.is-active {
+  color: var(--selection-accent);
+  background: var(--tn-fill-strong);
+}
+.thread-head-changes:focus-visible {
+  outline: var(--focus-ring-w) solid var(--focus);
+  outline-offset: var(--focus-ring-offset);
+}
+.thread-head-changes-stat {
+  display: inline-flex;
+  gap: 4px;
+  font-variant-numeric: tabular-nums;
+}
+.thread-head-added { color: var(--diff-added); }
+.thread-head-removed { color: var(--diff-removed); }
+/* The pane's menu: the more glyph on a 28px square. */
+.workspace-agent .workspace-tile-actions .thread-pane-menu-button {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  color: var(--tn-label-2);
+  border-radius: 50%;
+}
+.workspace-agent .workspace-tile-actions .thread-pane-menu-button:hover:not(:disabled),
+.workspace-agent .workspace-tile-actions .thread-pane-menu-button[aria-expanded="true"] {
+  color: var(--fg-strong);
+  background: var(--tn-fill);
+}

@@ -1,0 +1,120 @@
+{
+  "claudeInline": {
+    "input": {
+      "type": "user",
+      "uuid": "u1",
+      "session_id": "s1",
+      "parent_tool_use_id": null,
+      "parent_agent_id": null,
+      "message": {
+        "role": "user",
+        "content": [
+          { "type": "image", "source": { "type": "base64", "media_type": "image/png", "data": "iVBORw0KGgoAAAANSUhEUg==" } },
+          { "type": "text", "text": "what is wrong with this layout?" }
+        ]
+      }
+    },
+    "events": [
+      {
+        "kind": "user.message",
+        "text": "what is wrong with this layout?",
+        "images": [
+          { "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUg==", "label": "1" }
+        ]
+      }
+    ]
+  },
+  "claudeImageOnly": {
+    "input": {
+      "type": "user",
+      "uuid": "u2",
+      "session_id": "s1",
+      "parent_tool_use_id": null,
+      "message": {
+        "role": "user",
+        "content": [
+          { "type": "image", "source": { "type": "base64", "media_type": "image/png", "data": "iVBORw0KGgoAAAANSUhEUg==" } }
+        ]
+      }
+    },
+    "events": [
+      {
+        "kind": "user.message",
+        "text": "",
+        "images": [
+          { "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUg==", "label": "1" }
+        ]
+      }
+    ]
+  },
+  "claudePlain": {
+    "input": {
+      "type": "user",
+      "uuid": "u3",
+      "session_id": "s1",
+      "parent_tool_use_id": null,
+      "message": { "role": "user", "content": "just words" }
+    },
+    "events": [
+      { "kind": "user.message", "text": "just words" }
+    ]
+  },
+  "claudeRefusedRemote": {
+    "input": {
+      "type": "user",
+      "uuid": "u4",
+      "session_id": "s1",
+      "parent_tool_use_id": null,
+      "message": {
+        "role": "user",
+        "content": [
+          { "type": "image", "source": { "type": "url", "url": "https://tracker.test/pixel.png" } },
+          { "type": "text", "text": "look" }
+        ]
+      }
+    },
+    "events": [
+      { "kind": "user.message", "text": "look" }
+    ]
+  },
+  "codexInline": {
+    "input": {
+      "type": "userMessage",
+      "id": "u1",
+      "clientId": null,
+      "content": [
+        { "type": "text", "text": "why is this broken?" },
+        { "type": "image", "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUg==", "detail": "original" }
+      ]
+    },
+    "events": [
+      {
+        "kind": "user.message",
+        "text": "why is this broken?",
+        "images": [
+          { "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUg==", "label": "1" }
+        ]
+      }
+    ]
+  },
+  "codexLocalImage": {
+    "input": {
+      "type": "userMessage",
+      "id": "u2",
+      "clientId": null,
+      "content": [
+        { "type": "text", "text": "see" },
+        { "type": "localImage", "path": "/tmp/shot.png" }
+      ]
+    },
+    "events": [
+      {
+        "kind": "user.message",
+        "text": "see\n[image: /tmp/shot.png]",
+        "imageReferences": [
+          { "textLine": 1, "textLineCount": 1, "label": "shot.png" }
+        ]
+      }
+    ]
+  }
+}

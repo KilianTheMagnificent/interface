@@ -1,0 +1,27 @@
+[package]
+name = "engine-claude"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+async-trait.workspace = true
+interface-common = { path = "../interface-common" }
+interface-contracts = { path = "../interface-contracts" }
+interface-engine = { path = "../interface-engine" }
+interface-workspace = { path = "../interface-workspace" }
+libc.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+uuid.workspace = true
+
+[dev-dependencies]
+interface-engine = { path = "../interface-engine", features = ["test-support"] }
+tempfile.workspace = true
+
+[lints]
+workspace = true

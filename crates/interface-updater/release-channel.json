@@ -1,0 +1,12 @@
+{
+  "channel": "stable",
+  "feeds": [
+    "https://github.com/KilianTheMagnificent/interface-releases/releases/latest/download/interface-update.json"
+  ],
+  "keys": [
+    "vqOqNXcvge7lkV87ZAzDGfT4GFUo8GHQe1kTmwlhohw=",
+    "7QYu9ngsyGXtIAxSQQeXQED0Et7q7D2tvqOWZ+oEhpM="
+  ],
+  "product": "com.andreromero.interface",
+  "schema": 1
+}

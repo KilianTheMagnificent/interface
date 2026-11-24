@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Interface.app's own process, signed with the hardened runtime
+  (scripts/sign-mac.cjs). Nested Electron code uses entitlements.mac.inherit.plist;
+  the Rust and Swift executables in Contents/Resources/bin get theirs from
+  sign-mac.cjs. Never add com.apple.security.cs.allow-dyld-environment-variables
+  or com.apple.security.get-task-allow: either lets another program load its
+  own code into Interface and use the permissions people granted it.
+-->
+<plist version="1.0">
+  <dict>
+    <!-- V8 compiles JavaScript at run time. -->
+    <key>com.apple.security.cs.allow-jit</key>
+    <true/>
+    <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+    <true/>
+    <!-- The voice assistant, and Browser pane pages behind Interface's own ask. -->
+    <key>com.apple.security.device.audio-input</key>
+    <true/>
+    <key>com.apple.security.device.camera</key>
+    <true/>
+    <!--
+      Interface hosts terminals and agent command-line tools. macOS attributes
+      a child tool's permission request to Interface as the responsible app,
+      and under the hardened runtime refuses it without asking unless Interface
+      holds the entitlement: the same list terminal apps ship.
+    -->
+    <key>com.apple.security.automation.apple-events</key>
+    <true/>
+    <key>com.apple.security.personal-information.addressbook</key>
+    <true/>
+    <key>com.apple.security.personal-information.calendars</key>
+    <true/>
+    <key>com.apple.security.personal-information.location</key>
+    <true/>
+    <key>com.apple.security.personal-information.photos-library</key>
+    <true/>
+  </dict>
+</plist>

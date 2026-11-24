@@ -1,0 +1,286 @@
+consult recover: ()
+consult begin: requested r0 cancellable=true #b3d9e5b9e95e747c => 65fa40d8:8d8277515c13c595
+consult material: HumanPreviewMaterial { collaboration_id: "collaboration-1", mode: Consult, source_session_key: "claude#source-1", target_engine: Codex, objective: "Review the implementation\nand Café notes" }
+consult begin-replay: requested r0 cancellable=true #b3d9e5b9e95e747c
+consult complete: awaiting_approval r1 cancellable=true #1dcdef59be2adadb => 65fa40d8:10b7a10f86b8684c
+consult complete-replay: awaiting_approval r1 cancellable=true #1dcdef59be2adadb
+consult preview: 558 bytes #853ab131c7ea6138
+consult pending: 560 bytes #7e7f7e8716a63432
+consult approve: approved r2 cancellable=true #be4325adb1068a6b => 65fa40d8:b803cea8b5fd4ef8
+consult approve-replay: approved r2 cancellable=true #be4325adb1068a6b
+consult deny-after-approve: refused APPROVAL_STALE retryable=true record=collaboration-1
+consult reserve: preparing_target r4 cancellable=true #938ebd4277c00ad0 => 65fa40d8:6cc2d40c06e43a6a
+consult locked: []
+consult start-prepare: prepare-target effect-b2ac16d0e81d6 #5d745611cf23cb0f => 65fa40d8:acbf2abbe4a69fa0
+consult start-prepare-again: refused RECOVERY_REQUIRED retryable=false record=collaboration-1
+consult settle-prepare: running_target r6 cancellable=true #d1695625b6d840bf => 65fa40d8:6c3946a4b4a8655e
+consult participants: {"sourceSessionKey":"claude#source-1","targetSessionKey":"codex#target-1"}
+consult start-run: run-target effect-fd0a585e5b344 #d51dfcda0685bfc8 => 65fa40d8:94430083d70917d9
+consult settle-run: result_ready r8 cancellable=true #07c11aca0ee07a20 => 65fa40d8:98dccf029418104c
+consult hold: awaiting_peer_review r9 cancellable=true #a8ab2fd5b5ff2ff7 => 65fa40d8:400e6d9a956c45fd
+consult hold-replay: awaiting_peer_review r9 cancellable=true #a8ab2fd5b5ff2ff7
+consult pending-peer: 579 bytes #d76ee60b27a70cad
+consult guard: "82ef047e0fe482d34b17f2f349e393c43ffaf81693f9cd68fa5e0a11a8655ecf"
+consult accept: delivery_pending r10 cancellable=true #2ef1765ccf4abb91 => 65fa40d8:eb36f5dac3932eb7
+consult acceptance receipt: Some("acceptance-6e5affa578e99c106cb15ac4ac5fafddc7fe4db18f71d8ddf196ba967d99d5da")
+consult moved-guard: "883796d1084fb330bc473ad6ea273ba4630f0423cbb8e5479b72f620603b5174"
+consult start-deliver-moved: no command
+consult pending-peer: 581 bytes #5b46ab886e7f6e3f
+consult rebind: delivery_pending r11 cancellable=true #4eb7dac773997c32 => 65fa40d8:d540a8e1cca7342d
+consult acceptance receipt: Some("acceptance-7b84d5dcc85217e96b5173185eecd6bb18ec1de3c152aee83ff9cf599e706a74")
+consult pending-peer: 581 bytes #db59b462f0e9a05a
+consult rebind-replay: delivery_pending r11 cancellable=true #4eb7dac773997c32
+consult start-deliver: deliver-result effect-0b01660dc9aae #3d7e18ee98b859bc => 65fa40d8:3c3e5b887cfb8447
+consult settle-deliver: completed r13 cancellable=false #d4dda4def388288e => 65fa40d8:bc8a8be8d99658e6
+consult settle-deliver-again: refused RECOVERY_REQUIRED retryable=false record=collaboration-1
+consult cancel-terminal: completed r13 cancellable=false #d4dda4def388288e
+consult receipts: 277 bytes #f275863bd053d74f
+handoff recover: ()
+handoff submit: awaiting_approval r1 cancellable=true #85ce63ade0ecfc0c => 65fa40d8:35f16141acab4326
+handoff preview: 558 bytes #695574a12303bf09
+handoff approve: approved r2 cancellable=true #55ebc41751c06b21 => 65fa40d8:1a5d57a1a613fd2a
+handoff reserve: preparing_target r4 cancellable=true #2d283538ccde6c63 => 65fa40d8:dccff308d196ad25
+handoff start-prepare: prepare-target effect-b2ac16d0e81d6 #2eb5e662021e8701 => 65fa40d8:ab776719e21d8de1
+handoff settle-prepare: parking_source r6 cancellable=true #9d4b3728f1ec9c84 => 65fa40d8:c6d39ceaf292fea3
+handoff start-park-busy: refused PENDING_SOURCE_APPROVAL retryable=true record=collaboration-1
+handoff start-park-queued: refused SOURCE_QUEUE_NOT_EMPTY retryable=true record=collaboration-1
+handoff start-park: park-source effect-3cdea4eb06159 #7352596a9fe487c2 => 65fa40d8:db05d4b11f2df270
+handoff locked: 262 bytes #d02108c2951d6096
+handoff settle-park-wrong-value: refused STATE_CORRUPT retryable=true record=collaboration-1
+handoff settle-park: ownership_transfer r8 cancellable=false #78809967e2ef4932 => 65fa40d8:c9d6de52218437dc
+handoff start-transfer: transfer-ownership effect-6d9a2f9eaca9f #aebebf7719c68410 => 65fa40d8:bbda1abc0c2e117b
+handoff settle-transfer: activating_target r10 cancellable=false #f825fb07c442ccd8 => 65fa40d8:f4d34a5b3a2c3f73
+handoff start-activate: activate-target effect-652e2a49d394c #c7ce0f860d770b9a => 65fa40d8:e5a6734f955a6f89
+handoff settle-activate: completed r12 cancellable=false #3ee06dc27e43be8d => 65fa40d8:c7d03a857e3dbcc6
+approval-refresh recover: ()
+approval-refresh submit: awaiting_approval r1 cancellable=true #1dcdef59be2adadb => 65fa40d8:7de3e533ef0ce049
+approval-refresh preview: 558 bytes #853ab131c7ea6138
+approval-refresh approve-moved: awaiting_approval r2 cancellable=true #2cbd9cf2371d1a53 => 65fa40d8:d95660c5f09d80e7
+approval-refresh approve-stale: refused APPROVAL_STALE retryable=true record=collaboration-1
+approval-refresh preview: 558 bytes #d6ce231b44378fe0
+approval-refresh approve-new-packet-absent-worktree: awaiting_approval r3 cancellable=true #0b0a15e6496df464 => 65fa40d8:b060be2c5c2f4681
+approval-refresh preview: 566 bytes #c95ec7d12d02dc06
+approval-refresh approve-absent-worktree: approved r4 cancellable=true #fe66abf62d810a90 => 65fa40d8:b3324357f74cef6e
+approval-refresh reserve-absent-worktree: preparing_target r6 cancellable=true #9f74c6da5ab11900 => 65fa40d8:de61a1b0c0a062e7
+managed recover: ()
+managed submit-handoff: failed r1 MANAGED_WORKTREE_TRANSFER_UNAVAILABLE retryable=false cancellable=false #e29406041789a160 => 65fa40d8:d1ddd9b7ba818117
+managed participants: {"sourceSessionKey":"claude#source-1"}
+managed submit: awaiting_approval r1 cancellable=true #6ddf03012313b35f => 07909cba:208dd24e6e89d99f
+managed preview: 557 bytes #6acabad30dfddbb0
+managed approve-moved: awaiting_approval r2 cancellable=true #82fe40a72b99c6fd => 07909cba:7c978ab62387a8dd
+managed preview: 557 bytes #7efc05d1affec226
+managed approve: approved r3 cancellable=true #20aeaee9b2d2f06b => 07909cba:152a0fb4cbbd1ba5
+managed reserve: preparing_target r5 cancellable=true #1d21859a8a99b78b => 07909cba:570c4d763a37131a
+managed start-prepare: prepare-target effect-090994cc14183 #75a3ec7b84889b67 => 07909cba:7d68fe86d009f41f
+managed settle-prepare: running_target r7 cancellable=true #4528087f3ee5d1ae => 07909cba:2cc1cb235b870008
+managed start-run: run-target effect-0dc5ee2b55f35 #ca2a564b2e997b7d => 07909cba:ce84eca6e7f087ed
+managed settle-run: result_ready r9 cancellable=true #1378f4a9148e1626 => 07909cba:4d6324da5350a7c7
+managed hold: awaiting_peer_review r10 cancellable=true #50b90da01714e442 => 07909cba:f21f1c11d50b8d17
+managed pending-peer: 557 bytes #176b4c50347306fb
+managed discard: completed r11 cancellable=false #cc3728f0c5dda9c9 => 07909cba:0c65b5cfce81bd3a
+managed discard-replay: completed r11 cancellable=false #cc3728f0c5dda9c9
+approval-refusals recover: ()
+approval-refusals submit: awaiting_approval r1 cancellable=true #1dcdef59be2adadb => 65fa40d8:bb7a612ad80d85e9
+approval-refusals preview: 558 bytes #853ab131c7ea6138
+approval-refusals failed: failed r2 SOURCE_NOT_LIVE retryable=true cancellable=false #d704ca87a375a945 => 65fa40d8:3f929ab0caff4537
+approval-refusals submit: awaiting_approval r1 cancellable=true #29b0b6643fbade6a => 5c9ad1cd:d610c82d43edca67
+approval-refusals preview: 558 bytes #561accc2faae3d36
+approval-refusals unconvertible: failed r2 STATE_CORRUPT retryable=true cancellable=false #f0b3c86076401678 => 5c9ad1cd:fb01a8aeb24416bd
+approval-refusals submit: awaiting_approval r1 cancellable=true #4ca51fd0ccb293ed => 9eec416b:0010481c73f17289
+approval-refusals preview: 558 bytes #53a2111fc35972f3
+approval-refusals bad-packet: failed r2 BROKER_UNAVAILABLE retryable=true cancellable=false #c41974ddd670fc89 => 9eec416b:127df9d0fc5c831c
+approval-refusals submit: awaiting_approval r1 cancellable=true #bd86945f6f6f2d27 => 41248d0c:c9c67ae061f94b77
+approval-refusals preview: 558 bytes #4766b76b2a76a7b5
+approval-refusals other-session: failed r2 SOURCE_NOT_FOUND retryable=true cancellable=false #9ca1bcf38b058093 => 41248d0c:7ae891fd6e407012
+approval-refusals submit-failed-source: failed r1 SOURCE_NOT_LIVE retryable=true cancellable=false #baf56152e6646852 => f7c12c57:69e585f83bdd1110
+approval-refusals submit-unconvertible: failed r1 STATE_CORRUPT retryable=true cancellable=false #acd3c2460682752b => 492e46b4:38f49742e9433191
+approval-refusals submit-bad-packet: failed r1 BROKER_UNAVAILABLE retryable=true cancellable=false #1c29c08ab8218e28 => 9755ee87:2265b4e8f88e937f
+approval-refusals begin: requested r0 cancellable=true #4a3b7303df7034c8 => 2598f41d:6e6fb1dd6b95115f
+approval-refusals fail-preview: failed r1 TARGET_UNHEALTHY retryable=true cancellable=false #00c8b88aff8f4a2b => 2598f41d:99d6e5381f1f289c
+approval-refusals conflict: refused IDEMPOTENCY_CONFLICT retryable=true record=collaboration-12
+handoff-refusals recover: ()
+handoff-refusals submit: awaiting_approval r1 cancellable=true #85ce63ade0ecfc0c => 65fa40d8:535a05e8b603d26b
+handoff-refusals preview: 558 bytes #695574a12303bf09
+handoff-refusals approve-waiting: awaiting_approval r2 cancellable=true #65841f781f22a656 => 65fa40d8:9711c155ef4a1365
+handoff-refusals preview: 558 bytes #628f1bd2fc94f6be
+handoff-refusals approve-waiting-again: refused SOURCE_NOT_IDLE retryable=true record=collaboration-1
+handoff-refusals fail-operation: failed r3 TARGET_UNHEALTHY retryable=true cancellable=false #d757e3a9db3a440a => 65fa40d8:89878ed9c30468ce
+handoff-refusals fail-operation-again: failed r3 TARGET_UNHEALTHY retryable=true cancellable=false #d757e3a9db3a440a
+reserve-drift recover: ()
+reserve-drift submit: awaiting_approval r1 cancellable=true #1dcdef59be2adadb => 65fa40d8:05a5ecd9232898ba
+reserve-drift preview: 558 bytes #853ab131c7ea6138
+reserve-drift approve: approved r2 cancellable=true #f16f33e33db7e888 => 65fa40d8:8fedab9206a75264
+reserve-drift reserve-moved: awaiting_approval r3 cancellable=true #6c115bf05c6ca97a => 65fa40d8:a258473a741bc4eb
+reserve-drift preview: 558 bytes #f95a55b90ed43288
+reserve-drift approve-moved: approved r4 cancellable=true #c59195e1d4e15d84 => 65fa40d8:988f981865c4324c
+reserve-drift reserve-absent-worktree: preparing_target r6 cancellable=true #4c8eebbaef5cc825 => 65fa40d8:d9c0b797375a8b52
+reserve-drift reserve-again: refused APPROVAL_STALE retryable=true record=collaboration-1
+reserve-drift start-prepare-drifted: no command => 65fa40d8:ecf3e3f285c8e290
+reserve-drift submit: awaiting_approval r1 cancellable=true #1abe21d79953bf89 => 2eac4791:de74693141747231
+reserve-drift preview: 558 bytes #ae777f937ec4f1c9
+reserve-drift approve: approved r2 cancellable=true #d363a8b952bae515 => 2eac4791:e756edcac7402aad
+reserve-drift failed: failed r3 SOURCE_NOT_LIVE retryable=true cancellable=false #5bafc9caf3489960 => 2eac4791:9846826556533d48
+reserve-drift submit: awaiting_approval r1 cancellable=true #3149209d68c226b9 => 33b9cdec:259584c47fd13bac
+reserve-drift preview: 558 bytes #916ed6e2d5992be4
+reserve-drift approve: approved r2 cancellable=true #19d378368b282b70 => 33b9cdec:9958821ea50114cb
+reserve-drift unconvertible: failed r3 STATE_CORRUPT retryable=true cancellable=false #ed231f498c1fbeb5 => 33b9cdec:d35b653cba244947
+reserve-drift submit: awaiting_approval r1 cancellable=true #383c77171303f9e7 => f2cc82d5:d025e917a93b82c9
+reserve-drift preview: 558 bytes #26f7665f2b7ecc47
+reserve-drift approve: approved r2 cancellable=true #3a4124d5f559d912 => f2cc82d5:0306c2c8d61427e1
+reserve-drift bad-packet: failed r3 BROKER_UNAVAILABLE retryable=true cancellable=false #6e423f4cfd03233f => f2cc82d5:ed0c84367cfa842c
+reserve-drift submit: awaiting_approval r1 cancellable=true #78d131fb8b7c295b => 492e46b4:c1143ed1db158486
+reserve-drift preview: 560 bytes #1d23f85d081349c5
+reserve-drift approve: approved r2 cancellable=true #f5074da1eecdb458 => 492e46b4:982277a5f1f240b0
+reserve-drift other-session: failed r3 SOURCE_NOT_FOUND retryable=true cancellable=false #9aa3d6e5322cbd3f => 492e46b4:7e8038ad7a2efe60
+reserve-drift submit-unapproved: awaiting_approval r1 cancellable=true #71e2c0976b02a097 => 2598f41d:6f5ab6e2ef6669a4
+reserve-drift reserve-unapproved: refused APPROVAL_STALE retryable=true record=collaboration-12
+reserve-drift cancel: cancelled r2 cancellable=false #4343853dff2c9db9 => 2598f41d:6c159ed503817758
+start-refusals recover: ()
+start-refusals submit: awaiting_approval r1 cancellable=true #1dcdef59be2adadb => 65fa40d8:a7b33e1598ec9f22
+start-refusals preview: 558 bytes #853ab131c7ea6138
+start-refusals approve: approved r2 cancellable=true #f16f33e33db7e888 => 65fa40d8:a26764fbe4fee2a9
+start-refusals reserve: preparing_target r4 cancellable=true #111da687623158cc => 65fa40d8:3871ad99b4080c46
+start-refusals other-session: no command => 65fa40d8:87f75ec922523f4a
+start-refusals cancel: failed r5 APPROVAL_STALE retryable=true cancellable=false #2ec4e51490280ac3
+start-refusals submit: awaiting_approval r1 cancellable=true #aa9699d4ed8e243f => 5c9ad1cd:8e896f9c0a124a11
+start-refusals preview: 558 bytes #5b2b7cc5e3fd35a0
+start-refusals approve: approved r2 cancellable=true #19bef5ce2514665e => 5c9ad1cd:643a74c0d5aa3bf3
+start-refusals reserve: preparing_target r4 cancellable=true #5f3f3c5933b68132 => 5c9ad1cd:43729e250424e926
+start-refusals failed: no command => 5c9ad1cd:ff899f969a682bbe
+start-refusals cancel: failed r5 SOURCE_NOT_LIVE retryable=true cancellable=false #b1c58e9fe138721b
+start-refusals submit: awaiting_approval r1 cancellable=true #27a3a415ce24901b => 9eec416b:9245a20d0ed43f67
+start-refusals preview: 558 bytes #65030e727c71057c
+start-refusals approve: approved r2 cancellable=true #84ec606352a31b57 => 9eec416b:9dea3cec6441544c
+start-refusals reserve: preparing_target r4 cancellable=true #a54a49a1d8748a5f => 9eec416b:3d738da14fc7abc5
+start-refusals unconvertible: no command => 9eec416b:7c005c4685921a80
+start-refusals cancel: failed r5 STATE_CORRUPT retryable=true cancellable=false #ade48ce39e3026d9
+start-refusals submit: awaiting_approval r1 cancellable=true #4aab0afe804d236f => 41248d0c:2703d621ad6bfaf8
+start-refusals preview: 558 bytes #1aa1c207d2ed933f
+start-refusals approve: approved r2 cancellable=true #1f2008c9cf3d46b6 => 41248d0c:7ed0c5b7c5c8a7ef
+start-refusals reserve: preparing_target r4 cancellable=true #5db33b175496770b => 41248d0c:ada6b269aa98db32
+start-refusals bad-packet: no command => 41248d0c:6546e5bfba8d0998
+start-refusals cancel: failed r5 BROKER_UNAVAILABLE retryable=true cancellable=false #a5b8e7ff84bf8a4e
+start-refusals submit: awaiting_approval r1 cancellable=true #f96ee6b0d1d50165 => f7c12c57:ef6bc74b9aa5f933
+start-refusals preview: 559 bytes #0a93fa656ec16f68
+start-refusals approve: approved r2 cancellable=true #549f930c6151ea37 => f7c12c57:3e236f9a8483ac1e
+start-refusals reserve: preparing_target r4 cancellable=true #6c136b51c7003af2 => f7c12c57:d41a079fbe7fdef5
+start-refusals no-packet: refused APPROVAL_STALE retryable=true record=collaboration-9
+start-refusals cancel: cancelled r5 cancellable=false #f31892775f7f4f68 => f7c12c57:f3ff76d3d8832029
+start-refusals submit: awaiting_approval r1 cancellable=true #be4d268872dc696c => 9755ee87:9d35c8f5b04c8088
+start-refusals preview: 560 bytes #ef4d9daaf3fa2c61
+start-refusals approve: approved r2 cancellable=true #f9bcdaf8afd20f3c => 9755ee87:e8177b30b6635666
+start-refusals reserve: preparing_target r4 cancellable=true #b322f3aa32e2a701 => 9755ee87:8f9a33246b054b70
+start-refusals no-source: refused APPROVAL_STALE retryable=true record=collaboration-11
+start-refusals cancel: cancelled r5 cancellable=false #8a4e0f3a9f947516 => 9755ee87:2eafe19460f0dce9
+start-refusals submit: awaiting_approval r1 cancellable=true #0a1c638b442df96d => 9a3a8ab9:5c070c763ed296d6
+start-refusals preview: 560 bytes #8822047e15501c3f
+start-refusals approve: approved r2 cancellable=true #0aba11ec2c58514a => 9a3a8ab9:a83b9c860c282171
+start-refusals reserve: preparing_target r4 cancellable=true #bf93a7532627780d => 9a3a8ab9:0832b717dda7167c
+start-refusals clock 2026-08-27T13:00:00.000Z
+start-refusals start-after-deadline: no command => 9a3a8ab9:6ba790fad3f05221
+start-refusals start-unknown-record: refused SOURCE_NOT_FOUND retryable=true record=-
+settlements recover: ()
+settlements submit: awaiting_approval r1 cancellable=true #1dcdef59be2adadb => 65fa40d8:4486dff31f5ff628
+settlements preview: 558 bytes #853ab131c7ea6138
+settlements approve: approved r2 cancellable=true #f16f33e33db7e888 => 65fa40d8:6afa29214cb0841f
+settlements reserve: preparing_target r4 cancellable=true #111da687623158cc => 65fa40d8:7cc619dfc33b7cd3
+settlements start-prepare: prepare-target effect-b2ac16d0e81d6 #5d745611cf23cb0f => 65fa40d8:b069430a0f8a40ab
+settlements unsent-ambiguous-code: failed r6 BROKER_UNAVAILABLE retryable=true cancellable=false #e587a5f92fa98280 => 65fa40d8:c2ef87f119b327ec
+settlements settle-unknown-effect: refused STATE_CORRUPT retryable=true record=collaboration-1
+settlements cancel: failed r6 BROKER_UNAVAILABLE retryable=true cancellable=false #e587a5f92fa98280
+settlements fail-operation: failed r6 BROKER_UNAVAILABLE retryable=true cancellable=false #e587a5f92fa98280
+settlements submit: awaiting_approval r1 cancellable=true #aa9699d4ed8e243f => 5c9ad1cd:07862e4e3a25844e
+settlements preview: 558 bytes #5b2b7cc5e3fd35a0
+settlements approve: approved r2 cancellable=true #19bef5ce2514665e => 5c9ad1cd:d13b24cde9254bf0
+settlements reserve: preparing_target r4 cancellable=true #5f3f3c5933b68132 => 5c9ad1cd:6b14a046216504a8
+settlements start-prepare: prepare-target effect-eed6570962cd3 #fc1495ae9beecf3c => 5c9ad1cd:908807f5db8f928e
+settlements unsent: failed r6 TARGET_UNHEALTHY retryable=true cancellable=false #46f3060b5001a51c => 5c9ad1cd:d6d4b7007c8c20ae
+settlements settle-unknown-effect: refused STATE_CORRUPT retryable=true record=collaboration-3
+settlements cancel: failed r6 TARGET_UNHEALTHY retryable=true cancellable=false #46f3060b5001a51c
+settlements fail-operation: failed r6 TARGET_UNHEALTHY retryable=true cancellable=false #46f3060b5001a51c
+settlements submit: awaiting_approval r1 cancellable=true #27a3a415ce24901b => 9eec416b:1cd2145d113d4367
+settlements preview: 558 bytes #65030e727c71057c
+settlements approve: approved r2 cancellable=true #84ec606352a31b57 => 9eec416b:898f02d0c4c76786
+settlements reserve: preparing_target r4 cancellable=true #a54a49a1d8748a5f => 9eec416b:5bbba8b1ffec61a1
+settlements start-prepare: prepare-target effect-0527d1885b67c #5cdb2728a3c9f16a => 9eec416b:adf6c02ecc7ecbbb
+settlements ambiguous: unknown r6 PROVIDER_OUTCOME_UNKNOWN retryable=false cancellable=false #d7936cd905ee029f => 9eec416b:3fcb55ab2c685f12
+settlements settle-unknown-effect: refused STATE_CORRUPT retryable=true record=collaboration-5
+settlements cancel: unknown r6 PROVIDER_OUTCOME_UNKNOWN retryable=false cancellable=false #d7936cd905ee029f
+settlements fail-operation: unknown r6 PROVIDER_OUTCOME_UNKNOWN retryable=false cancellable=false #d7936cd905ee029f
+settlements submit: awaiting_approval r1 cancellable=true #4aab0afe804d236f => 41248d0c:0088f421d1e48112
+settlements preview: 558 bytes #1aa1c207d2ed933f
+settlements approve: approved r2 cancellable=true #1f2008c9cf3d46b6 => 41248d0c:47df60df679d772e
+settlements reserve: preparing_target r4 cancellable=true #5db33b175496770b => 41248d0c:b92e06661e9a81b4
+settlements start-prepare: prepare-target effect-8ac6fc7a79107 #926b244479e6656c => 41248d0c:38a7cb8363adc2ef
+settlements wrong-value: refused STATE_CORRUPT retryable=true record=collaboration-7
+settlements settle-unknown-effect: refused STATE_CORRUPT retryable=true record=collaboration-7
+settlements cancel: preparing_target r5 cancellable=false #9b460e547c967a42
+settlements fail-operation: failed r6 TARGET_UNHEALTHY retryable=true cancellable=false #bb149b3ad002dc31 => 41248d0c:97fd96975df9b670
+settlements submit: awaiting_approval r1 cancellable=true #edd5fbe0ed706a97 => f7c12c57:b6b0be5bea57317f
+settlements preview: 559 bytes #34eb8b12448f879c
+settlements approve: approved r2 cancellable=true #11f0743afc7705ef => f7c12c57:2434e32851fc0e21
+settlements reserve: preparing_target r4 cancellable=true #06e6e9f078714c1b => f7c12c57:e718fad90288232a
+settlements start-prepare: prepare-target effect-352b56a718472 #0252572ae076f98f => f7c12c57:69eeec65c8e56453
+settlements clock 2026-08-27T14:00:00.000Z
+settlements settle-after-deadline: running_target r6 cancellable=true #c83b2d1f62949a68 => f7c12c57:7de80f3bf9c07e0c
+settlements reconcile-unknown-refused: refused RECOVERY_REQUIRED retryable=false record=collaboration-9
+delivery-unknown recover: ()
+delivery-unknown submit: awaiting_approval r1 cancellable=true #1dcdef59be2adadb => 65fa40d8:22a8131e6ba66620
+delivery-unknown preview: 558 bytes #853ab131c7ea6138
+delivery-unknown approve: approved r2 cancellable=true #f16f33e33db7e888 => 65fa40d8:52ee6a4db932d5ed
+delivery-unknown reserve: preparing_target r4 cancellable=true #111da687623158cc => 65fa40d8:bf1584b50a623120
+delivery-unknown start-prepare: prepare-target effect-b2ac16d0e81d6 #5d745611cf23cb0f => 65fa40d8:1ea8bda8a9cd4e39
+delivery-unknown settle-prepare: running_target r6 cancellable=true #46914403326e1f1d => 65fa40d8:a1253d981de2686d
+delivery-unknown start-run: run-target effect-fd0a585e5b344 #8a2c463ab5bf5864 => 65fa40d8:6b343f3688b8743c
+delivery-unknown settle-run-wrong-value: refused STATE_CORRUPT retryable=true record=collaboration-1
+delivery-unknown settle-run: result_ready r8 cancellable=true #07c11aca0ee07a20 => 65fa40d8:c4b1b535d5c8029d
+delivery-unknown hold: awaiting_peer_review r9 cancellable=true #a8ab2fd5b5ff2ff7 => 65fa40d8:bae72390a0b5e645
+delivery-unknown pending-peer: 25123 bytes #4803aa05383a17fd
+delivery-unknown accept: delivery_pending r10 cancellable=true #2ef1765ccf4abb91 => 65fa40d8:fb55709d1d367dfa
+delivery-unknown start-deliver: deliver-result effect-0b01660dc9aae #d04332949dd1fcb8 => 65fa40d8:5992b4511c7906fe
+delivery-unknown locked: 136 bytes #18e991518faf546b
+delivery-unknown settle-deliver-ambiguous: unknown r12 DELIVERY_UNKNOWN retryable=false cancellable=false #4b09ab088fa55506 => 65fa40d8:53818cb9f7db45a3
+delivery-unknown locked-unknown: 247 bytes #ab862f53780fa79d
+delivery-unknown reconcile: failed r13 TARGET_UNHEALTHY retryable=false cancellable=false #5a05c1d5ee01fb16 => 65fa40d8:fa5277a015947a12
+approvals recover: ()
+approvals submit-denied: awaiting_approval r1 cancellable=true #1dcdef59be2adadb => 65fa40d8:b64b37b5225c67f8
+approvals preview: 558 bytes #853ab131c7ea6138
+approvals deny: denied r2 DENIED retryable=false cancellable=false #87fa65912e9b98b4 => 65fa40d8:c1e851ea7258d902
+approvals deny-replay: denied r2 DENIED retryable=false cancellable=false #87fa65912e9b98b4
+approvals submit-cancelled: awaiting_approval r1 cancellable=true #233f8a1d6b2b56d5 => 5c9ad1cd:e01c82151cd01466
+approvals cancel: cancelled r2 cancellable=false #8ff09df4b8d9b827 => 5c9ad1cd:57b962ede96069b7
+approvals submit-expiring: awaiting_approval r1 cancellable=true #10d90c92241ca7fd => 9eec416b:9433b0f16fd50de3
+approvals preview: 558 bytes #a043a3115f4e6bc0
+approvals submit-second: awaiting_approval r1 cancellable=true #699cc674edc034b1 => 41248d0c:7a470612dda292a7
+approvals preview: 558 bytes #5768a0f8b67d987a
+approvals clock 2026-08-27T15:00:00.000Z
+approvals preview-expired: null
+approvals pending-expired: []
+approvals approve-expired: cancelled r2 APPROVAL_EXPIRED retryable=true cancellable=false #ee660b7ac84e5007 => 9eec416b:7467868a938c8f3b
+approvals deny-expired: cancelled r2 APPROVAL_EXPIRED retryable=true cancellable=false #168e39fa3e1c36d2 => 41248d0c:e473d23e1ec812de
+approvals submit-third: awaiting_approval r1 cancellable=true #1c00f55448d92733 => f7c12c57:ff975c5a91532437
+approvals clock 2026-08-27T16:00:00.000Z
+approvals expire-all: 1 => f7c12c57:9adec5afc5d08c5e
+approvals status: 443 bytes #d593662b82449ef8
+approvals active: []
+approvals submit-model: awaiting_approval r1 cancellable=true #ddbf6e9e4bd547b4 => 9755ee87:395a1685de9d81db
+approvals model-status: awaiting_approval r1 cancellable=true #ddbf6e9e4bd547b4
+approvals cancel-model: cancelled r2 cancellable=false #d59a7aa3d816ea53 => 9755ee87:9ab5779330c09a08
+approvals submit-model-deep: refused LIMIT_EXCEEDED retryable=true record=-
+recovery recover: ()
+recovery submit-pending: awaiting_approval r1 cancellable=true #1dcdef59be2adadb => 65fa40d8:02cfd0f0c889f160
+recovery submit: awaiting_approval r1 cancellable=true #6f6887fa3a433ac3 => 5c9ad1cd:92217453a3a31afa
+recovery preview: 558 bytes #9ed085acbfd3ab72
+recovery approve: approved r2 cancellable=true #3c0e8c6c745269a7 => 5c9ad1cd:e81b1bb064c941a6
+recovery reserve: preparing_target r4 cancellable=true #07c1dbbbe9610cbe => 5c9ad1cd:06557cfdae02e314
+recovery start-prepare: prepare-target effect-eed6570962cd3 #fc1495ae9beecf3c => 5c9ad1cd:c2723bb61727b7d6
+recovery before-recover: preparing_target r5 cancellable=false #5ce04032a4791df0
+recovery clock 2026-08-27T17:00:00.000Z
+recovery recover: () => 5c9ad1cd:20ab6152c9194205 => 65fa40d8:257acc6a8eafdaf0
+recovery pending-after-recover: cancelled r2 APPROVAL_EXPIRED retryable=true cancellable=false #f6f2d0230bc7a3cc
+recovery settle-after-recover: refused RECOVERY_REQUIRED retryable=false record=collaboration-3
+recovery locked: []
+recovery reconcile-ambiguous-code: refused RECOVERY_REQUIRED retryable=false record=collaboration-3
+recovery reconcile: failed r7 TARGET_UNHEALTHY retryable=false cancellable=false #32d7537277db1e14 => 5c9ad1cd:e5a89efe6d86a369
+recovery quiesce: ()
+recovery submit-quiesced: refused BROKER_UNAVAILABLE retryable=true record=-

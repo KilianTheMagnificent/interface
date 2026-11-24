@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "intents": {
+    "r": {
+      "agentId": "a",
+      "fingerprint": "fe66d0d0db8f96d13b8134921b120ac9fe6ae356b1f3b77831a96c8760671e02",
+      "sessionKey": "codex#1",
+      "definitelyUnsent": false
+    },
+    "s": {
+      "agentId": "a",
+      "fingerprint": "83eb3dc0505c132e2e4d9b51c8fb423534cbf8e732ecb66c684a518a8db83014",
+      "sessionKey": null,
+      "definitelyUnsent": true
+    }
+  }
+}

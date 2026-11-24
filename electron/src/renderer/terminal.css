@@ -1,0 +1,1686 @@
+.terminal-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* The offscreen announcement box is 1px wide. Wrapping cursor animations there
+   can monopolize Chromium layout even with the visible terminal on WebGL. */
+.terminal-xterm .xterm .live-region { white-space: pre; }
+
+/* The bar cursor, drawn by terminal-caret.ts instead of xterm:
+   a visible blue stroke at both standard and Retina pixel densities. */
+.terminal-xterm .terminal-caret {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  background: var(--terminal-caret-color);
+  pointer-events: none;
+}
+
+/* ---- dedicated center surface ----------------------------------------- */
+
+.terminal-center {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  color: var(--fg);
+  background: var(--workbench-canvas);
+  font-family: var(--font-ui);
+  --terminal-reading-size: var(--workspace-terminal-font-size, 11.5);
+  /* Roomier tiles (owner, 2026-10-02, matching the reference's proportions;
+     dense since 2026-10-01): a 32px head band over a flush screen, 12px
+     gutters and 10px tile corners. The tile clips its screen, so the screen
+     itself draws no corners. */
+  --tile-head-h: 32px;
+  --tile-gap: 12px;
+  --tile-radius: 10px;
+  --tile-screen-radius: 0px;
+}
+
+.terminal-center-body {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+/* The launcher covers the splits instead of replacing them: the panes below
+   keep their xterm buffers and stay measurable for re-fitting. */
+.terminal-center-split { width: 100%; height: 100%; }
+.terminal-center-body > .terminal-launcher {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* This surface's one control lives in the window toolbar (App's
+   .workspace-toolbar-terminal slot), so the tiles start directly under the
+   title row: a four-square toggle whose menu is portaled to the body. */
+.terminal-center-action,
+.terminal-pane-action,
+.terminal-search button,
+.terminal-tab-close,
+.terminal-launcher-close {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: var(--control-h);
+  height: var(--control-h);
+  padding: 0;
+  color: var(--fg-muted);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-control);
+  cursor: pointer;
+}
+
+.terminal-center-action:hover:not(:disabled),
+.terminal-pane-action:hover:not(:disabled),
+.terminal-search button:hover:not(:disabled),
+.terminal-tab-close:hover:not(:disabled),
+.terminal-launcher-close:hover:not(:disabled) {
+  color: var(--fg-strong);
+  background: var(--row-hover);
+}
+
+.terminal-center-action:focus-visible,
+.terminal-pane-action:focus-visible,
+.terminal-search button:focus-visible,
+.terminal-tab:focus-visible,
+.terminal-tab-close:focus-visible,
+.terminal-menu-panel [role^="menuitem"]:focus-visible,
+.terminal-launcher-profile:focus-visible,
+.terminal-launcher-count:focus-visible,
+.terminal-launcher-review-link:focus-visible,
+.terminal-launcher-close:focus-visible,
+.terminal-launcher-cwd-browse:focus-visible,
+.terminal-splitter:focus-visible {
+  outline: var(--focus-ring-w) solid var(--focus);
+  outline-offset: calc(-1 * var(--focus-ring-offset));
+}
+
+.terminal-center-action:disabled,
+.terminal-pane-action:disabled,
+.terminal-search button:disabled,
+.terminal-launcher-close:disabled {
+  color: var(--fg-faint);
+  cursor: default;
+}
+
+.terminal-center-action.is-active { color: var(--accent-text); background: var(--row-selected); }
+/* ---- terminal popovers ------------------------------------------------ */
+
+.terminal-menu-panel {
+  position: fixed;
+  z-index: 1200;
+  box-sizing: border-box;
+  min-width: 360px;
+  max-width: min(560px, calc(100vw - 16px));
+  padding: 5px;
+  overflow: auto;
+  color: var(--fg);
+  background: var(--dropdown-bg);
+  border: var(--border-w) solid var(--border-strong);
+  border-radius: var(--radius-overlay);
+  box-shadow: var(--overlay-shadow);
+  font-family: var(--font-ui);
+}
+.terminal-menu-panel.is-compact { min-width: 200px; }
+/* Compact popovers follow the BridgeMind menu reference: a lifted neutral
+   surface, muted rows that brighten on a soft neutral fill, and that fill (not
+   the accent ring) marking keyboard focus. */
+.terminal-menu-panel.is-compact {
+  padding: 6px;
+  background: color-mix(in srgb, var(--fg) 16%, var(--dropdown-bg));
+  border-color: color-mix(in srgb, var(--fg) 13%, transparent);
+}
+.terminal-menu-panel.is-compact .terminal-menu-launch:not(:disabled) { color: var(--fg-muted); }
+.terminal-menu-panel.is-compact .terminal-menu-launch:is(:hover, :focus):not(:disabled) {
+  color: var(--fg-strong);
+  background: color-mix(in srgb, var(--fg) 9%, transparent);
+}
+.terminal-menu-panel.is-compact [role^="menuitem"]:focus-visible { outline: none; }
+.terminal-menu-launch {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  min-height: 32px;
+  padding: 5px 8px;
+  color: var(--fg);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-control);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.terminal-menu-launch:hover:not(:disabled),
+.terminal-menu-panel [role^="menuitem"]:focus { background: var(--row-hover); }
+.terminal-menu-launch:disabled { color: var(--fg-faint); cursor: default; }
+.terminal-menu-empty { padding: 14px 8px; color: var(--fg-dim); font-size: var(--text-ui); }
+
+/* ---- Browser pages ------------------------------------------------------
+   The page layer holds every Browser page in the centre; BrowserPane.css
+   draws the pane around each. The layer is not positioned, so a page is
+   placed against .terminal-center-body, which also holds every pane slot its
+   anchor can name. The agent overview's Browser tab has a layer of its own,
+   placed against .agent-overview-browser. */
+.browser-page {
+  position: absolute;
+  top: anchor(top, 0px); right: anchor(right, 0px); bottom: anchor(bottom, 0px); left: anchor(left, 0px);
+  position-visibility: anchors-visible;
+  overflow: hidden;
+  /* The corners of the card it is drawn over (BrowserPane.css). */
+  border-radius: var(--radius-container);
+  /* A page without a background of its own sits on the web's white canvas,
+     as in any browser, whatever the app's theme: guests are transparent. */
+  background: white;
+}
+.browser-page.is-parked,
+.browser-page.is-covered { visibility: hidden; pointer-events: none; }
+/* Parked at the size it was last shown: no reflow, no scroll lost. */
+.browser-page.is-parked {
+  top: 0; right: auto; bottom: auto; left: 0;
+  width: var(--browser-page-width, 100%); height: var(--browser-page-height, 100%);
+}
+/* A dragged pane head or tab has to reach the pane under a page. */
+.browser-page-layer[data-tab-drag] .browser-page { pointer-events: none; }
+/* A page's fullscreen (a video's) fills the app window, not a new Space;
+   leaving it puts the page back over its pane exactly as it was. The filling
+   is Chromium's: the <webview> is the app's fullscreen element, drawn in the
+   top layer over the whole window. This box follows only where it can (in
+   the App, .workspace-surface's contain: layout holds it to the work area). */
+.browser-page.is-fullscreen {
+  position: fixed; inset: 0; z-index: 2147483000;
+  position-visibility: always; border-radius: 0;
+}
+.browser-page-view { display: flex; width: 100%; height: 100%; }
+/* A width preset (Phone, Tablet, Desktop) lays the page out narrower than the
+   pane, centred (browser-page.ts sets its width); the rest of the card stays
+   neutral so the page's own edges show. */
+.browser-page[data-viewport] { background: color-mix(in srgb, var(--fg) 6%, var(--terminal-content-bg)); }
+.browser-page[data-viewport] .browser-page-view { background: white; }
+
+/* ---- split tree and panes --------------------------------------------- */
+
+.terminal-workspace,
+.terminal-split {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+.terminal-workspace {
+  box-sizing: border-box;
+  padding: 0;
+  overflow: hidden;
+  background: var(--workbench-canvas);
+}
+/* Closing the last split leaves a pane directly in this block container.
+   Give it the height its former grid parent supplied, even when unmaximized. */
+.terminal-workspace:not(.is-equal-grid) > .terminal-pane-frame { height: 100%; }
+/* Each pane's tile: one grid cell the pane fills. */
+.terminal-pane-frame { display: grid; min-width: 0; min-height: 0; height: 100%; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); }
+.terminal-pane-slot,
+.terminal-pane-mount { min-width: 0; min-height: 0; height: 100%; }
+.terminal-workspace.has-maximized .terminal-pane-slot:not(:has(.terminal-pane.is-maximized)) {
+  display: none;
+}
+/* Twenty-four tracks support balanced two-, three- and four-column rows. */
+.terminal-workspace.is-equal-grid {
+  display: grid;
+  grid-template-columns: repeat(24, minmax(0, 1fr));
+  grid-auto-rows: minmax(180px, 1fr);
+  overflow: auto;
+  gap: var(--tile-gap);
+  background: var(--workbench-canvas);
+}
+.terminal-workspace.is-equal-grid > .terminal-pane-slot,
+.terminal-workspace.is-equal-grid > .terminal-pane-frame { grid-column: span 6; }
+.terminal-workspace.is-equal-grid.terminal-count-1 > .terminal-pane-slot,
+.terminal-workspace.is-equal-grid.terminal-count-1 > .terminal-pane-frame { grid-column: 1 / -1; }
+.terminal-workspace.is-equal-grid:is(.terminal-count-2, .terminal-count-3, .terminal-count-4) > .terminal-pane-slot,
+.terminal-workspace.is-equal-grid:is(.terminal-count-2, .terminal-count-3, .terminal-count-4) > .terminal-pane-frame { grid-column: span 12; }
+.terminal-workspace.is-equal-grid.terminal-count-3 > .terminal-pane-slot:last-child,
+.terminal-workspace.is-equal-grid.terminal-count-3 > .terminal-pane-frame:last-child { grid-column: 1 / -1; }
+.terminal-workspace.is-equal-grid:is(.terminal-count-5, .terminal-count-6) > .terminal-pane-slot,
+.terminal-workspace.is-equal-grid:is(.terminal-count-5, .terminal-count-6) > .terminal-pane-frame { grid-column: span 8; }
+.terminal-workspace.is-equal-grid.terminal-count-5 > .terminal-pane-slot:nth-last-child(-n + 2),
+.terminal-workspace.is-equal-grid.terminal-count-5 > .terminal-pane-frame:nth-last-child(-n + 2) { grid-column: span 12; }
+.terminal-workspace.is-equal-grid.terminal-count-7 > .terminal-pane-slot:nth-last-child(-n + 3),
+.terminal-workspace.is-equal-grid.terminal-count-7 > .terminal-pane-frame:nth-last-child(-n + 3) { grid-column: span 8; }
+/* A maximized pane hides its siblings rather than unmounting them, so the
+   splits it sits inside collapse to plain blocks and it fills the workspace. */
+.terminal-workspace.has-maximized,
+.terminal-workspace.has-maximized .terminal-split { display: block; }
+.terminal-workspace.has-maximized .terminal-splitter,
+.terminal-workspace.has-maximized .terminal-pane-frame:not(:has(> .terminal-pane.is-maximized)),
+.terminal-workspace.has-maximized .terminal-split:not(:has(.terminal-pane.is-maximized)) {
+  display: none;
+}
+.terminal-workspace.has-maximized .terminal-pane.is-maximized { height: 100%; }
+.terminal-split { display: grid; overflow: hidden; }
+.terminal-split.is-columns { grid-template-rows: minmax(0, 1fr); }
+.terminal-split.is-rows { grid-template-columns: minmax(0, 1fr); }
+.terminal-splitter {
+  position: relative;
+  z-index: 2;
+  background: transparent;
+  touch-action: none;
+}
+.terminal-split.is-columns > .terminal-splitter { width: var(--tile-gap); cursor: col-resize; }
+.terminal-split.is-rows > .terminal-splitter { height: var(--tile-gap); cursor: row-resize; }
+/* The bar itself is invisible at rest: it only paints under the pointer,
+   under keyboard focus, or while dragging. The shared gutter hit area never moves. */
+.terminal-splitter::after {
+  content: "";
+  position: absolute;
+  background: var(--selection-border);
+  opacity: 0;
+  transition: opacity var(--motion-fast) var(--ease-standard);
+}
+.terminal-split.is-columns > .terminal-splitter::after { inset: 0 5px; }
+.terminal-split.is-rows > .terminal-splitter::after { inset: 5px 0; }
+.terminal-splitter:hover::after,
+.terminal-splitter:focus-visible::after,
+.terminal-splitter.is-dragging::after,
+.terminal-splitter:active::after { opacity: 1; }
+
+.terminal-pane {
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+  /* DENSE (owner, 2026-10-01): every pane is a flush TILE, its head a band
+     over the screen. The focused tile's head steps up one shade and its edge
+     firms; nothing lifts. Hairlines carry the structure. */
+  padding: 0;
+  background: var(--terminal-content-bg);
+  border: 0;
+  border-radius: var(--tile-radius);
+  box-shadow: none;
+  transition: box-shadow var(--motion-base) var(--ease-standard),
+    background-color var(--motion-base) var(--ease-standard);
+}
+/* The edge is drawn above the frame by ::after so idle panes stay separated.
+   The pane is its own stacking context so a position:fixed popover (the New
+   menu) cannot promote that overlay to a viewport layer that stays put.
+   The focused edge is a firmer NEUTRAL, not the selection hue: the only
+   colour in the grid belongs to the status lights. */
+.terminal-pane.is-focused .terminal-pane-head { background: var(--terminal-header-bg-focused); }
+.terminal-pane::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  box-sizing: border-box;
+  border: var(--border-w) solid var(--terminal-tile-edge);
+  border-radius: inherit;
+}
+.terminal-pane.is-focused::after {
+  border-color: var(--terminal-focus-edge);
+}
+/* A pane waiting on the human lights a 2px amber strip along its bottom edge
+   ("needs you", owner 2026-09-28; flush since 2026-10-01). It is drawn over
+   the terminal's own 2px bottom inset, so the screen's size and the PTY never
+   change. */
+.terminal-pane:has(> .terminal-pane-head .terminal-tab-status.is-waiting)::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 21;
+  height: 2px;
+  pointer-events: none;
+  background: var(--status-waiting);
+}
+.terminal-pane-needs {
+  flex: none;
+  padding: 0 6px;
+  color: var(--status-waiting);
+  font-size: var(--text-meta);
+  font-weight: var(--wght-strong);
+  white-space: nowrap;
+}
+@container terminal-head (max-width: 380px) {
+  .terminal-pane-needs { display: none; }
+}
+.terminal-pane.is-drop-target {
+  box-shadow: inset 0 0 0 2px var(--selection-border);
+}
+.terminal-pane.is-drop-target::after {
+  border-color: var(--selection-border);
+  border-width: 2px;
+  background: color-mix(in srgb, var(--selection-accent) 18%, transparent);
+}
+/* Chosen from the agent overview: one accent ring that fades back to the
+   pane's own edge, so the pane can be found. Transient; TerminalPane removes
+   the class after TERMINAL_PANE_LOCATE_MS. Reduced motion holds a still ring. */
+.terminal-pane.is-locating::after {
+  animation: terminal-pane-locate 900ms var(--ease-out) 1;
+}
+@keyframes terminal-pane-locate {
+  0%, 30% {
+    border-color: var(--selection-border);
+    border-width: 2px;
+    background: color-mix(in srgb, var(--selection-accent) 14%, transparent);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .terminal-pane.is-locating::after {
+    animation: none;
+    border-color: var(--selection-border);
+    border-width: 2px;
+  }
+}
+.terminal-pane-drag-preview {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: min(360px, calc(100vw - 16px));
+  height: 34px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  border: 2px solid var(--selection-border);
+  border-radius: var(--radius-pill);
+  background: var(--menu-bg);
+  color: var(--fg);
+  box-shadow: var(--overlay-shadow);
+  font-size: var(--text-body);
+  font-weight: var(--wght-medium);
+  pointer-events: none;
+  user-select: none;
+}
+.terminal-pane-drag-identity {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.terminal-pane-drag-identity .terminal-tab-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  animation: none;
+}
+.terminal-pane-drag-identity > :not(.terminal-tab-title) { flex: none; }
+.terminal-pane-drag-action {
+  display: none;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  padding-left: 10px;
+  border-left: var(--border-w) solid var(--border-strong);
+  color: var(--selection-border);
+}
+.terminal-pane-drag-preview.is-swap .terminal-pane-drag-action {
+  display: flex;
+}
+.terminal-pane-head {
+  display: flex;
+  container: terminal-head / inline-size;
+  flex: none;
+  align-items: center;
+  min-width: 0;
+  height: var(--tile-head-h);
+  --control-h: 24px;
+  --terminal-action-fg: var(--fg-dim);
+  padding-left: 0;
+  font-size: var(--text-body);
+  /* DENSE (owner, 2026-10-01): the head is a band over the screen, one step
+     above it, with a hairline under it; the focused pane's band steps up. */
+  background: var(--terminal-header-bg);
+  border-bottom: var(--border-w) solid var(--terminal-header-border);
+}
+/* Header hover alone gets a purple wash; selection and keyboard focus keep
+   the theme's grey header. Inset paint preserves translucent backgrounds. */
+.terminal-pane-head {
+  transition: box-shadow var(--motion-fast) var(--ease-standard);
+}
+.terminal-pane-head:hover {
+  box-shadow: inset 0 0 0 100px rgb(139 126 189 / 16%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .terminal-pane-head { transition: none; }
+}
+.terminal-tabs {
+  display: flex;
+  flex: 1 1 auto;
+  align-self: stretch;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+.terminal-tabs::-webkit-scrollbar { display: none; }
+.terminal-tab-wrap { display: inline-flex; flex: 0 1 220px; align-items: center; min-width: 92px; }
+.terminal-tab-wrap:only-child { flex: 1 1 auto; }
+/* In a tabbed pane, give spare header width to the current task's name. */
+.terminal-tab-wrap.is-active { flex-grow: 1; background: transparent; }
+.terminal-tab {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  height: 100%;
+  padding: 0 3px 0 9px;
+  color: var(--fg-muted);
+  background: transparent;
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+}
+.terminal-tab[draggable="true"] { cursor: grab; }
+.terminal-tab[draggable="true"]:active { cursor: grabbing; }
+/* The active name leads the header; unread tabs add the stronger weight. */
+.terminal-tab-wrap.is-active .terminal-tab { color: var(--fg-strong); font-weight: var(--wght-strong); }
+/* The pane's name stays in its head, one tab or many: the owner wants to read
+   it there, reference or not (2026-09-06). */
+.terminal-tab-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.terminal-tab-status,
+.terminal-card-status {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  background: var(--status-idle);
+  border-radius: 50%;
+}
+/* The one status vocabulary the rest of the window already speaks: the
+   working hue only while the process is busy, amber when it needs the human,
+   blue when an agent finished a turn nobody has looked at yet (owner,
+   2026-09-25), nothing while it starts, rests or has exited, red for a
+   failure. Starting draws nothing on purpose: a tab whose PTY has not reported
+   yet is an empty pane, and an empty pane is not working. */
+.terminal-tab-status.is-starting,
+.terminal-card-status.is-starting { background: transparent; }
+.terminal-tab-status.is-working,
+.terminal-card-status.is-working {
+  /* Porcelain status light: the dot plus a faint halo in its own hue. */
+  color: var(--status-working);
+  background: currentColor;
+  box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 16%, transparent);
+}
+.terminal-tab-status.is-running,
+.terminal-card-status.is-running { background: transparent; }
+.terminal-tab-status.is-done,
+.terminal-card-status.is-done { background: var(--status-done); }
+.terminal-tab-status.is-waiting,
+.terminal-card-status.is-waiting {
+  color: var(--status-waiting);
+  background: currentColor;
+  box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 18%, transparent);
+}
+.terminal-tab-status.is-exited,
+.terminal-card-status.is-exited { background: transparent; }
+.terminal-tab-status.is-failed,
+.terminal-card-status.is-failed { background: var(--status-failed); }
+.terminal-tab-wrap.has-unread .terminal-tab-title { font-weight: var(--wght-strong); }
+.terminal-tab-close { width: 20px; height: 20px; margin-right: 3px; opacity: 0; }
+.terminal-tab-wrap:hover .terminal-tab-close,
+.terminal-tab-wrap:focus-within .terminal-tab-close,
+.terminal-tab-wrap.is-active .terminal-tab-close { opacity: 1; }
+/* One tab: the header's × already closes it, so the per-tab one is noise. */
+.terminal-tab-wrap:only-child .terminal-tab-close { display: none; }
+.terminal-pane-actions { display: flex; flex: none; align-items: center; gap: 0; padding: 0 2px; }
+/* Actions keep their hit targets and keyboard order; the title leads at rest. */
+.terminal-pane-head:hover,
+.terminal-pane-head:focus-within { --terminal-action-fg: var(--fg-muted); }
+.terminal-pane-actions .terminal-pane-action:where(:enabled) { color: var(--terminal-action-fg); }
+.terminal-pane-action[aria-expanded="true"] { color: var(--fg-muted); }
+.terminal-pane-head .terminal-pane-action:hover:not(:disabled),
+.terminal-pane-head .terminal-pane-action:focus-visible { color: var(--fg-strong); }
+/* The 12px glyphs read hairline in the header; a 0.75px stroke brings
+   them to ~2px, matching the diagonal masks (codicons.css) at stroke-width 2.25.
+   Restored 2026-09-26: the owner preferred this to the 16px icon-review look. */
+.terminal-pane-actions .codicon { -webkit-text-stroke: 0.75px currentColor; }
+.terminal-pane-expand { font: inherit; font-size: var(--text-ui); }
+/* Expand and New tab stay visible at rest (owner, 2026-09-14): hover-only
+   controls read as missing, so the header keeps all four actions drawn. */
+.terminal-pane-body,
+.terminal-tabpanel { flex: 1 1 auto; width: 100%; min-width: 0; min-height: 0; }
+.terminal-pane-body {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  background: var(--terminal-content-bg);
+  /* The SCREEN. Its corners nest inside the frame's, and a hairline in the
+     screen's own shade keeps its edge crisp against the frame. A palette may
+     put dark screens inside light chrome, so the screen carries its own text
+     tiers and colour scheme; everything drawn inside it (xterm, the caret's
+     light-dark() colour, notices, scrollbars) reads these. */
+  border-radius: var(--tile-screen-radius);
+  box-shadow: none;
+  color-scheme: var(--terminal-color-scheme);
+  --fg: var(--terminal-fg);
+  --fg-strong: var(--terminal-fg-strong);
+  --fg-muted: var(--terminal-fg-muted);
+  --fg-dim: var(--terminal-fg-dim);
+  --fg-faint: var(--terminal-fg-faint);
+  --border: var(--terminal-border);
+  --scrollbar: var(--terminal-scrollbar);
+  --scrollbar-active: var(--terminal-scrollbar-active);
+  color: var(--fg);
+}
+.terminal-pane.is-focused .terminal-pane-head { border-bottom-color: var(--terminal-header-border-focused); }
+/* A saved pane the host refused to reopen says why, in place of the terminal
+   it could not start, and offers the moved folder when there is one. */
+.terminal-reopen-failure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 0 24px;
+  color: var(--fg-dim);
+  font-size: var(--text-ui);
+  line-height: var(--lh-ui);
+  text-align: center;
+}
+.terminal-reopen-failure p { margin: 0; max-width: 56ch; overflow-wrap: anywhere; white-space: pre-line; }
+.terminal-reopen-failure-title { color: var(--fg); font-size: var(--text-body); }
+/* A pane whose program is waiting on cloud-only startup files says so, over
+   the terminal rather than beside it: a resize would signal the program. */
+.terminal-startup-download {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: calc(100% - 20px);
+  box-sizing: border-box;
+  padding: 4px 10px;
+  border: var(--border-w) solid var(--border);
+  border-radius: var(--radius-control);
+  color: var(--fg-dim);
+  background: var(--surface-raised);
+  font-size: var(--text-meta);
+  line-height: var(--lh-ui);
+}
+.terminal-startup-download-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* An agent that ended on its own terms keeps its output readable; the
+   notice offers the restart the host already serves (terminalRestartOffer). */
+.terminal-restart-offer {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  /* Above xterm's own layers (its link layer would take the click), as the
+     search widget is. */
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: calc(100% - 20px);
+  box-sizing: border-box;
+  padding: 4px 4px 4px 10px;
+  border: var(--border-w) solid var(--border);
+  border-radius: var(--radius-control);
+  color: var(--fg-dim);
+  /* Inside the screen: its own text tiers, so its own shade underneath. */
+  background: color-mix(in srgb, var(--fg) 8%, var(--terminal-content-bg));
+  font-size: var(--text-meta);
+  line-height: var(--lh-ui);
+}
+.terminal-restart-offer-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.terminal-restart-offer-button {
+  flex: none;
+  padding: 2px 10px;
+  border: var(--border-w) solid var(--border);
+  border-radius: var(--radius-control);
+  color: var(--fg-strong);
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+.terminal-restart-offer-button:hover { background: color-mix(in srgb, var(--fg) 16%, var(--terminal-content-bg)); }
+.terminal-restart-offer-button:focus-visible {
+  outline: var(--focus-ring-w) solid var(--focus);
+  outline-offset: var(--focus-ring-offset);
+}
+/* A covered tab keeps its box only while it is the active one. `visibility`
+   alone leaves a laid-out box, which xterm's IntersectionObserver reads as
+   on screen: every background tab then paints every row nobody is watching.
+   The cost is that a background tab stops fitting until it is shown again,
+   which its ResizeObserver does on the way back. */
+.terminal-tabpanel {
+  position: absolute;
+  inset: 0;
+  visibility: hidden;
+  content-visibility: hidden;
+  pointer-events: none;
+}
+.terminal-tabpanel.is-active {
+  visibility: visible;
+  content-visibility: visible;
+  pointer-events: auto;
+}
+
+/* Flip: the pane keeps its header and layout; the body is covered by a
+   card carrying what the terminal is and what it last said. Covered, not
+   unmounted, so the xterm buffer underneath survives — and is what the
+   preview lines are read from. */
+.terminal-pane-card {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  box-sizing: border-box;
+  padding: 0 18px;
+  color: var(--fg-strong);
+  background: var(--terminal-content-bg);
+  font-size: var(--text-prose);
+  font-weight: var(--wght-strong);
+}
+.terminal-pane-card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+  min-width: 0;
+}
+.terminal-pane-card-title { min-width:0; max-width:36ch; overflow-wrap:anywhere; line-height:var(--lh-ui); text-align:left; }
+/* Shared by both card surfaces: the state word, the folder, and the tail of
+   the buffer, in the terminal's own face so it reads as terminal output. */
+.terminal-card-meta {
+  display: flex;
+  max-width: 100%;
+  min-width: 0;
+  color: var(--fg-dim);
+  font-size: var(--text-meta);
+  font-weight: var(--wght-regular);
+}
+.terminal-card-cwd {
+  min-width: 0;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.terminal-card-preview {
+  display: -webkit-box;
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--fg-muted);
+  font-family: var(--font-terminal);
+  font-size: var(--text-meta);
+  font-weight: var(--wght-regular);
+  line-height: var(--lh-ui);
+  text-align: left;
+  white-space: pre-line;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+/* ---- BridgeMind-style reviewed terminal lineup ------------------------ */
+
+/* Workspace launcher: quiet rows, clear choices and an explicit launch lineup. */
+.terminal-launcher {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding: 32px clamp(20px, 4vw, 56px);
+  color: var(--fg);
+  background: var(--terminal-canvas);
+}
+.terminal-launcher-card {
+  box-sizing: border-box;
+  width: min(960px, 100%);
+  margin: 0 auto;
+}
+.terminal-launcher-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 32px;
+}
+.terminal-launcher-heading-context {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.terminal-launcher-product { display: inline-flex; flex: none; color: var(--fg-muted); }
+.terminal-launcher-product-mark { width: 22px; height: 22px; }
+.terminal-launcher-heading h2 {
+  margin: 0;
+  color: var(--fg-strong);
+  font-size: var(--text-h2);
+  font-weight: var(--wght-strong);
+  letter-spacing: var(--track-h1);
+}
+.terminal-launcher-form { min-width: 0; margin-top: 24px; }
+.terminal-launcher-section + .terminal-launcher-section { margin-top: 22px; }
+.terminal-launcher-section h3 {
+  margin: 0 0 10px;
+  color: var(--fg-muted);
+  font-size: var(--text-meta);
+  font-weight: var(--wght-strong);
+  letter-spacing: var(--track-caps);
+  text-transform: uppercase;
+}
+.terminal-launcher-agent-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+/* Seven tiles in three columns orphaned Terminal on a row of its own. */
+@container workspace (min-width: 900px) {
+  .terminal-launcher-agent-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+.terminal-launcher-profile {
+  position: relative;
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) 16px;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  min-height: 52px;
+  padding: 8px 14px;
+  color: var(--fg);
+  /* Tiles are surfaces like the pane frames, not recessed wells: the grey
+     well read as disabled in Porcelain (owner, 2026-09-28). */
+  background: var(--surface);
+  border: var(--border-w) solid var(--border);
+  border-radius: calc(var(--radius-control) * 2);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--motion-fast) linear, background var(--motion-fast) linear;
+}
+.terminal-launcher-profile:hover:not(:disabled) {
+  color: var(--fg-strong);
+  border-color: var(--border-strong);
+}
+.terminal-launcher-profile.is-selected {
+  color: var(--fg-strong);
+  background: var(--row-selected);
+  border-color: var(--selection-accent);
+  box-shadow: inset 0 0 0 var(--border-w) var(--selection-accent);
+}
+.terminal-launcher-profile:disabled { color: var(--fg-dim); cursor: default; }
+/* Not installed or not signed in: an outline of a tile, not a dimmer copy of
+   one, so it never reads as a choice that merely is not selected. */
+.terminal-launcher-profile.is-unavailable {
+  background: transparent;
+  border-style: dashed;
+  border-color: var(--border-strong);
+}
+.terminal-launcher-profile.is-unavailable .terminal-launcher-profile-mark { opacity: .4; }
+.terminal-launcher-profile-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  color: var(--fg-muted);
+}
+.terminal-launcher-profile-mark > .codicon { font-size: var(--icon-size); }
+.terminal-launcher-profile-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.terminal-launcher-profile-note {
+  overflow: hidden;
+  color: var(--fg-dim);
+  font-size: var(--text-meta);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.terminal-launcher-profile-label {
+  min-width: 0;
+  overflow: hidden;
+  font-size: var(--text-body);
+  font-weight: var(--wght-strong);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.terminal-launcher-profile-check {
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  color: var(--terminal-canvas);
+  background: var(--selection-accent);
+  border-radius: 50%;
+  font-size: var(--text-meta);
+}
+/* The complete unavailable reason remains in the accessible name and tooltip;
+   it must not stretch one provider row away from the rest of the grid. */
+.terminal-launcher-profile-reason {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.terminal-launcher-profile-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 8px 0 0;
+  color: var(--fg-dim);
+  font-size: var(--text-meta);
+}
+.terminal-launcher-profile-status.is-error { color: var(--danger-fg); }
+/* Not-installed tools other than Claude Code, Codex and Terminal fold here,
+   each with its install hint, so the grid holds what can run (review C4). */
+.terminal-launcher-more { margin-top: 10px; }
+.terminal-launcher-more > summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  min-height: 24px;
+  padding: 0 8px 0 4px;
+  margin-left: -4px;
+  color: var(--fg-muted);
+  border-radius: var(--radius-control);
+  font-size: var(--text-meta);
+  list-style: none;
+  cursor: pointer;
+}
+.terminal-launcher-more > summary::-webkit-details-marker { display: none; }
+.terminal-launcher-more > summary:hover { color: var(--fg-strong); background: var(--row-hover); }
+.terminal-launcher-more > summary:focus-visible {
+  outline: var(--focus-ring-w) solid var(--focus);
+  outline-offset: calc(-1 * var(--focus-ring-offset));
+}
+.terminal-launcher-more-chevron { transition: transform var(--motion-fast) linear; }
+.terminal-launcher-more[open] .terminal-launcher-more-chevron { transform: rotate(90deg); }
+.terminal-launcher-more-label { font-weight: var(--wght-strong); }
+.terminal-launcher-more-count { color: var(--fg-dim); }
+/* The same dashed outline as a tile that needs setup: one list, not a tile each. */
+.terminal-launcher-more-list {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  border: var(--border-w) dashed var(--border-strong);
+  border-radius: calc(var(--radius-control) * 2);
+}
+.terminal-launcher-more-item {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 8px 14px;
+}
+.terminal-launcher-more-item + .terminal-launcher-more-item {
+  border-top: var(--border-w) solid var(--border);
+}
+.terminal-launcher-more-item .terminal-launcher-profile-mark { opacity: .4; }
+.terminal-launcher-more-copy { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.terminal-launcher-more-name {
+  color: var(--fg-dim);
+  font-size: var(--text-body);
+  font-weight: var(--wght-strong);
+}
+.terminal-launcher-more-hint {
+  color: var(--fg-dim);
+  font-size: var(--text-meta);
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+.terminal-launcher-more-hint code { color: var(--fg-muted); font-family: var(--font-mono); }
+.terminal-launcher-more-actions { display: flex; justify-content: flex-end; margin-top: 8px; }
+.terminal-launcher-more-refresh { display: inline-flex; align-items: center; gap: 6px; }
+.terminal-launcher-count-row { display: flex; align-items: center; gap: 14px; }
+/* One joined control: the eight counts share a surface on one hairline, and
+   only the chosen one carries an edge. */
+.terminal-launcher-count-group {
+  display: grid;
+  grid-template-columns: repeat(8, 40px);
+  gap: 2px;
+  min-width: 0;
+  padding: 3px;
+  background: var(--surface);
+  border: var(--border-w) solid var(--border);
+  border-radius: calc(var(--radius-control) * 2);
+}
+.terminal-launcher-count {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 36px;
+  padding: 0;
+  color: var(--fg-muted);
+  background: transparent;
+  border: var(--border-w) solid transparent;
+  border-radius: calc(var(--radius-control) * 1.5);
+  font: var(--wght-strong) var(--text-body)/1 var(--font-ui);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: border-color var(--motion-fast) linear, background var(--motion-fast) linear;
+}
+.terminal-launcher-count:hover:not(:disabled) { color: var(--fg-strong); background: var(--row-hover); }
+.terminal-launcher-count.is-selected {
+  color: var(--selection-accent);
+  background: var(--row-selected);
+  border-color: var(--selection-accent);
+  box-shadow: inset 0 0 0 var(--border-w) var(--selection-accent);
+}
+.terminal-launcher-count:disabled { color: var(--fg-faint); cursor: default; }
+.terminal-launcher-count-unit { color: var(--fg-dim); font-size: var(--text-ui); }
+/* One option is a fact, not a choice: plain text until a second isolation
+   mode exists, then the selector returns. */
+.terminal-launcher-isolation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--fg-muted);
+  font-size: var(--text-ui);
+}
+.terminal-launcher-isolation strong { color: var(--fg); font-weight: var(--wght-medium); }
+.terminal-launcher-isolation .codicon { color: var(--fg-dim); }
+.terminal-launcher-hint { margin: 8px 0 0; color: var(--fg-dim); font-size: var(--text-meta); }
+.terminal-launcher-cwd {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px 8px 14px;
+  color: var(--fg-muted);
+  background: var(--surface);
+  border: var(--border-w) solid var(--border);
+  border-radius: calc(var(--radius-control) * 2);
+}
+.terminal-launcher-cwd-copy {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+}
+.terminal-launcher-cwd-name {
+  flex: none;
+  max-width: 45%;
+  overflow: hidden;
+  color: var(--fg-strong);
+  font-size: var(--text-body);
+  font-weight: var(--wght-strong);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.terminal-launcher-cwd-path {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--fg-dim);
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.terminal-launcher-cwd-browse {
+  min-height: 30px;
+  padding: 0 10px;
+  color: var(--fg);
+  background: var(--surface);
+  border: var(--border-w) solid var(--border);
+  border-radius: var(--radius-control);
+  font: inherit;
+  font-size: var(--text-meta);
+  cursor: pointer;
+}
+.terminal-launcher-cwd-browse:hover:not(:disabled) { color: var(--fg-strong); background: var(--row-hover); }
+.terminal-launcher-cwd-browse:disabled { color: var(--fg-faint); cursor: default; }
+.terminal-launcher-lineup {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 10px 14px;
+  color: var(--fg);
+  background: var(--surface);
+  border: var(--border-w) solid var(--border);
+  border-radius: calc(var(--radius-control) * 2);
+  font-size: var(--text-body);
+}
+.terminal-launcher-lineup-label { overflow: hidden; font-weight: var(--wght-strong); text-overflow: ellipsis; white-space: nowrap; }
+.terminal-launcher-lineup-count { flex: none; color: var(--fg-muted); font-variant-numeric: tabular-nums; }
+.terminal-launcher-lineup-folder { overflow: hidden; color: var(--fg-dim); text-overflow: ellipsis; white-space: nowrap; }
+.terminal-launcher-notice {
+  margin-top: 16px;
+  padding: 10px 12px;
+  border: var(--border-w) solid var(--border-strong);
+  border-radius: var(--radius-control);
+  font-size: var(--text-ui);
+}
+.terminal-launcher-notice.is-error { color: var(--danger-fg); background: var(--danger-bg); }
+.terminal-launcher-notice.is-partial { color: var(--fg); background: var(--row-selected-blur); }
+.terminal-launcher-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: var(--border-w) solid var(--border);
+}
+.terminal-launcher-review-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-right: auto;
+  min-width: 0;
+  min-height: 30px;
+  padding: 0 10px 0 8px;
+  margin-left: -8px;
+  color: var(--fg-muted);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-control);
+  font: inherit;
+  font-size: var(--text-ui);
+  text-align: left;
+  cursor: pointer;
+}
+.terminal-launcher-review-link:hover:not(:disabled) { color: var(--fg-strong); background: var(--row-hover); }
+.terminal-launcher-review-link:disabled { color: var(--fg-faint); cursor: default; }
+.terminal-launcher-shortcut {
+  padding: 1px 6px;
+  color: var(--fg-dim);
+  border: var(--border-w) solid var(--border-strong);
+  border-radius: calc(var(--radius-control) * .75);
+  font: var(--text-ui)/var(--lh-ui) var(--font-mono);
+}
+.terminal-launcher-actions .btn { min-width: 220px; min-height: 36px; }
+
+/* ---- xterm wrapper ----------------------------------------------------- */
+
+.terminal-view {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--terminal-content-bg);
+}
+.terminal-xterm {
+  position: absolute;
+  inset: 0;
+  min-width: 0;
+  min-height: 0;
+  /* Roomier tiles (owner, 2026-10-02): text sits 12px in from the tile's
+     edge and 10px under the head band; the 2px foot keeps the CLI footer low. */
+  padding: 10px 0 2px 12px;
+  display: flex;
+  align-items: flex-end;
+  background: var(--terminal-content-bg);
+}
+/* FitAddon measures the host. Keep the emulator at its whole-row height and
+   put any fractional-row remainder above it, keeping the CLI footer low. */
+.terminal-xterm .xterm { width: 100%; height: auto; flex: none; }
+/* xterm swaps to the arrow the moment a CLI turns mouse reporting on, which is
+   every agent pane. The text is still selectable there (option-drag), so keep
+   the I-beam saying so. */
+.terminal-xterm .xterm.enable-mouse-events { cursor: text; }
+/* Keep xterm's black fallback from winning when its stylesheet loads later. */
+.terminal-xterm .xterm .xterm-viewport {
+  background-color: var(--terminal-content-bg);
+}
+/* xterm 6 draws its own scrollbar. Paint a 4px thumb inside the 8px drag
+   target; keep the gutter fixed so hovering never shifts terminal columns. */
+.terminal-view .terminal-xterm .xterm .xterm-scrollable-element > .scrollbar > .slider {
+  box-sizing: border-box;
+  background: var(--scrollbar);
+  border: 2px solid transparent;
+  border-radius: var(--radius-pill);
+  background-clip: padding-box;
+}
+.terminal-view .terminal-xterm .xterm .xterm-scrollable-element > .scrollbar > .slider:is(:hover, .active) {
+  background-color: var(--scrollbar-active);
+}
+.terminal-pane:not(:hover) .terminal-xterm .xterm .xterm-scrollable-element > .scrollbar > .slider:not(.active) {
+  background: transparent;
+}
+/* Find opens a row above the text (owner, 2026-11-15: nothing floats over the
+   terminal's text any more). The screen gives up that row while it is open,
+   and the emulator refits to what is left. */
+.terminal-view { --terminal-search-h: 34px; }
+.terminal-view.has-search .terminal-xterm { top: var(--terminal-search-h); }
+.terminal-search {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: var(--terminal-search-h);
+  box-sizing: border-box;
+  padding: 0 6px 0 8px;
+  /* A step off the screen in the screen's own text colour, so the row reads
+     as a tool row in every palette, dark screens in light chrome included. */
+  background: color-mix(in srgb, var(--fg) 6%, var(--terminal-content-bg));
+  border-bottom: var(--border-w) solid var(--border);
+}
+.terminal-search input {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 420px;
+  height: 24px;
+  padding: 0 7px;
+  color: var(--input-fg);
+  background: var(--input-bg);
+  border: var(--border-w) solid var(--input-border);
+  border-radius: var(--radius-control);
+  font: inherit;
+  font-size: var(--text-ui);
+}
+.terminal-search input:focus { outline: var(--focus-ring-w) solid var(--focus); outline-offset: calc(-1 * var(--focus-ring-offset)); }
+.terminal-search-result { flex: none; min-width: 46px; color: var(--fg-dim); font-size: var(--text-meta); }
+.terminal-search button { width: 24px; height: 24px; }
+
+@media (hover: none) {
+  .terminal-tab-close { opacity: 1; }
+}
+
+@container workspace (max-width: 700px) {
+  .terminal-menu-panel { min-width: min(360px, calc(100vw - 16px)); }
+  .terminal-launcher { padding: 24px 20px; }
+  .terminal-launcher-agent-grid,
+  .terminal-launcher-lineup { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@container workspace (max-width: 460px) {
+  .terminal-launcher { padding: 18px 16px; }
+  .terminal-launcher-agent-grid,
+  .terminal-launcher-lineup { grid-template-columns: minmax(0, 1fr); }
+  .terminal-launcher-count-row { flex-wrap: wrap; gap: 8px; }
+  .terminal-launcher-count-group { grid-template-columns: repeat(4, minmax(0, 1fr)); width: 100%; box-sizing: border-box; }
+  .terminal-launcher-count { width: 100%; }
+  .terminal-launcher-actions { align-items: stretch; flex-direction: column; }
+  .terminal-launcher-shortcut { display: none; }
+  .terminal-launcher-actions .btn { width: 100%; min-width: 0; }
+}
+
+/* The Fast bolt shares the pane action target; only confirmed CLI state lights it. */
+.terminal-pane-action.terminal-fast-mode.is-on {
+  color: var(--accent-text);
+  background: var(--surface-raised);
+}
+.terminal-fast-mode[aria-busy="true"] { opacity: .55; }
+.terminal-fast-mode:disabled { cursor: default; }
+
+.terminal-pane-menu-heading { display:flex; flex-direction:column; gap:3px; padding:6px 8px 8px; }
+.terminal-pane-menu-heading strong { color:var(--fg-strong); font-size:var(--text-body); }
+.terminal-pane-menu-heading > span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  max-width:280px; color:var(--fg-faint); font-family:var(--font-mono); font-size:var(--text-meta); }
+.terminal-pane-menu-divider { height:1px; margin:5px 0; background:var(--border); }
+.terminal-pane-new-menu .terminal-menu-launch > .codicon { color:var(--fg-dim); }
+.terminal-menu-shortcut { margin-left:auto; padding-left:16px; color:var(--fg-faint); font-size:var(--text-meta); }
+.terminal-menu-check { margin-left:auto; }
+
+
+/* ---- agent overview ----------------------------------------------------
+   Every agent pane across every workspace, as a column beside the panes
+   (owner's BridgeMind dashboard reference, 2026-09-23). Dense live cards
+   (owner, 2026-10-01): a count with a status meter, filter chips, search and
+   Close idle, then a card per agent showing its last screen lines and how
+   long it has been at it. Drawn in the window's own chrome tokens. */
+/* 360px at 1440px windows, growing with the window to 560px on a large
+   display, where the filter chips still fit on one row (narrowed, owner
+   2026-10-05: the 680px column took too much room from the panes). */
+.terminal-center.has-agent-overview {
+  position: relative;
+  flex-direction: row;
+  --agent-overview-width: clamp(360px, 22vw, 560px);
+}
+.agent-overview {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  width: var(--agent-overview-width);
+  min-height: 0;
+  margin-left: var(--tile-gap);
+  overflow: hidden;
+  box-sizing: border-box;
+  border-radius: var(--tile-radius);
+  background: var(--workbench-panel);
+  box-shadow: inset 0 0 0 var(--border-w) var(--border);
+  color: var(--fg);
+}
+.agent-overview .dot { width: var(--dot-size); height: var(--dot-size); }
+/* Agents and Tasks, then close: the panel's own tab row. */
+.agent-overview-tabs {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 2px;
+  height: 40px;
+  padding: 0 8px 0 10px;
+  border-bottom: var(--border-w) solid var(--border);
+}
+.agent-overview-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--fg-muted);
+  font: inherit;
+  font-size: var(--text-ui);
+  cursor: pointer;
+}
+.agent-overview-tab:hover { color: var(--fg-strong); background: var(--row-hover); }
+.agent-overview-tab.is-active { background: var(--row-selected); color: var(--fg-strong); font-weight: var(--wght-strong); }
+.agent-overview-tab .codicon { font-size: var(--icon-size-sm); color: var(--fg-dim); }
+.agent-overview-tab-count { color: var(--selection-accent); font-variant-numeric: tabular-nums; }
+.agent-overview-tab:focus-visible {
+  outline: 2px solid var(--selection-border);
+  outline-offset: -2px;
+}
+.agent-overview-tabs > .agent-overview-close { margin-left: auto; }
+.agent-overview-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 16px 12px 18px;
+}
+.agent-overview-total {
+  color: var(--fg-strong);
+  font-size: var(--text-display);
+  font-weight: var(--wght-strong);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.agent-overview-heading { display: flex; flex: 1 1 auto; flex-direction: column; gap: 2px; min-width: 0; }
+.agent-overview-heading > strong {
+  color: var(--fg-strong);
+  font-size: var(--text-body);
+  font-weight: var(--wght-strong);
+}
+.agent-overview-heading > span {
+  overflow: hidden;
+  color: var(--fg-dim);
+  font-size: var(--text-meta);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.agent-overview-grouping {
+  display: inline-flex;
+  flex: none;
+  gap: 2px;
+  padding: 2px;
+  border-radius: var(--radius-container);
+  background: color-mix(in srgb, var(--fg) 6%, transparent);
+}
+.agent-overview-grouping-option {
+  height: 20px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: calc(var(--radius-container) - 2px);
+  background: transparent;
+  color: var(--fg-muted);
+  font: inherit;
+  font-size: var(--text-meta);
+  cursor: pointer;
+}
+.agent-overview-grouping-option:hover { color: var(--fg-strong); }
+.agent-overview-grouping-option.is-active {
+  background: var(--surface);
+  box-shadow: 0 0 0 var(--border-w) var(--border);
+  color: var(--fg-strong);
+}
+.agent-overview-close { flex: none; }
+/* One segment per status with agents in it, in the lights' own colours. */
+.agent-overview-meter {
+  display: flex;
+  gap: 2px;
+  height: 4px;
+  margin: 0 14px 12px;
+  border-radius: var(--radius-pill);
+  background: transparent;
+}
+.agent-overview-meter > span {
+  flex-basis: 0;
+  min-width: 4px;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--fg-dim) 30%, transparent);
+  transition: flex-grow var(--motion-base) var(--ease-standard);
+}
+.agent-overview-meter > .is-waiting { background: var(--status-waiting); }
+.agent-overview-meter > .is-working { background: var(--status-working); }
+.agent-overview-meter > .is-done { background: var(--status-done); }
+.agent-overview-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 18px;
+}
+.agent-overview-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--fg) 4%, transparent);
+  box-shadow: inset 0 0 0 var(--border-w) var(--border);
+  color: var(--fg-muted);
+  font: inherit;
+  font-size: var(--text-ui);
+  cursor: pointer;
+}
+.agent-overview-filter:hover { background: var(--row-hover); color: var(--fg); }
+.agent-overview-filter.is-active {
+  background: var(--surface);
+  box-shadow: inset 0 0 0 var(--border-w) var(--border-strong);
+  color: var(--fg-strong);
+  font-weight: var(--wght-medium);
+}
+.agent-overview-filter:focus-visible,
+.agent-overview-row:focus-visible,
+.agent-overview-grouping-option:focus-visible,
+.agent-overview-close-idle:focus-visible {
+  outline: 2px solid var(--selection-border);
+  outline-offset: -2px;
+}
+.agent-overview-filter-count { color: var(--fg-dim); font-variant-numeric: tabular-nums; }
+.agent-overview-tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  border-bottom: var(--border-w) solid var(--border);
+}
+.agent-overview-search {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  height: 34px;
+  padding: 0 11px;
+  box-sizing: border-box;
+  border-radius: var(--radius-container);
+  background: var(--input-bg);
+  box-shadow: inset 0 0 0 var(--border-w) var(--input-border);
+  color: var(--fg-dim);
+}
+.agent-overview-search:focus-within { box-shadow: inset 0 0 0 var(--border-w) var(--focus); }
+.agent-overview-search input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--input-fg);
+  font: inherit;
+  font-size: var(--text-ui);
+}
+.agent-overview-search input::placeholder { color: var(--input-placeholder); }
+.agent-overview-search input::-webkit-search-cancel-button { display: none; }
+.agent-overview-close-idle {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--fg-muted);
+  font: inherit;
+  font-size: var(--text-ui);
+  cursor: pointer;
+}
+.agent-overview-close-idle:hover { color: var(--fg-strong); background: var(--row-hover); }
+.agent-overview-confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 10px 14px 0;
+  padding: 10px;
+  border-radius: var(--radius-container);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 var(--border-w) var(--border-strong);
+  color: var(--fg);
+  font-size: var(--text-ui);
+  line-height: var(--lh-ui);
+}
+.agent-overview-confirm-actions { display: flex; justify-content: flex-end; gap: 6px; }
+.agent-overview-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 8px 16px 16px;
+}
+.agent-overview-empty { padding: 12px 2px; }
+/* The Browser tab: a Browser filling the column, on the column's own panel,
+   inset to its 16px rhythm. Its page is placed against this box. */
+.agent-overview-browser { position: relative; display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }
+.agent-overview-browser[hidden] { display: none; }
+.agent-overview-browser > .browser-pane { --browser-pane-inset: 16px; background: transparent; }
+.agent-overview-group + .agent-overview-group { margin-top: 14px; }
+.agent-overview-group-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  margin: 0;
+  padding: 0 2px;
+  color: var(--fg-strong);
+  font-size: var(--text-body);
+  font-weight: var(--wght-strong);
+}
+.agent-overview-group-count { color: var(--fg-dim); font-weight: var(--wght-regular); font-variant-numeric: tabular-nums; }
+.agent-overview-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* A live card: head (mark with its light, name, provider · workspace, clock),
+   then the agent's last screen lines on a screen-coloured strip. Needs you
+   wears an amber edge; idle and stopped agents are one compact line. */
+.agent-overview-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 16px;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: var(--radius-container);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 var(--border-w) var(--border);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--motion-fast) var(--ease-standard);
+}
+.agent-overview-row:hover { background: color-mix(in srgb, var(--surface) 92%, var(--fg)); }
+.agent-overview-row.is-waiting { box-shadow: inset 0 0 0 var(--border-w) var(--status-waiting); }
+.agent-overview-row.is-compact { padding: 9px 14px; background: transparent; }
+.agent-overview-row.is-compact:hover { background: var(--row-hover); }
+.agent-overview-row-head { display: flex; align-items: flex-start; gap: 12px; min-width: 0; }
+.agent-overview-row.is-compact .agent-overview-row-head { align-items: center; }
+.agent-overview-row-icon {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: calc(var(--radius-control) * 1.75);
+  background: var(--surface-raised);
+}
+.agent-overview-row.is-compact .agent-overview-row-icon { width: 22px; height: 22px; background: transparent; }
+.agent-overview-row-light.dot {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--surface);
+}
+.agent-overview-row-text { display: flex; flex: 1 1 auto; flex-direction: column; gap: 3px; min-width: 0; }
+.agent-overview-row-meta { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Up to two lines of the agent's name, then an ellipsis. */
+.agent-overview-row-title {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--fg-strong);
+  font-size: var(--text-h3);
+  font-weight: var(--wght-strong);
+  line-height: var(--lh-tight);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.agent-overview-row.is-compact .agent-overview-row-title {
+  display: block;
+  font-size: var(--text-body);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.agent-overview-row-meta { color: var(--fg-dim); font-size: var(--text-ui); }
+.agent-overview-row.is-compact .agent-overview-row-text { flex-direction: row; align-items: baseline; gap: 8px; }
+.agent-overview-row.is-compact .agent-overview-row-title { flex: 0 1 auto; font-weight: var(--wght-medium); }
+.agent-overview-row-status { flex: none; }
+.agent-overview-row-tail {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 11px;
+  border-radius: calc(var(--radius-container) - 2px);
+  background: var(--terminal-content-bg);
+  color: var(--terminal-fg);
+  color-scheme: var(--terminal-color-scheme);
+  font-family: var(--font-terminal);
+  font-size: var(--text-meta);
+  line-height: var(--lh-ui);
+}
+.agent-overview-row-tail > span { overflow: hidden; text-overflow: ellipsis; white-space: pre; }
+.agent-overview-row-summary {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--fg-muted);
+  font-size: var(--text-ui);
+  line-height: var(--lh-ui);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.agent-overview-row-open {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 9px;
+  border-radius: var(--radius-control);
+  background: var(--surface-raised);
+  box-shadow: inset 0 0 0 var(--border-w) var(--border-strong);
+  color: var(--fg-strong);
+  font-size: var(--text-meta);
+}
+.agent-overview-row-open kbd { color: var(--fg-dim); font: inherit; }
+@media (prefers-reduced-motion: reduce) {
+  .agent-overview-meter > span,
+  .agent-overview-row { transition: none; }
+}
+/* The toggle slides it in from the window's right edge while the panes give
+   way, the left sidebar's motion mirrored: the panel keeps its width and a
+   negative margin hands its column back, so its rows never reflow mid-slide.
+   The panes hold their terminal grids until it settles (TerminalWorkspace).
+   An overview remembered open appears in place on launch; only a toggle
+   moves it. Clipped only while moving, so nothing paints past the edge. */
+.terminal-center:has(> .agent-overview.is-entering, > .agent-overview.is-leaving) { overflow: clip; }
+.agent-overview.is-entering { animation: agent-overview-in var(--motion-slow) var(--ease-out) both; }
+.agent-overview.is-leaving {
+  pointer-events: none;
+  animation: agent-overview-out var(--motion-base) var(--ease-in) both;
+}
+@keyframes agent-overview-in { from { margin-right: calc(-1 * var(--agent-overview-width) - var(--tile-gap)); opacity: 0; } }
+@keyframes agent-overview-out { to { margin-right: calc(-1 * var(--agent-overview-width) - var(--tile-gap)); opacity: 0; } }
+/* Too narrow for a column beside the panes: it floats over them instead, the
+   side-sheet treatment theme.css gives the detail pane at the same width. */
+@media (max-width: 1080px) {
+  .terminal-center.has-agent-overview > .agent-overview {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(360px, 92%);
+    margin-left: 0;
+    box-shadow: inset 0 0 0 var(--border-w) var(--border-strong), var(--overlay-shadow);
+  }
+  /* A floating sheet has no column to open: it glides in over the panes. */
+  .terminal-center.has-agent-overview > .agent-overview.is-entering { animation-name: agent-overview-sheet-in; }
+  .terminal-center.has-agent-overview > .agent-overview.is-leaving { animation-name: agent-overview-sheet-out; }
+}
+@keyframes agent-overview-sheet-in { from { translate: 24px 0; opacity: 0; } }
+@keyframes agent-overview-sheet-out { to { translate: 24px 0; opacity: 0; } }
+/* Not the global 0.01ms: a filled animation would still paint its first frame
+   off-screen before finishing. After the narrow rules, which it must beat. */
+@media (prefers-reduced-motion: reduce) {
+  .terminal-center.has-agent-overview > .agent-overview:is(.is-entering, .is-leaving) { animation: none; }
+}
+
+/* Narrow windows retain readable cells; manual splits remain user-controlled.
+   Dense tiles keep three columns down to 1100px (owner, 2026-10-01). */
+@media (max-width: 1100px) {
+  .terminal-workspace.is-equal-grid > .terminal-pane-slot,
+  .terminal-workspace.is-equal-grid > .terminal-pane-frame { grid-column: span 12 !important; }
+  .terminal-workspace.is-equal-grid:is(.terminal-count-1, .terminal-count-3, .terminal-count-5, .terminal-count-7) > .terminal-pane-slot:last-child,
+  .terminal-workspace.is-equal-grid:is(.terminal-count-1, .terminal-count-3, .terminal-count-5, .terminal-count-7) > .terminal-pane-frame:last-child { grid-column: 1 / -1 !important; }
+}
+@media (max-width: 640px) {
+  .terminal-workspace.is-equal-grid > .terminal-pane-slot,
+  .terminal-workspace.is-equal-grid > .terminal-pane-frame { grid-column: 1 / -1 !important; }
+  .terminal-launcher-count-group { grid-template-columns: repeat(4, 40px); }
+}

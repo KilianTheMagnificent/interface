@@ -1,0 +1,122 @@
+{
+  "protocolVersion": 67,
+  "commands": [
+    {
+      "kind": "suggestShipText",
+      "key": "claude#a",
+      "what": "commit",
+      "paths": [
+        "src/lib.rs"
+      ]
+    },
+    {
+      "kind": "suggestShipText",
+      "key": "claude#a",
+      "what": "pullRequest"
+    },
+    {
+      "kind": "sideAsk",
+      "key": "claude#a",
+      "question": "Which test covers the login timeout?"
+    },
+    {
+      "kind": "sideClose",
+      "key": "claude#a"
+    }
+  ],
+  "response": {
+    "view": {
+      "version": 1,
+      "revision": 41,
+      "now": 1791298800000,
+      "settings": {
+        "autoSettleDays": 3,
+        "settleOnMerge": true,
+        "generatedTitles": false,
+        "trackPullRequests": true
+      },
+      "threads": []
+    },
+    "shipText": "Fix the login test\n\nIt waited too little for the form."
+  },
+  "view": {
+    "version": 1,
+    "revision": 41,
+    "now": 1791298800000,
+    "settings": {
+      "autoSettleDays": 3,
+      "settleOnMerge": true,
+      "generatedTitles": false,
+      "trackPullRequests": true
+    },
+    "threads": [
+      {
+        "key": "claude#6c1d2e3f-4a5b-4c6d-8e7f-90a1b2c3d4e5",
+        "section": "active",
+        "createdAt": 1791212400000,
+        "activeOrder": "V",
+        "woke": false,
+        "unread": false,
+        "autoSettle": true,
+        "workspace": {
+          "mode": "worktree",
+          "projectRoot": "/Users/fixture/Developer/Projects/atlas",
+          "worktreePath": "/Users/fixture/Developer/Projects/.atlas-worktrees/fix-login",
+          "branch": "iface/fix-login",
+          "baseRef": "main",
+          "owned": true
+        },
+        "pullRequest": {
+          "url": "https://github.com/fixture/atlas/pull/42",
+          "number": 42,
+          "state": "open",
+          "checkedAt": 1791298200000
+        },
+        "turns": [],
+        "secretRequest": {
+          "id": "secret-1",
+          "name": "STRIPE_TEST_KEY",
+          "reason": "To run the payment tests against Stripe's test mode.",
+          "agent": "Claude"
+        },
+        "side": {
+          "key": "claude#side-7f3a",
+          "question": "Which test covers the login timeout?",
+          "askedAt": 1791298800000
+        }
+      }
+    ]
+  },
+  "secretChannel": "iface:threadSecret",
+  "secretRequests": [
+    {
+      "kind": "list"
+    },
+    {
+      "kind": "give",
+      "key": "claude#6c1d2e3f-4a5b-4c6d-8e7f-90a1b2c3d4e5",
+      "id": "secret-1",
+      "value": "sk_test_fixture_value"
+    },
+    {
+      "kind": "decline",
+      "key": "claude#6c1d2e3f-4a5b-4c6d-8e7f-90a1b2c3d4e5",
+      "id": "secret-1"
+    },
+    {
+      "kind": "forget",
+      "key": "claude#6c1d2e3f-4a5b-4c6d-8e7f-90a1b2c3d4e5",
+      "name": "STRIPE_TEST_KEY"
+    }
+  ],
+  "secretsView": {
+    "version": 1,
+    "secrets": [
+      {
+        "key": "claude#6c1d2e3f-4a5b-4c6d-8e7f-90a1b2c3d4e5",
+        "name": "STRIPE_TEST_KEY",
+        "expiresAt": 1791385200000
+      }
+    ]
+  }
+}

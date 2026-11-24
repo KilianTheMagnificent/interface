@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "reviews": [
+    "{\"id\":\"5a25396ce0772478d82331c84ea0752975ce09b54445bdc78a21cd74f8e469eb\",\"revision\":2,\"snapshot\":{\"root\":\"/project\",\"path\":\"report.md\",\"byteLength\":3,\"revision\":\"cba06b5736faf67e54b07b561eae94395e774c517a7d910a54369e1263ccfbd4\",\"content\":{\"kind\":\"text\",\"text\":\"old\",\"format\":\"markdown\"}},\"anchor\":{\"kind\":\"text\",\"quote\":\"old\",\"startLine\":1,\"endLine\":1},\"note\":\"Revise the ending\",\"threadKey\":\"claude#a\",\"task\":\"Release notes\",\"updatedAt\":2,\"delivery\":null}",
+    "{\"id\":\"157d10c7fc612c186e02c3f10e7f889e0529ca2537040d837d843c87da3b71b0\",\"revision\":2,\"snapshot\":{\"root\":\"/project\",\"path\":\"chart.png\",\"byteLength\":12,\"revision\":\"8dc580175969db9757b7c06c3118570db35acd52f55f97c9220e4e1edbbfc693\",\"content\":{\"kind\":\"image\",\"mediaType\":\"image/png\",\"bytes\":[137,80,78,71,13,10,26,10,0,1,2,255]}},\"anchor\":{\"kind\":\"region\",\"x\":0.25,\"y\":0.5,\"width\":0.5,\"height\":0.25},\"note\":\"Label the axis\",\"threadKey\":null,\"task\":\"\",\"updatedAt\":4,\"delivery\":null}"
+  ]
+}

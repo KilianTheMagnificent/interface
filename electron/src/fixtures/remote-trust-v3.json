@@ -1,0 +1,54 @@
+{
+  "admin": [
+    {
+      "action": "trusted",
+      "version": 3,
+      "command": "status"
+    },
+    {
+      "action": "trusted",
+      "version": 3,
+      "command": "approve",
+      "id": "12345678-1234-4234-8234-123456789abc"
+    },
+    {
+      "action": "trusted",
+      "version": 3,
+      "command": "reject",
+      "id": "12345678-1234-4234-8234-123456789abc"
+    },
+    {
+      "action": "trusted",
+      "version": 3,
+      "command": "forget",
+      "id": "12345678-1234-4234-8234-123456789abc"
+    }
+  ],
+  "status": {
+    "version": 3,
+    "pending": [
+      {
+        "id": "12345678-1234-4234-8234-123456789abc",
+        "name": "Fixture iPhone",
+        "verification": "12345678"
+      }
+    ],
+    "devices": []
+  },
+  "enrollment": {
+    "version": 3,
+    "id": "12345678-1234-4234-8234-123456789abc",
+    "name": "Fixture iPhone",
+    "secret": "abababababababababababababababababababababababababababababababab"
+  },
+  "unlock": {
+    "version": 3,
+    "id": "12345678-1234-4234-8234-123456789abc",
+    "secret": "abababababababababababababababababababababababababababababababab"
+  },
+  "reply": {
+    "version": 3,
+    "approved": false,
+    "verification": "12345678"
+  }
+}

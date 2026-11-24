@@ -1,0 +1,52 @@
+[package]
+name = "interface-host"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+async-trait.workspace = true
+base64.workspace = true
+chrono.workspace = true
+directories.workspace = true
+engine-acp = { path = "../../crates/engine-acp" }
+engine-claude = { path = "../../crates/engine-claude" }
+engine-codex = { path = "../../crates/engine-codex" }
+futures.workspace = true
+interface-contracts = { path = "../../crates/interface-contracts" }
+interface-collaboration = { path = "../../crates/interface-collaboration" }
+interface-common = { path = "../../crates/interface-common" }
+interface-desktop-services = { path = "../../crates/interface-desktop-services" }
+interface-engine = { path = "../../crates/interface-engine" }
+interface-orchestration = { path = "../../crates/interface-orchestration" }
+interface-prompt-context = { path = "../../crates/interface-prompt-context" }
+interface-registry = { path = "../../crates/interface-registry" }
+interface-remote = { path = "../../crates/interface-remote" }
+interface-review = { path = "../../crates/interface-review" }
+interface-runtime = { path = "../../crates/interface-runtime" }
+interface-settings = { path = "../../crates/interface-settings" }
+interface-storage = { path = "../../crates/interface-storage" }
+interface-terminal = { path = "../../crates/interface-terminal" }
+interface-updater = { path = "../../crates/interface-updater" }
+interface-voice = { path = "../../crates/interface-voice" }
+libc.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tokio-util.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+uuid.workspace = true
+
+[dev-dependencies]
+# Test-only: the replay suite reads its fixtures and the recorder test
+# writes them; its binaries are found in the target directory.
+provider-replay = { path = "../../crates/provider-replay" }
+tempfile.workspace = true
+tokio = { workspace = true, features = ["test-util"] }
+
+[lints]
+workspace = true

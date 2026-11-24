@@ -1,0 +1,13 @@
+{
+  "requests": [
+    {"version":1,"action":"list","root":"/project","path":""},
+    {"version":1,"action":"read","root":"/project","path":"outputs/report.md"}
+  ],
+  "responses": [
+    {"kind":"directory","version":1,"root":"/project","path":"","entries":[{"name":"outputs","directory":true}]},
+    {"kind":"file","version":1,"snapshot":{"root":"/project","path":"outputs/report.md","byteLength":2,"revision":"8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4","content":{"kind":"text","text":"hi","format":"markdown"}}},
+    {"kind":"file","version":1,"snapshot":{"root":"/project","path":"a.png","byteLength":3,"revision":"abc","content":{"kind":"image","mediaType":"image/png","bytes":[1,2,3]}}},
+    {"kind":"file","version":1,"snapshot":{"root":"/project","path":"a.pdf","byteLength":3,"revision":"abc","content":{"kind":"pdf","bytes":[1,2,3]}}},
+    {"kind":"file","version":1,"snapshot":{"root":"/project","path":"a.docx","byteLength":3,"revision":null,"content":{"kind":"unsupported","reason":"Open this file in its own application."}}}
+  ]
+}

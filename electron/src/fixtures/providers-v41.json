@@ -1,0 +1,49 @@
+{
+  "protocol": 41,
+  "signedOutInfo": {
+    "binaryPath": "/Users/me/.local/bin/claude",
+    "version": "2.1.300 (Claude Code)",
+    "loginIdentity": null,
+    "auth": "signedOut",
+    "capabilities": {
+      "streaming": true,
+      "approvals": true,
+      "resume": true,
+      "fork": true,
+      "cloudSessions": false,
+      "models": "dynamic",
+      "effortLevels": [],
+      "permissionModes": ["default"]
+    }
+  },
+  "signedOutError": {
+    "kind": "error",
+    "message": "Not logged in · Please run /login",
+    "retryable": false,
+    "cause": "signedOut"
+  },
+  "plainError": { "kind": "error", "message": "Overloaded", "retryable": true },
+  "signInTerminal": {
+    "id": "8c3f6b5e-4a1d-4f2e-9b7a-2d6c1e0f3a45",
+    "cwd": "/Users/me",
+    "size": { "columns": 80, "rows": 24 },
+    "title": "Sign in to Claude",
+    "launch": { "version": 1, "profileId": "claude" },
+    "signIn": true
+  },
+  "refusedSignInTerminals": [
+    {
+      "id": "8c3f6b5e-4a1d-4f2e-9b7a-2d6c1e0f3a46",
+      "cwd": "/Users/me",
+      "signIn": true
+    },
+    {
+      "id": "8c3f6b5e-4a1d-4f2e-9b7a-2d6c1e0f3a47",
+      "cwd": "/Users/me",
+      "launch": { "version": 1, "profileId": "claude" },
+      "launchSession": { "version": 1, "id": "abc", "resume": false },
+      "signIn": true
+    }
+  ],
+  "refresh": { "refresh": true }
+}

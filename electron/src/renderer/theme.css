@@ -1,0 +1,4550 @@
+/* Self-hosted Geist, VARIABLE cuts. SIL OFL — see fonts/OFL.txt.
+   One face per family across the whole 100-900 range, in place of the two
+   static instances each carried before: it is 52KB SMALLER than the four files
+   it replaces, and it is what makes the weight ramp below possible at all.
+   `font-weight: 460` against a static 400/600 pair silently snaps to one of
+   them; against the wght axis it is the weight actually asked for. */
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("./fonts/Geist-Variable.woff2") format("woff2-variations");
+}
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("./fonts/GeistMono-Variable.woff2") format("woff2-variations");
+}
+/* Instrument Sans, the Porcelain interface face (SIL OFL — fonts/OFL-InstrumentSans.txt).
+   Variable on weight and width, split into the Latin and Latin Extended
+   subsets so ordinary UI text loads one 57KB file. */
+@font-face {
+  font-family: "Instrument Sans";
+  font-style: normal;
+  font-weight: 400 700;
+  font-stretch: 75% 100%;
+  font-display: swap;
+  src: url("./fonts/InstrumentSans-Variable-latin.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Instrument Sans";
+  font-style: normal;
+  font-weight: 400 700;
+  font-stretch: 75% 100%;
+  font-display: swap;
+  src: url("./fonts/InstrumentSans-Variable-latin-ext.woff2") format("woff2-variations");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* Interface theme — Porcelain.
+
+   Every app colour and layout number lives in the token blocks below.
+   Component CSS and style objects read those semantic tokens. Geometry is
+   tokenised too, so density is dialled here rather than hunted through
+   selectors.
+
+   The Interface family itself is Porcelain (light) and Porcelain Night
+   (dark): the `light` and `dark` blocks further down. The bare :root block
+   keeps the older warm-paper values only as the fallback every other palette
+   inherits for tokens it does not set.
+
+   All color themes share Porcelain's workspace structure: each terminal pane
+   is a frame (--terminal-header-bg) holding an inset screen
+   (--terminal-content-bg). Fonts can vary, but spacing, type sizes, corners,
+   motion, materials and shadow geometry are shared.
+
+   Below the token block: the handful of classes every pane shares. */
+
+/* The token system is one cascade layer, so a theme file (adopted after every
+   app stylesheet, unlayered) overrides any token with a plain `:root` rule.
+   Rules outside it that set tokens on :root (the pre-mount fallback, reduced
+   transparency, Bare CLI, Dev builds) are meant to win and still do. */
+@layer interface-palette {
+:root {
+  /* ══ HOW TO RETHEME ═══════════════════════════════════════════════════════
+     Swap the values in the Chrome, Text and Accent groups for any VS Code
+     theme's equivalents — the token names are that theme's own key names, so a
+     retheme is a value swap and nothing below has to move. Geometry is
+     independent of colour: change it for density, not for looks.
+
+     The light theme blends Claude's warm paper surfaces with Codex's restrained
+     monochrome controls. The application stays deliberately more contrasty in
+     its smallest text tiers so informative copy continues to clear WCAG AA.
+     ════════════════════════════════════════════════════════════════════════ */
+
+  /* ---- Chrome + editor surfaces -----------------------------------------
+     Navigation is a warm gray sheet beside a paper canvas. Prompt cards and
+     menus are nearly white, so hierarchy comes from temperature and value
+     changes rather than heavy frames. */
+  --chrome-bg: #eeece7;
+  --editor-bg: #f7f5f0;
+  --surface: #fffdfa;
+  --surface-raised: #e6e3dd;
+  --workbench-canvas: #f9f8f4;
+  --workbench-panel: #f5f3ee;
+  --terminal-canvas: #f9f8f4;
+  --terminal-content-bg: #f8f6f2;
+  --terminal-caret-color: light-dark(#526dcc, #8297e8);
+  --terminal-header-bg: #eceae6;
+  --terminal-header-border: #e4e2dd;
+  --terminal-header-bg-focused: #dedcd7;
+  --terminal-header-border-focused: #d3d1cc;
+  --terminal-tile-edge: #d7d7d7;
+  /* Dense tiles (owner, 2026-10-01): a pane is a flush tile, its head a band
+     over the screen, with no frame around it and no lift. The screen keeps
+     its own text colour and colour scheme, because a palette may set dark
+     screens inside light chrome. */
+  --terminal-focus-edge: var(--fg-faint);
+  --terminal-fg: var(--fg);
+  --terminal-fg-strong: var(--fg-strong);
+  --terminal-fg-muted: var(--fg-muted);
+  --terminal-fg-dim: var(--fg-dim);
+  --terminal-fg-faint: var(--fg-faint);
+  --terminal-border: var(--border);
+  --terminal-color-scheme: normal;
+  --terminal-scrollbar: var(--scrollbar);
+  --terminal-scrollbar-active: var(--scrollbar-active);
+  --dropdown-bg: #fffdfa;      /* anchored selects and conversation menus */
+  --widget-bg: #fffdfa;        /* command palette, quick open and dialogs */
+  --menu-bg: #fffdfa;          /* row action menus */
+  --overlay-shadow-color: #29252f1a;
+  --overlay-shadow-soft-color: #29252f12;
+  --overlay-shadow: 0 12px 32px var(--overlay-shadow-color), 0 2px 8px var(--overlay-shadow-soft-color);
+  /* The prompt surface: a soft lift instead of a drawn box. */
+  --composer-lift-color: #29252f14;
+  --composer-lift: 0 1px 2px var(--composer-lift-color);
+  --backdrop: #2f2c3466;
+
+  /* ---- Borders -----------------------------------------------------------
+     Soft neutral hairlines define containment without outlining every pane. */
+  --border: #ddd9d1;
+  --border-strong: #cec8bc;
+  --selection-border: #4057b2;
+
+  /* ---- List rows ---------------------------------------------------------
+     Selection carries a cool interaction wash. It stays separate from the
+     warm Interface identity and from green / amber / red runtime state. */
+  --row-hover: #e8e7ec;
+  --row-selected: #dfe2f0;
+  --row-selected-blur: #ebeaf0;
+  --tree-guide: #b8b7bb;
+
+  /* ---- Text --------------------------------------------------------------
+     The live Cursor ramp is charcoal rather than black. Muted/dim are lifted
+     just enough for informative 11–12px copy to remain readable. */
+  --fg: #3f3d38;
+  --fg-strong: #24231f;
+  --fg-muted: #5c5851;
+  --fg-dim: #625c54;
+  --fg-selected-secondary: #625c54;
+  /* --fg-faint sits under WCAG 1.4.11's 3:1 graphical floor on most surfaces,
+     deliberately: it is the quietest tier in the app. That is only legal for
+     what the floor exempts — a decorative glyph that repeats a label beside
+     it, an aria-hidden twisty, and a genuinely disabled control. If a glyph
+     is the sole indicator of something the user can still act on, it belongs
+     in --fg-muted (the quiet-control tier), never here. */
+  --fg-faint: #9a9a9f;
+
+  /* ---- Accent + semantics -----------------------------------------------
+     Warm bronze remains Interface's identity and primary-action colour. A
+     separate electric blue carries selection and focus, while violet names
+     review-oriented controls. Provider and runtime hues keep their own jobs.
+
+     --accent is a fill first (primary button and progress),
+     but several surfaces also paint it as TEXT — the transcript's markdown
+     links, the steering send glyph — so it
+     is held to 4.5:1 on every surface a row-level token lands on, exactly like
+     --accent-text. theme-accessibility.test.ts asserts it; a theme whose
+     accent is only bright enough to sit under white text is not shippable. */
+  --accent: #5a4634;
+  --accent-text: #5a4634;
+  --accent-text-hover: #4a3929;
+  --accent-fg: #fffdfa;
+  --accent-hover: #4a3929;
+  --focus: #4057b2;
+  --focus-contrast: #fffdfa;
+
+  --selection-accent: #4057b2;
+  --review-accent: var(--mode-auto);
+  --terminal-drop-bg: color-mix(in srgb, var(--selection-accent) 30%, transparent);
+
+  --badge-bg: #4057b2;
+  --badge-fg: #fffdfa;
+
+  /* Working, waiting and failed are each drawn as a 6px dot AND as text on a
+     row, so all three clear 4.5:1 on chrome, editor, surface-raised and the
+     composited hover and selected rows, in every theme. Idle is dot-only —
+     its text tier routes to --fg-dim — so it is held to WCAG 1.4.11's 3:1
+     graphical floor instead, which it must still clear: a dot nobody can see
+     is not reporting a state. Done, the blue dot for an agent turn nobody has
+     looked at yet (owner, 2026-09-25), is dot-only too and held to the same
+     3:1. theme-accessibility.test.ts asserts exactly this, on every surface;
+     do not add a theme without running it. */
+  --status-working: #5a4634;
+  --status-waiting: #885000;
+  --status-idle: #797980;
+  --status-failed: #b4234d;
+  --status-done: #2f5fcf;
+
+  /* Version-control marks in the file tree and the worktree list. Deliberately
+     NOT --status-waiting: amber is the app's one "an agent is blocked on you"
+     hue, and spending it on "this file changed" or "this worktree is dirty"
+     means the two are indistinguishable in a window that shows both at once. Modified is the default state of a working tree, so it
+     takes the neutral quiet-control tier and leaves the hue budget to added
+     (new) and conflicted (stop). Declared once here rather than per theme: the
+     var() is resolved against whichever theme block is active, so every palette
+     gets its own --fg-muted, and a future VCS-specific colour has one name to
+     change. --diff-added and --danger-fg carry the other two marks. */
+  --vcs-modified: var(--fg-muted);
+
+  --danger-fg: #b4234d;
+  --danger-bg: #fbe8ed;
+
+  --diff-added: #206c3f;
+  --diff-removed: #b4234d;
+  --diff-added-bg: #206c3f14;
+  --diff-removed-bg: #b4234d14;
+
+  /* ---- Access modes ------------------------------------------------------
+     How much rope the agent has, as a colour. Claude Code's CLI does this
+     rather than making people read the mode name every time, and the access
+     picker is the one control in this app where the difference between two
+     adjacent rows is the difference between an agent you supervise and one you
+     do not. Four hues, one meaning each: plan reads, accept writes files,
+     danger stops asking, auto hands the decision to a classifier.
+
+     These are TEXT tokens — access-modes.ts routes each provider token to one
+     of them and both pickers paint the pill's value — so every theme holds all
+     four to 4.5:1 on all eight row surfaces, exactly like the status tokens
+     above. Each palette voices them in its own temperature rather than
+     inheriting one hex: Solarized's blue is not Catppuccin's.
+
+     There is deliberately NO fifth "neutral" token. A mode nothing here names
+     keeps --fg, because the absence of a colour is the honest answer for a
+     token whose risk this app has not been taught. */
+  --mode-plan: #1f5aa6;
+  --mode-accept: #1c6539;
+  --mode-danger: #a8214a;
+  --mode-auto: #6b3fa0;
+
+  /* The effort ceiling (max/ultra/ultracode) is the one badge that does NOT
+     follow the theme accent. Declared once here and never re-declared in a
+     theme block, so the top rung is the same purple in light, dark and every
+     named palette — switching appearance must not repaint it. */
+  --effort-max: #6b3fa0;
+  --effort-max-fg: #ffffff;
+
+  /* Dev-build identity. Opaque canary chip, same in every theme, matching the
+     Dock icon footer. Never re-declared: switching appearance must not repaint
+     the word that says this is not production. */
+  --product-dev-bg: #e0b41c;
+  --product-dev-fg: #1a1406;
+  /* The Fold's plate in the window is monochrome (owner, 2026-09-28): the
+     theme's strongest ink with the canvas as its stroke, so the app's one
+     green is not spent on a logo. The Dock icon keeps its emerald plate; Dev
+     builds still take the canary chip above. */
+  --brand-tile-bg: var(--fg-strong);
+  --brand-tile-fg: var(--editor-bg);
+
+  /* ---- Inputs + scrollbars ---------------------------------------------- */
+  --input-bg: #ffffffa8;
+  --input-fg: #24231f;
+  --input-border: #cec8bc;
+  --input-placeholder: #6e6e74;
+  --scrollbar: #6561681c;
+  --scrollbar-active: #65616838;
+  --selection: #4057b233;
+  --theme-kind: light;
+
+  /* One material model across palettes: Dark's solid surfaces and shadow
+     geometry. Theme blocks change colors, never blur, spacing or elevation. */
+  --material-blur: 0px;
+  --material-saturate: 100%;
+  --material-chrome: var(--chrome-bg);
+  --material-surface: var(--surface);
+  --material-widget: var(--widget-bg);
+
+  /* Resolve these fills at the root before floating surfaces override the
+     opaque palette tokens locally. Nested popovers reuse the same material. */
+  --floating-opacity: 64%;
+  --floating-blur: 8px;
+  --floating-saturate: 110%;
+  --floating-dropdown-bg: color-mix(in srgb, var(--dropdown-bg) var(--floating-opacity), transparent);
+  --floating-widget-bg: color-mix(in srgb, var(--widget-bg) var(--floating-opacity), transparent);
+  --floating-menu-bg: color-mix(in srgb, var(--menu-bg) var(--floating-opacity), transparent);
+
+  /* ---- Typography --------------------------------------------------------
+     Two ramps, and a size may not come from anywhere else.
+
+     Chrome ramp — every control, row, label, dialog and pane in the app:
+       --text-meta   11px  rows, pills, captions, counts, timestamps
+       --text-ui     12px  section headers, buttons, secondary labels
+       --text-body   13px  pane and dialog body, session titles, markdown h4–h6
+       --text-prose  15px  transcript prose, composer input, dialog titles
+
+     --text-meta is the floor. Below it, informative copy in the --fg-dim tier
+     stops being comfortably legible at the densities this app runs, so no
+     label may be smaller — reach for --fg-dim or fewer words instead.
+
+     Heading ramp — for the few things that must outrank the chrome ramp:
+     markdown rendered inside a transcript (h1/h2/h3 map to h1/h2/h3 below,
+     h4–h6 fall back to --text-body), page and empty-state titles, and a glyph
+     drawn large enough to read as a symbol rather than as text:
+       --text-h3     15px
+       --text-h2     17px
+       --text-h1     19px   (also the narrow-width step down from display)
+       --text-display 22px
+
+     Weights: the compressed --wght-* ladder below (360/460/560) plus the 430
+     reading face, and nothing between. Spend --wght-strong on the one item in
+     a group that has to outrank its neighbours — a part header, a pane or
+     dialog title, an active tab, a heading, a count the eye must land on
+     first — and never on body copy. Letter-spacing is 0 through the chrome;
+     the exceptions are the uppercase micro-labels (.03–.04em) and the optical
+     --track-h1 tier declared further down this file.
+
+     The two mono stacks genuinely differ and that is intentional: --font-mono
+     is Geist Mono for chrome, and --font-terminal is the owner's terminal
+     face: MonoLisa Bold, as set in their Rex terminal (2026-11-15). MonoLisa
+     is installed on this Mac and named by family only; the commercial files
+     are not bundled. JetBrainsMono Nerd Font follows it for the powerline and
+     icon glyphs MonoLisa lacks, and is the face on a Mac without MonoLisa. */
+  --font-ui-sans: "Instrument Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --font-ui-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", ui-serif, serif;
+  --font-ui: var(--font-ui-sans);
+  --font-mono: "Geist Mono", "SF Mono", Monaco, Menlo, Courier, monospace;
+  --font-terminal: "MonoLisa", "JetBrainsMono Nerd Font", "Geist Mono", "SF Mono", Monaco, Menlo, Courier, monospace;
+  /* The weight terminal panes draw plain text in; a theme file may set 400. */
+  --terminal-text-weight: 700;
+
+  /* ---- The Threads look: TN Code's (owner, 2026-11-16) ---------------------
+     Threads is drawn in the image of the owner's TN Code (their fork of T3
+     Code, MIT; notice in docs/THIRD_PARTY_NOTICES.md), Apple-style interface:
+     the system face at macOS sizes, labels as alphas of the strongest ink,
+     soft fills, hairline separators, grouped cards and a prompt bubble with a
+     tail. Every colour is worked out from the theme's own tokens, so each
+     palette and theme file wears the look in its own colours; corners and
+     leading stay on the radius and leading ramps, so Bare CLI still squares
+     them. Read by the
+     Threads sheets only (ThreadTranscript, ThreadComposer, ThreadPaneHead,
+     ThreadInbox). */
+  --tn-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
+  --tn-font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif;
+  --tn-font-mono: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, monospace;
+  /* TN Code's two quieter label tiers are alphas of its ink (62% and 46%).
+     Here they are the theme's own muted and dim tiers, which every palette
+     already holds to 4.5:1 on its row surfaces. */
+  --tn-label-2: var(--fg-muted);
+  --tn-label-3: var(--fg-dim);
+  --tn-separator: color-mix(in srgb, var(--fg-strong) 9%, transparent);
+  --tn-fill: color-mix(in srgb, var(--fg-strong) 7%, transparent);
+  --tn-fill-strong: color-mix(in srgb, var(--fg-strong) 11%, transparent);
+  --tn-group: light-dark(var(--surface), color-mix(in srgb, var(--fg-strong) 4.5%, transparent));
+  /* The prompt bubble and the selected row: the selection colour laid over
+     the ground, as TN Code's message surface is its accent over the canvas. */
+  --tn-bubble: light-dark(color-mix(in srgb, var(--selection-accent) 10%, var(--editor-bg)),
+    color-mix(in srgb, var(--selection-accent) 20%, var(--editor-bg)));
+  --tn-row-selected: light-dark(color-mix(in srgb, var(--selection-accent) 18%, transparent),
+    color-mix(in srgb, var(--selection-accent) 30%, transparent));
+  --wght-heavy: 700;
+  /* A right-hand tail in a 24x20 box: the bubble's edge at x 18, the tip at x 24. */
+  --tn-tail: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 20' preserveAspectRatio='none'%3E%3Cpath d='M0 0H18V5C18 12.5 19.8 17.4 24 20C20.6 20.5 16.6 19.9 13.6 18.1C12 19.4 9.8 20 7 20H0Z'/%3E%3C/svg%3E");
+
+  /* ---- Weight ------------------------------------------------------------
+     A COMPRESSED RAMP, low in the range. Measured off Claude's own desktop
+     type: regular 360, medium 460, semibold 540, bold 560 — the whole ladder
+     inside 200 units, with body copy sitting BELOW normal.
+
+     The app used 400/600 before, twice that distance. The wide jump is what
+     made emphasis read as shouting: on a dense agent transcript every session
+     title, part header and active tab leapt off the page at once, and the eye
+     had nowhere to rest. A 200-unit ladder still ranks those things, it just
+     stops them competing.
+
+     Numeric font-weight, not font-variation-settings: `font-weight: 560` maps
+     straight onto the wght axis, inherits, and animates — while
+     font-variation-settings does none of those and silently wins over any
+     font-weight beneath it.
+
+     --wght-prose is the reading face only (transcript, user turn). Chrome
+     stays at 360 so titles and tabs do not shout; prose uses 430. */
+  --wght-regular: 360;
+  --wght-medium: 460;
+  --wght-strong: 560;
+  --wght-prose: 430;
+
+  --text-meta: 11px;
+  --text-ui: 12px;
+  --text-body: 13px;
+  --text-label: 14px;
+  --text-nav: 16px;
+  /* Reading text stays distinct from the navigation and metadata tiers. */
+  --text-prose: 15px;
+  --text-h3: 15px;
+  --text-h2: 17px;
+  --text-h1: 19px;
+  --text-display: 22px;
+
+  /* ---- Leading and tracking ----------------------------------------------
+     Three leading tiers and one tracking tier, because 22 distinct line-height
+     values shipped across 153 declarations — 1.3, 1.35, 1.4, 1.45 and 1.5 all
+     inside one component — and 16 of them were px leading on token-sized text,
+     which breaks the moment the size changes.
+
+       --lh-tight  a row, a label, a pill, a heading that owns its own box
+       --lh-ui     pane and dialog body, the default for anything multi-line
+       --lh-prose  the transcript's reading measure
+
+     The independent Bare-CLI form axis below keeps its own leading to match
+     the user's terminal metrics.
+
+     --track-caps is the ONE amount an uppercase micro-label is tracked by.
+     Three different values were in use for the same kind of label. The optical
+     --track-h1 tier below is a different job — a display size set tighter, not
+     a small label set looser. */
+  --lh-tight: 1.2;
+  --lh-ui: 1.35;
+  --lh-prose: 1.65;
+  --track-caps: .04em;
+
+  /* ---- Motion -----------------------------------------------------------
+     Spatial transitions explain where a surface came from; colour transitions
+     make selection changes legible. Continuous loops are reserved for real
+     provider activity. Reduced motion below turns every duration into an
+     effectively immediate state change while retaining the state itself. */
+  --motion-fast: 100ms;
+  --motion-base: 180ms;
+  --motion-slow: 260ms;
+  --ease-standard: cubic-bezier(.2, .8, .2, 1);
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  /* Exits accelerate away: a closing panel leaves faster than it arrived. */
+  --ease-in: cubic-bezier(.4, 0, 1, 1);
+
+  /* ---- Geometry: layout --------------------------------------------------
+     Space ramp, in two tiers. It is denser than a typical app grid on
+     purpose — this is a control plane, and the small steps are load-bearing.
+
+     Block tier — even steps only: 2 / 4 / 6 / 8 / 10 / 12 / 14 / 16 / 18 / 24.
+     Take every gap between two blocks, every pane inset, every card pad and
+     every stack margin from here.
+
+     Control tier — the block tier plus the odd steps 1 / 3 / 5 / 7 / 9 / 11,
+     and only inside a control: its own padding, the gap between a glyph and
+     its label, an optical nudge. The odd steps are not accidents — control
+     internals are tuned against --row-h and --control-h (28), --strip-h (24)
+     and --icon-size (16), and centring inside those heights lands on odd
+     remainders. Never reach for an odd step to separate two blocks.
+
+     Above 24 the number is usually a measured dimension — a width, a
+     max-height, room at the foot of a scroller — rather than a step: name it
+     where it is used and do not treat it as a new step. When editing an
+     existing block, match its neighbours before introducing a step it lacks. */
+  --pane-left: 240px;          /* roomier Interface navigation (owner, 2026-10-02) */
+  /* The subagent detail column. Fixed, and not user-resizable, because nothing
+     else in this shell is. 240 sidebar + 340 here + 420 (the pane width this
+     project measures against) is 1000px of window; the column still becomes
+     an overlay below 1080. */
+  --pane-detail: 340px;
+  --titlebar-h: 44px;          /* full-window hiddenInset rail; the traffic lights (y 16) stay centred */
+  --shell-inset: 8px;
+  --shell-gap: 6px;
+
+  /* ---- Geometry: workspace tiles ----------------------------------------
+     A pane is a card in BOTH chromes: the CLI form axis zeroes every other
+     radius, and these three are the deliberate exception. Declared here and
+     nowhere else — a redefinition inside :root[data-chrome="cli"] would move a
+     token off the form axis and chrome-mode.test.ts would (correctly) fail. */
+  --tile-radius: 12px;
+  --tile-gap: 12px;
+  --tile-head-h: 30px;
+
+  /* ---- Geometry: rows and strips ---------------------------------------- */
+  --row-h: 30px;               /* compact navigation with a WCAG-sized target */
+  --section-header-h: 32px;    /* repository and panel headers */
+  --strip-h: 24px;             /* breadcrumbs height — the Changes strip */
+  --control-h: 30px;           /* buttons, pills and single-line inputs */
+
+  /* ---- Geometry: indent, icons, borders ---------------------------------- */
+  --indent: 8px;               /* workbench.tree.indent — one nesting step */
+  --icon-size: 16px;           /* rows, tabs, headers, tree, workspace toolbar */
+  --icon-size-sm: 12px;        /* inside pills and inline with 11px text. Nothing in between. */
+  --dot-size: 6px;             /* the status dot inside its 16px column */
+  --border-w: 1px;             /* always 1px */
+  /* The focus ring, stated once. It was 1px here and 2px in sixteen of the
+     seventeen local rules that draw their own, across three different offsets —
+     so the app shipped one indicator in four sizes. 2px is what the majority
+     already drew and what survives a --focus that only just clears 3:1 on its
+     surface. A rule that must sit INSIDE its element (a clipped row, a control
+     flush with a pane edge) negates the offset with calc rather than inventing
+     a second number. */
+  --focus-ring-w: 2px;
+  --focus-ring-offset: 2px;
+
+  /* ---- Geometry: the corner radius system, stated once -------------------
+     Workbench chrome stays compact; the two prompt surfaces get a softer edge. */
+  --radius-control: 4px;       /* anything the pointer targets: buttons, inputs, pills, rows, chips */
+  --radius-container: 8px;     /* a bordered block inside a pane */
+  --radius-overlay: 10px;      /* Cursor's softly rounded floating menus */
+  --radius-composer: 14px;     /* primary prompt surfaces */
+  --radius-pill: 999px;        /* a fully-round capsule: badges and status pills */
+  --radius-none: 0;            /* all chrome: toolbar, tab strip, tabs, status bar, part headers */
+
+  /* NO ALIASES. --bg-sunken, --danger, --font, --radius and finally --bg all
+     went with their last call sites; --bg's was the question card's preview,
+     which now reads --editor-bg directly. A token declared and never read makes
+     the design system look larger than it is, and theme-accessibility.test.ts
+     fails on one. */
+
+  color-scheme: light;
+}
+
+/* Porcelain — the Interface light theme (owner, 2026-09-26). Pale chrome and
+   white frames around dark screens: the terminal is the one dark surface, so
+   the screen sets its own text colour and colour scheme. Hierarchy comes from
+   hairlines and one soft lift under the focused frame, never gradients. */
+:root[data-theme="light"] {
+  --chrome-bg: #f0f0ee;
+  --editor-bg: #f0f0ee;
+  --surface: #ffffff;
+  --surface-raised: #e9e9e6;
+  --workbench-canvas: #f0f0ee;
+  --workbench-panel: #f5f5f3;
+  --terminal-canvas: #f0f0ee;
+  --terminal-content-bg: #18191b;
+  --terminal-header-bg: #f7f7f5;
+  --terminal-header-border: #0e0f10;
+  --terminal-header-bg-focused: #ffffff;
+  --terminal-header-border-focused: #0e0f10;
+  --terminal-tile-edge: #dddddd;
+  --terminal-focus-edge: #cbcbc6;
+  --terminal-fg: #d5d7da;
+  --terminal-fg-strong: #f2f3f5;
+  --terminal-fg-muted: #b3b6ba;
+  --terminal-fg-dim: #a2a5aa;
+  --terminal-fg-faint: #6c7076;
+  --terminal-border: #ffffff14;
+  --terminal-color-scheme: dark;
+  --terminal-scrollbar: #ffffff26;
+  --terminal-scrollbar-active: #ffffff47;
+  --terminal-drop-bg: #3e63c985;
+  --dropdown-bg: #ffffff;
+  --widget-bg: #ffffff;
+  --menu-bg: #ffffff;
+  --overlay-shadow-color: #1818141f;
+  --overlay-shadow-soft-color: #18181412;
+  --composer-lift-color: #18181414;
+  --backdrop: #1818144d;
+  --border: #e1e1dd;
+  --border-strong: #cfcfca;
+  --selection-border: #3e63c9;
+  --row-hover: #e8e8e5;
+  --row-selected: #ffffff;
+  --row-selected-blur: #f7f7f5;
+  --sidebar-selected-fill: #ffffff;
+  --sidebar-selected-edge: #dddddd;
+  --sidebar-parent-fill: #0000000a;
+  --sidebar-parent-hover: #2a2b2e12;
+  --tree-guide: #c9c9c4;
+  --fg: #2a2b2e;
+  --fg-strong: #1d1e20;
+  --fg-muted: #55565a;
+  --fg-dim: #5e5f63;
+  --fg-selected-secondary: #5e5f63;
+  --fg-faint: #9a9b9e;
+  --accent: #1d1e20;
+  --accent-text: #1d1e20;
+  --accent-text-hover: #000000;
+  --accent-fg: #ffffff;
+  --accent-hover: #000000;
+  --focus: #3e63c9;
+  --focus-contrast: #ffffff;
+  --selection-accent: #3e63c9;
+  --badge-bg: #3e63c9;
+  --badge-fg: #ffffff;
+  --status-working: #ad4a16;
+  --status-waiting: #8a5a0e;
+  --status-idle: #808185;
+  --status-failed: #b4234d;
+  --status-done: #2f5fcf;
+  --danger-fg: #b4234d;
+  --danger-bg: #fbe8ed;
+  --diff-added: #206c3f;
+  --diff-removed: #b4234d;
+  --diff-added-bg: #206c3f14;
+  --diff-removed-bg: #b4234d14;
+  --mode-plan: #1f5aa6;
+  --mode-accept: #1c6539;
+  --mode-danger: #a8214a;
+  --mode-auto: #6b3fa0;
+  --input-bg: #ffffff;
+  --input-fg: #1d1e20;
+  --input-border: #d6d6d2;
+  --input-placeholder: #6a6b6f;
+  --scrollbar: #1818141f;
+  --scrollbar-active: #18181438;
+  --selection: #3e63c933;
+  --theme-kind: light;
+  color-scheme: light;
+}
+
+/* Porcelain Night — the Interface dark theme (owner, 2026-09-26). Warm
+   graphite frames around near-black screens. The warmth, the inset screen and
+   the status lights keep it apart from a neutral charcoal tile grid. The
+   renderer writes data-theme after reading the durable preference; every
+   component consumes these semantic tokens, so menus, dialogs, inputs, diffs
+   and scrollbars switch as one surface. */
+:root[data-theme="dark"] {
+  --terminal-drop-bg: #3e63c985;
+  --chrome-bg: #0e0e0d;
+  --editor-bg: #0e0e0d;
+  --surface: #1a1918;
+  --surface-raised: #22211f;
+  --workbench-canvas: #0e0e0d;
+  --workbench-panel: #131312;
+  --terminal-canvas: #0e0e0d;
+  --terminal-content-bg: #0a0a09;
+  --terminal-header-bg: #151514;
+  --terminal-header-border: #1f1e1c;
+  --terminal-header-bg-focused: #1e1d1b;
+  --terminal-header-border-focused: #2a2927;
+  --terminal-tile-edge: #262626;
+  --terminal-focus-edge: #4d4b47;
+  --terminal-color-scheme: dark;
+  --dropdown-bg: #1a1918;
+  --widget-bg: #1a1918;
+  --menu-bg: #1a1918;
+  --overlay-shadow-color: #00000080;
+  --overlay-shadow-soft-color: #00000066;
+  /* The prompt surface: a soft lift instead of a drawn box. */
+  --composer-lift-color: #00000040;
+  --backdrop: #00000099;
+  --border: #ffffff14;
+  --border-strong: #2f2e2b;
+  --selection-border: #8da8f0;
+  --row-hover: #ffffff0a;
+  --row-selected: #ffffff12;
+  --row-selected-blur: #ffffff0a;
+  --sidebar-selected-fill: #ffffff14;
+  --sidebar-selected-edge: #ffffff0f;
+  --sidebar-parent-fill: #ffffff0d;
+  --sidebar-parent-hover: #e4e2de12;
+  --tree-guide: #ffffff33;
+  --fg: #e4e2de;
+  --fg-strong: #f5f3ef;
+  --fg-muted: #bdbab5;
+  --fg-dim: #a8a5a0;
+  --fg-selected-secondary: #b3b0ab;
+  --fg-faint: #6d6b68;
+  --accent: #edebe8;
+  --accent-text: #edebe8;
+  --accent-text-hover: #ffffff;
+  --accent-fg: #0e0e0d;
+  --accent-hover: #ffffff;
+  --focus: #8da8f0;
+  --focus-contrast: #0e0e0d;
+  --selection-accent: #8da8f0;
+  --badge-bg: #8da8f0;
+  --badge-fg: #0e0e0d;
+  --status-working: #ff8a4c;
+  --status-waiting: #efb14a;
+  --status-idle: #87847f;
+  --status-failed: #f2708f;
+  --status-done: #7aa7ff;
+  --danger-fg: #f2708f;
+  --danger-bg: #3a1d24;
+  --diff-added: #a3be8c;
+  --diff-removed: #e6888f;
+  --diff-added-bg: #a3be8c1a;
+  --diff-removed-bg: #e6888f1a;
+  --mode-plan: #8ec2f0;
+  --mode-accept: #a8c98f;
+  --mode-danger: #f2708f;
+  --mode-auto: #c9a9f5;
+  --input-bg: #ffffff0a;
+  --input-fg: #f5f3ef;
+  --input-border: #2f2e2b;
+  --input-placeholder: #9c9994;
+  --scrollbar: #6b686355;
+  --scrollbar-active: #7d7a745f;
+  --selection: #8da8f03d;
+  --theme-kind: dark;
+  color-scheme: dark;
+}
+
+/* Clay (the anthropic-* ids; renamed 2026-09-28, when it absorbed Sauteed
+   Paper and Warm Editorial) — Anthropic's slate #141413, ivory #faf9f5 and clay #d97757, with
+   its blue and olive for the plan and accept modes. Dark paints the brand clay,
+   blue and kraft as they are; on ivory the clay only reaches 3:1, so Light
+   deepens each hue until it clears AA on the raised and selected rows. */
+:root[data-theme="anthropic-light"] {
+  --chrome-bg: #f0eee6;
+  --editor-bg: #faf9f5;
+  --surface: #fdfcf9;
+  --surface-raised: #e8e6dc;
+  --workbench-canvas: #f5f4ee;
+  --workbench-panel: #f8f7f2;
+  --terminal-canvas: #f5f4ee;
+  --terminal-content-bg: #fdfcf9;
+  --terminal-header-bg: #e9e5d9;
+  --terminal-header-border: #e0dccf;
+  --terminal-header-bg-focused: #e0dbcd;
+  --terminal-header-border-focused: #d0cabb;
+  --terminal-tile-edge: #d8d8d8;
+  --terminal-focus-edge: #bcb8ae;
+  --dropdown-bg: #fdfcf9;
+  --widget-bg: #fdfcf9;
+  --menu-bg: #fdfcf9;
+  --overlay-shadow-color: #1414131a;
+  --overlay-shadow-soft-color: #14141312;
+  /* The prompt surface: a soft lift instead of a drawn box. */
+  --composer-lift-color: #14141314;
+  --backdrop: #14141366;
+  --border: #e3e1d8;
+  --border-strong: #cfccc1;
+  --selection-border: #a24425;
+  --row-hover: #ebe8df;
+  --row-selected: #e3e0d5;
+  --row-selected-blur: #edebe4;
+  --tree-guide: #c4c1b6;
+  --fg: #141413;
+  --fg-strong: #141413;
+  --fg-muted: #3d3d3a;
+  --fg-dim: #5e5b53;
+  --fg-selected-secondary: #5e5b53;
+  --fg-faint: #8a8880;
+  --accent: #a24425;
+  --accent-text: #a24425;
+  --selection-accent: var(--accent-text);
+  --accent-text-hover: #8c3a20;
+  --accent-fg: #faf9f5;
+  --accent-hover: #8c3a20;
+  --focus: #a24425;
+  --focus-contrast: #faf9f5;
+  --badge-bg: #a24425;
+  --badge-fg: #faf9f5;
+  --status-working: #a24425;
+  --status-waiting: #845917;
+  --status-idle: #7a786f;
+  --status-failed: #b62d44;
+  --status-done: #2f5fb8;
+  --danger-fg: #b62d44;
+  --danger-bg: #f7e1e3;
+  --diff-added: #546838;
+  --diff-removed: #b62d44;
+  --diff-added-bg: #788c5d1a;
+  --diff-removed-bg: #b62d4414;
+  --mode-plan: #396496;
+  --mode-accept: #546838;
+  --mode-danger: #b62d44;
+  --mode-auto: #754dac;
+  --input-bg: #fdfcf9a8;
+  --input-fg: #141413;
+  --input-border: #cfccc1;
+  --input-placeholder: #5e5b53;
+  --scrollbar: #5e5b531c;
+  --scrollbar-active: #5e5b5338;
+  --selection: #d9775733;
+  --theme-kind: light;
+  color-scheme: light;
+}
+
+:root[data-theme="anthropic-dark"] {
+  --chrome-bg: #1a1918;
+  --editor-bg: #141413;
+  --surface: #1f1e1c;
+  --surface-raised: #292825;
+  --workbench-canvas: #0e0e0d;
+  --workbench-panel: #171615;
+  --terminal-canvas: #0e0e0d;
+  --terminal-content-bg: #121211;
+  --terminal-header-bg: #232220;
+  --terminal-header-border: #0a0a09;
+  --terminal-header-bg-focused: #2c2b28;
+  --terminal-header-border-focused: #0a0a09;
+  --terminal-tile-edge: #2c2c2c;
+  --terminal-focus-edge: #4a4844;
+  --dropdown-bg: #1f1e1c;
+  --widget-bg: #1f1e1c;
+  --menu-bg: #1f1e1c;
+  --overlay-shadow-color: #00000080;
+  --overlay-shadow-soft-color: #00000066;
+  /* The prompt surface: a soft lift instead of a drawn box. */
+  --composer-lift-color: #00000040;
+  --backdrop: #00000099;
+  --border: #2a2926;
+  --border-strong: #3a3935;
+  --selection-border: #d97757;
+  --row-hover: #232220;
+  --row-selected: #2a2926;
+  --row-selected-blur: #232220;
+  --tree-guide: #3a3935;
+  --fg: #ebe9e1;
+  --fg-strong: #faf9f5;
+  --fg-muted: #cfccc1;
+  --fg-dim: #b0aea5;
+  --fg-selected-secondary: #b0aea5;
+  --fg-faint: #6f6d66;
+  --accent: #d97757;
+  --accent-text: #d97757;
+  --selection-accent: var(--accent-text);
+  --accent-text-hover: #e38d70;
+  --accent-fg: #141413;
+  --accent-hover: #e38d70;
+  --focus: #d97757;
+  --focus-contrast: #141413;
+  --badge-bg: #d97757;
+  --badge-fg: #141413;
+  --status-working: #d97757;
+  --status-waiting: #d4a27f;
+  --status-idle: #7d7a72;
+  --status-failed: #e56c76;
+  --status-done: #7ea6e0;
+  --danger-fg: #e56c76;
+  --danger-bg: #3a1c1f;
+  --diff-added: #819b5d;
+  --diff-removed: #e56c76;
+  --diff-added-bg: #788c5d1f;
+  --diff-removed-bg: #e56c761a;
+  --mode-plan: #6a9bcc;
+  --mode-accept: #819b5d;
+  --mode-danger: #e56c76;
+  --mode-auto: #a57fda;
+  --input-bg: #faf9f50a;
+  --input-fg: #faf9f5;
+  --input-border: #3a3935;
+  --input-placeholder: #a3a097;
+  --scrollbar: #6f6d6655;
+  --scrollbar-active: #8a887f5f;
+  --selection: #d9775740;
+  --theme-kind: dark;
+  color-scheme: dark;
+}
+
+/* Ghostty palettes — Solarized and Catppuccin Mocha. Sauteed Paper and Warm
+   Editorial were retired into Clay on 2026-09-28 (owner).
+   Geometry stays on :root. Only colour roles move here, sampled from the
+   matching .ghostty files and lifted where WCAG AA needs a darker ink. */
+:root[data-theme="solarized-light"] {
+  --chrome-bg: #eee8d5;
+  --editor-bg: #fdf6e3;
+  --surface: #fdf6e3;
+  --surface-raised: #eee8d5;
+  --workbench-canvas: #fef8ea;
+  --workbench-panel: #fbf4e1;
+  --terminal-canvas: #fef8ea;
+  --terminal-content-bg: #fdf6e3;
+  --terminal-header-bg: #ebe4cf;
+  --terminal-header-border: #e2dac3;
+  --terminal-header-bg-focused: #e7e0c9;
+  --terminal-header-border-focused: #dbd2b8;
+  --terminal-tile-edge: #d6d6d6;
+  --terminal-focus-edge: #bab5a6;
+  --dropdown-bg: #fdf6e3;
+  --widget-bg: #fdf6e3;
+  --menu-bg: #fdf6e3;
+  --overlay-shadow-color: #0736421a;
+  --overlay-shadow-soft-color: #07364212;
+  /* The prompt surface: a soft lift instead of a drawn box. */
+  --composer-lift-color: #07364214;
+  --backdrop: #07364266;
+  --border: #ddd6c1;
+  --border-strong: #d3cbb4;
+  --selection-border: #18608a;
+  --row-hover: #eee8d5;
+  --row-selected: #e4dcc6;
+  --row-selected-blur: #eee8d5;
+  --tree-guide: #93a1a1;
+  --fg: #50646a;
+  --fg-strong: #073642;
+  --fg-muted: #4d6268;
+  --fg-dim: #4d6268;
+  --fg-selected-secondary: #4d6268;
+  --fg-faint: #93a1a1;
+  --accent: #18608a;
+  --accent-text: #18608a;
+  --selection-accent: var(--accent-text);
+  --accent-text-hover: #0d5a82;
+  --accent-fg: #fdf6e3;
+  --accent-hover: #0d5a82;
+  --focus: #18608a;
+  --focus-contrast: #fdf6e3;
+  --badge-bg: #18608a;
+  --badge-fg: #fdf6e3;
+  --status-working: #11645d;
+  --status-waiting: #765d00;
+  --status-idle: #6f7f7f;
+  --status-failed: #b01f1c;
+  --status-done: #1b6aa8;
+  --danger-fg: #b01f1c;
+  --danger-bg: #f4e0d6;
+  --diff-added: #596700;
+  --diff-removed: #b01f1c;
+  --diff-added-bg: #8599001a;
+  --diff-removed-bg: #dc322f1a;
+  --mode-plan: #185f8c;
+  --mode-accept: #56670c;
+  --mode-danger: #a01a5c;
+  --mode-auto: #4a4f9e;
+  --input-bg: #ffffffa8;
+  --input-fg: #073642;
+  --input-border: #d3cbb4;
+  --input-placeholder: #4d6268;
+  --scrollbar: #657b831c;
+  --scrollbar-active: #657b8338;
+  --selection: #18608a33;
+  --theme-kind: light;
+  color-scheme: light;
+}
+
+:root[data-theme="solarized-dark"] {
+  --chrome-bg: #073642;
+  --editor-bg: #002b36;
+  --surface: #073642;
+  --surface-raised: #073642;
+  --workbench-canvas: #002028;
+  --workbench-panel: #022d38;
+  --terminal-canvas: #002028;
+  --terminal-content-bg: #002731;
+  --terminal-header-bg: #0b3a45;
+  --terminal-header-border: #01212a;
+  --terminal-header-bg-focused: #10424d;
+  --terminal-header-border-focused: #011d25;
+  --terminal-tile-edge: #3b3b3b;
+  --terminal-focus-edge: #5c5f60;
+  --dropdown-bg: #073642;
+  --widget-bg: #073642;
+  --menu-bg: #073642;
+  --overlay-shadow-color: #00000066;
+  --overlay-shadow-soft-color: #00000066;
+  /* The prompt surface: a soft lift instead of a drawn box. */
+  --composer-lift-color: #00000040;
+  --backdrop: #00000099;
+  --border: #094352;
+  --border-strong: #0b5163;
+  --selection-border: #7ec8ef;
+  --row-hover: #09435299;
+  --row-selected: #094352;
+  --row-selected-blur: #073642;
+  --tree-guide: #586e75;
+  --fg: #9eabab;
+  --fg-strong: #eee8d5;
+  --fg-muted: #a5b4b4;
+  --fg-dim: #a5b4b4;
+  --fg-selected-secondary: #a5b4b4;
+  --fg-faint: #586e75;
+  --accent: #7ec8ef;
+  --accent-text: #7ec8ef;
+  --selection-accent: var(--accent-text);
+  --accent-text-hover: #9ad4f3;
+  --accent-fg: #002b36;
+  --accent-hover: #9ad4f3;
+  --focus: #7ec8ef;
+  --focus-contrast: #002b36;
+  --badge-bg: #7ec8ef;
+  --badge-fg: #002b36;
+  --status-working: #4cc2b4;
+  --status-waiting: #b7c94a;
+  --status-idle: #728d95;
+  --status-failed: #ff8480;
+  --status-done: #5aaef0;
+  --danger-fg: #ff8480;
+  --danger-bg: #3a1d20;
+  --diff-added: #b7c94a;
+  --diff-removed: #ff8480;
+  --diff-added-bg: #8599001a;
+  --diff-removed-bg: #dc322f1a;
+  --mode-plan: #7ec8ef;
+  --mode-accept: #b7c94a;
+  --mode-danger: #f593c4;
+  --mode-auto: #adb0f0;
+  --input-bg: #09435255;
+  --input-fg: #eee8d5;
+  --input-border: #0b5163;
+  --input-placeholder: #a5b4b4;
+  --scrollbar: #586e7555;
+  --scrollbar-active: #93a1a155;
+  --selection: #094352;
+  --theme-kind: dark;
+  color-scheme: dark;
+}
+
+:root[data-theme="catppuccin-mocha"] {
+  --chrome-bg: #181825;
+  --editor-bg: #1e1e2e;
+  --surface: #313244;
+  --surface-raised: #45475a;
+  --workbench-canvas: #161622;
+  --workbench-panel: #202030;
+  --terminal-canvas: #161622;
+  --terminal-content-bg: #1b1b29;
+  --terminal-header-bg: #272738;
+  --terminal-header-border: #2e2f40;
+  --terminal-header-bg-focused: #333446;
+  --terminal-header-border-focused: #3c3d50;
+  --terminal-tile-edge: #3d3d3d;
+  --terminal-focus-edge: #5a5a66;
+  --dropdown-bg: #313244;
+  --widget-bg: #313244;
+  --menu-bg: #313244;
+  --overlay-shadow-color: #11111b66;
+  --overlay-shadow-soft-color: #11111b66;
+  /* The prompt surface: a soft lift instead of a drawn box. */
+  --composer-lift-color: #11111b40;
+  --backdrop: #11111b99;
+  --border: #45475a;
+  --border-strong: #585b70;
+  --selection-border: #ceacf8;
+  --row-hover: #31324499;
+  --row-selected: #45475a;
+  --row-selected-blur: #313244;
+  --tree-guide: #585b70;
+  --fg: #cdd6f4;
+  --fg-strong: #cdd6f4;
+  --fg-muted: #bac2de;
+  --fg-dim: #bac2de;
+  --fg-selected-secondary: #bac2de;
+  --fg-faint: #6c7086;
+  --accent: #ceacf8;
+  --accent-text: #d0b4fa;
+  --selection-accent: var(--accent-text);
+  --accent-text-hover: #d4b8ff;
+  --accent-fg: #1e1e2e;
+  --accent-hover: #d0b4fa;
+  --focus: #ceacf8;
+  --focus-contrast: #1e1e2e;
+  --badge-bg: #ceacf8;
+  --badge-fg: #1e1e2e;
+  --status-working: #cca8f7;
+  --status-waiting: #f9e2af;
+  --status-idle: #9195a7;
+  --status-failed: #f59fb7;
+  --status-done: #89b4fa;
+  --danger-fg: #f59fb7;
+  --danger-bg: #3a1d28;
+  --diff-added: #a6e3a1;
+  --diff-removed: #f59fb7;
+  --diff-added-bg: #a6e3a11a;
+  --diff-removed-bg: #f59fb71a;
+  --mode-plan: #93baff;
+  --mode-accept: #a6e3a1;
+  --mode-danger: #f5a3b9;
+  --mode-auto: #d0adf9;
+  --input-bg: #45475a55;
+  --input-fg: #cdd6f4;
+  --input-border: #585b70;
+  --input-placeholder: #a6adc8;
+  --scrollbar: #585b7055;
+  --scrollbar-active: #6c708655;
+  --selection: #45475a;
+  --theme-kind: dark;
+  color-scheme: dark;
+}
+
+/* Carbon (the grok-build id; renamed 2026-09-28) — the Grok Build CLI's own
+   console, and since Nightshade's retirement the one Bare CLI palette.
+
+   Flat carbon: two near-black grounds (#0e0e0e canvas, #1a1a1a chrome), paper
+   type, and ember as the single hot accent. Materials follow the shared solid workspace surfaces.
+
+   The ember is lifted from the CLI's #e8611a to #f0761f, and that is not a
+   liberty: --accent is painted as TEXT (hunk headers, markdown links, the
+   steering glyph), so the shipped #e8611a reaches only 4.1:1 on the composited
+   selected row and is not legal here. The CLI's own gold, sage and slate blue
+   survive untouched. Failed is rose rather than the CLI's orange-red, which
+   read as a second working light (2026-09-28). */
+:root[data-theme="grok-build"] {
+  --chrome-bg: #1a1a1a;
+  --editor-bg: #0e0e0e;
+  --surface: #1a1a1a;
+  --surface-raised: #242424;
+  --workbench-canvas: #0a0a0a;
+  --workbench-panel: #101010;
+  --terminal-canvas: #0a0a0a;
+  --terminal-content-bg: #0d0d0d;
+  --terminal-header-bg: #1a1919;
+  --terminal-header-border: #232221;
+  --terminal-header-bg-focused: #2a2928;
+  --terminal-header-border-focused: #353432;
+  --terminal-tile-edge: #2d2d2d;
+  --terminal-focus-edge: #4a4a4a;
+  --dropdown-bg: #1a1a1a;
+  --widget-bg: #1a1a1a;
+  --menu-bg: #1a1a1a;
+  --overlay-shadow-color: #00000066;
+  --overlay-shadow-soft-color: #00000066;
+  /* The prompt surface: a soft lift instead of a drawn box. */
+  --composer-lift-color: #00000040;
+  --backdrop: #00000099;
+  --border: #282828;
+  --border-strong: #3a3a3a;
+  --selection-border: #f0761f;
+  --row-hover: #2a2a2a99;
+  --row-selected: #ffffff14;
+  --row-selected-blur: #242424;
+  --tree-guide: #5c6470;
+  --fg: #e8e2d6;
+  --fg-strong: #f5efe3;
+  --fg-muted: #b3ab9c;
+  --fg-dim: #a8a094;
+  --fg-selected-secondary: #a8a094;
+  --fg-faint: #6e6a60;
+  --accent: #f0761f;
+  --accent-text: #f9884a;
+  --selection-accent: var(--accent-text);
+  --accent-text-hover: #ffa06a;
+  --accent-fg: #0e0e0e;
+  --accent-hover: #ff8a3d;
+  --focus: #f0761f;
+  --focus-contrast: #0e0e0e;
+  --badge-bg: #f0761f;
+  --badge-fg: #0e0e0e;
+  --status-working: #f0761f;
+  --status-waiting: #f2c96b;
+  --status-idle: #8a857a;
+  --status-failed: #f2708f;
+  --status-done: #6ea8ff;
+  --danger-fg: #f0705c;
+  --danger-bg: #3a1a12;
+  --diff-added: #8aae8e;
+  --diff-removed: #f0705c;
+  --diff-added-bg: #8aae8e1a;
+  --diff-removed-bg: #f0705c1a;
+  --mode-plan: #4da6e0;
+  --mode-accept: #8fbd93;
+  --mode-danger: #ff7b6b;
+  --mode-auto: #b98ae6;
+  --input-bg: #24242455;
+  --input-fg: #f5efe3;
+  --input-border: #3a3a3a;
+  --input-placeholder: #a8a094;
+  --scrollbar: #4a4a4a55;
+  --scrollbar-active: #7a756a55;
+  --selection: #f0761f33;
+  --theme-kind: dark;
+  color-scheme: dark;
+}
+
+/* Navy (the hermes id) and Ice (hermes-light), renamed 2026-09-28: navy/cream
+   and ice/Klein palettes on the shared workspace design. */
+:root[data-theme="hermes"] {
+  --chrome-bg: #12276b;
+  --editor-bg: #142762;
+  --surface: #16244e;
+  --surface-raised: #1c3478;
+  --workbench-canvas: #0f1d4a;
+  --workbench-panel: #162963;
+  --terminal-canvas: #0f1d4a;
+  --terminal-content-bg: #122358;
+  --terminal-header-bg: #1f3168;
+  --terminal-header-border: #28396d;
+  --terminal-header-bg-focused: #2f3f71;
+  --terminal-header-border-focused: #3a4877;
+  --terminal-tile-edge: #4e4e4e;
+  --terminal-focus-edge: #7a7a86;
+  --dropdown-bg: #16244e;
+  --widget-bg: #16244e;
+  --menu-bg: #16244e;
+  --overlay-shadow-color: #0a143866;
+  --overlay-shadow-soft-color: #0a143866;
+  --composer-lift-color: #0a143840;
+  --backdrop: #0a1438b3;
+  --border: #ffffff1a;
+  --border-strong: #ffffff2e;
+  --selection-border: #d5c6ba;
+  --row-hover: #ffffff18;
+  --row-selected: #d5c6ba28;
+  --row-selected-blur: #ffffff14;
+  --tree-guide: #ffffff24;
+  --fg: #eddcc8;
+  --fg-strong: #f4ebe0;
+  --fg-muted: #d5c6ba;
+  --fg-dim: #c8b8b0;
+  --fg-selected-secondary: #c8b8b0;
+  --fg-faint: #8a8498;
+  --accent: #e9c46a;
+  --accent-text: #e9c46a;
+  --selection-accent: var(--accent-text);
+  --accent-text-hover: #f3d281;
+  --accent-fg: #12276b;
+  --accent-hover: #f3d281;
+  --focus: #d5c6ba;
+  --focus-contrast: #12276b;
+  --badge-bg: #d5c6ba;
+  --badge-fg: #12276b;
+  --status-working: #d5c6ba;
+  --status-waiting: #e8c07a;
+  --status-idle: #9aa0c8;
+  --status-failed: #f0a8b8;
+  --status-done: #9cc3ff;
+  --danger-fg: #f0a8b8;
+  --danger-bg: #3a1848;
+  --diff-added: #8fd9a8;
+  --diff-removed: #f0a8b8;
+  --diff-added-bg: #8fd9a81a;
+  --diff-removed-bg: #f0a8b81a;
+  --mode-plan: #9cc4ff;
+  --mode-accept: #8fd9a8;
+  --mode-danger: #f0a8b8;
+  --mode-auto: #d8b4f0;
+  --input-bg: #ffffff14;
+  --input-fg: #f4ebe0;
+  --input-border: #ffffff2e;
+  --input-placeholder: #c8b8b0;
+  --scrollbar: #ffffff22;
+  --scrollbar-active: #ffffff40;
+  --selection: #d5c6ba33;
+  --theme-kind: dark;
+  color-scheme: dark;
+}
+
+:root[data-theme="hermes-light"] {
+  --chrome-bg: #f4f7fe;
+  --editor-bg: #f8fafd;
+  --surface: #ffffff;
+  --surface-raised: #dce4f4;
+  --workbench-canvas: #fafbfe;
+  --workbench-panel: #f6f8fb;
+  --terminal-canvas: #fafbfe;
+  --terminal-content-bg: #fbfcfe;
+  --terminal-header-bg: #e6eaf3;
+  --terminal-header-border: #dce1ec;
+  --terminal-header-bg-focused: #dae0ee;
+  --terminal-header-border-focused: #ccd3e3;
+  --terminal-tile-edge: #dbdbdb;
+  --terminal-focus-edge: #b1b5bf;
+  --dropdown-bg: #ffffff;
+  --widget-bg: #ffffff;
+  --menu-bg: #ffffff;
+  --overlay-shadow-color: #12276b1a;
+  --overlay-shadow-soft-color: #12276b1a;
+  --composer-lift-color: #12276b1a;
+  --backdrop: #12276b66;
+  --border: #12276b1a;
+  --border-strong: #12276b2e;
+  --selection-border: #2451f2;
+  --row-hover: #e4eafd;
+  --row-selected: #dde5fd;
+  --row-selected-blur: #e8eef8;
+  --tree-guide: #12276b2e;
+  --fg: #242427;
+  --fg-strong: #1a1a1c;
+  --fg-muted: #3d3e43;
+  --fg-dim: #4a4b50;
+  --fg-selected-secondary: #4a4b50;
+  --fg-faint: #8a8b90;
+  --accent: #2451f2;
+  --accent-text: #1a3fd0;
+  --selection-accent: var(--accent-text);
+  --accent-text-hover: #1436b8;
+  --accent-fg: #f4f7fe;
+  --accent-hover: #1a3fd0;
+  --focus: #2451f2;
+  --focus-contrast: #f4f7fe;
+  --badge-bg: #2451f2;
+  --badge-fg: #f4f7fe;
+  --status-working: #a8490f;
+  --status-waiting: #7a5000;
+  --status-idle: #6e6e74;
+  --status-failed: #a01c44;
+  --status-done: #2451f2;
+  --danger-fg: #a01c44;
+  --danger-bg: #f0d0d8;
+  --diff-added: #1a5a34;
+  --diff-removed: #a01c44;
+  --diff-added-bg: #1a5a3414;
+  --diff-removed-bg: #a01c4414;
+  --mode-plan: #1a3fd0;
+  --mode-accept: #1a5a34;
+  --mode-danger: #a01c44;
+  --mode-auto: #5e2f94;
+  --input-bg: #ffffff;
+  --input-fg: #1a1a1c;
+  --input-border: #12276b2e;
+  --input-placeholder: #5a5b60;
+  --scrollbar: #12276b22;
+  --scrollbar-active: #12276b40;
+  --selection: #2451f233;
+  --theme-kind: light;
+  color-scheme: light;
+}
+/* Theme files (2026-10-02). A theme the user keeps in
+   ~/.config/interface/themes/<name>.css paints over one of these two blocks:
+   the renderer sets data-theme to custom-dark or custom-light from the file's
+   --theme-kind and adopts the file's CSS after every app stylesheet.
+
+   Every token here is worked out from eight key colours, so a file that sets
+   only the keys still colours the whole window; a file may also set any token
+   below (or any other CSS) directly. The keys default to Porcelain Night and
+   Porcelain. This whole token system sits in the interface-palette cascade
+   layer, so a plain :root rule in a theme file always wins over it. */
+:root[data-theme="custom-dark"],
+:root[data-theme="custom-light"] {
+  --chrome-bg: var(--theme-panel);
+  --editor-bg: var(--theme-background);
+  --surface: var(--theme-raised);
+  --surface-raised: color-mix(in oklab, var(--theme-raised), var(--theme-text) 6%);
+  --workbench-canvas: var(--theme-background);
+  --workbench-panel: color-mix(in oklab, var(--theme-panel), var(--theme-text) 2%);
+  --terminal-canvas: var(--theme-background);
+  --terminal-content-bg: var(--theme-screen);
+  --terminal-header-bg: color-mix(in oklab, var(--theme-panel), var(--theme-text) 4%);
+  --terminal-header-border: color-mix(in oklab, var(--theme-panel), var(--theme-text) 8%);
+  --terminal-header-bg-focused: color-mix(in oklab, var(--theme-panel), var(--theme-text) 8%);
+  --terminal-header-border-focused: color-mix(in oklab, var(--theme-panel), var(--theme-text) 14%);
+  /* Neutral grey at the mixed lightness (settled look: neutral tile edges). */
+  --terminal-tile-edge: oklch(from color-mix(in oklab, var(--theme-background), var(--theme-text) 12%) l 0 0);
+  --terminal-focus-edge: oklch(from color-mix(in oklab, var(--theme-background), var(--theme-text) 28%) l 0 0);
+  --terminal-fg: var(--theme-screen-text);
+  --terminal-fg-muted: color-mix(in oklab, var(--theme-screen-text), var(--theme-screen) 20%);
+  --terminal-fg-dim: color-mix(in oklab, var(--theme-screen-text), var(--theme-screen) 28%);
+  --terminal-fg-faint: color-mix(in oklab, var(--theme-screen-text), var(--theme-screen) 55%);
+  --terminal-border: color-mix(in srgb, var(--theme-screen-text) 8%, transparent);
+  --terminal-scrollbar: color-mix(in srgb, var(--theme-screen-text) 15%, transparent);
+  --terminal-scrollbar-active: color-mix(in srgb, var(--theme-screen-text) 28%, transparent);
+  --terminal-drop-bg: color-mix(in srgb, var(--theme-selection) 52%, transparent);
+  --dropdown-bg: var(--theme-raised);
+  --widget-bg: var(--theme-raised);
+  --menu-bg: var(--theme-raised);
+  --border: color-mix(in srgb, var(--theme-text) 9%, transparent);
+  --border-strong: color-mix(in oklab, var(--theme-background), var(--theme-text) 18%);
+  --selection-border: var(--theme-selection);
+  --row-hover: color-mix(in srgb, var(--theme-text) 5%, transparent);
+  --row-selected: color-mix(in srgb, var(--theme-text) 8%, transparent);
+  --row-selected-blur: color-mix(in srgb, var(--theme-text) 5%, transparent);
+  --sidebar-selected-fill: color-mix(in srgb, var(--theme-text) 9%, transparent);
+  --sidebar-selected-edge: color-mix(in srgb, var(--theme-text) 7%, transparent);
+  --sidebar-parent-fill: color-mix(in srgb, var(--theme-text) 5%, transparent);
+  --sidebar-parent-hover: color-mix(in srgb, var(--theme-text) 7%, transparent);
+  --tree-guide: color-mix(in srgb, var(--theme-text) 22%, transparent);
+  --fg: var(--theme-text);
+  --fg-muted: color-mix(in oklab, var(--theme-text), var(--theme-background) 16%);
+  --fg-dim: color-mix(in oklab, var(--theme-text), var(--theme-background) 24%);
+  --fg-selected-secondary: color-mix(in oklab, var(--theme-text), var(--theme-background) 20%);
+  --fg-faint: color-mix(in oklab, var(--theme-text), var(--theme-background) 52%);
+  --accent: var(--theme-accent);
+  --accent-text: var(--theme-accent);
+  --focus: var(--theme-selection);
+  --selection-accent: var(--theme-selection);
+  --badge-bg: var(--theme-selection);
+  --danger-bg: color-mix(in oklab, var(--theme-background), var(--danger-fg) 18%);
+  --input-fg: var(--fg-strong);
+  --input-border: var(--border-strong);
+  --input-placeholder: color-mix(in oklab, var(--theme-text), var(--theme-background) 36%);
+  --scrollbar: color-mix(in srgb, var(--theme-text) 18%, transparent);
+  --scrollbar-active: color-mix(in srgb, var(--theme-text) 30%, transparent);
+  --selection: color-mix(in srgb, var(--theme-selection) 24%, transparent);
+}
+
+/* The dark keys default to Porcelain Night. */
+:root[data-theme="custom-dark"] {
+  --theme-background: #0e0e0d;
+  --theme-panel: var(--theme-background);
+  --theme-raised: #1a1918;
+  --theme-text: #e4e2de;
+  --theme-accent: #edebe8;
+  --theme-selection: #8da8f0;
+  --theme-screen: #0a0a09;
+  --theme-screen-text: var(--theme-text);
+  --terminal-fg-strong: color-mix(in oklab, var(--theme-screen-text), #ffffff 45%);
+  --fg-strong: color-mix(in oklab, var(--theme-text), #ffffff 45%);
+  --accent-text-hover: color-mix(in oklab, var(--theme-accent), #ffffff 30%);
+  --accent-hover: color-mix(in oklab, var(--theme-accent), #ffffff 30%);
+  --accent-fg: var(--theme-background);
+  --focus-contrast: var(--theme-background);
+  --badge-fg: var(--theme-background);
+  --overlay-shadow-color: #00000080;
+  --overlay-shadow-soft-color: #00000066;
+  --composer-lift-color: #00000040;
+  --backdrop: #00000099;
+  --status-working: #ff8a4c;
+  --status-waiting: #efb14a;
+  --status-idle: #87847f;
+  --status-failed: #f2708f;
+  --status-done: #7aa7ff;
+  --danger-fg: #f2708f;
+  --diff-added: #a3be8c;
+  --diff-removed: #e6888f;
+  --diff-added-bg: #a3be8c1a;
+  --diff-removed-bg: #e6888f1a;
+  --mode-plan: #8ec2f0;
+  --mode-accept: #a8c98f;
+  --mode-danger: #f2708f;
+  --mode-auto: #c9a9f5;
+  --input-bg: color-mix(in srgb, var(--theme-text) 4%, transparent);
+  --terminal-color-scheme: dark;
+  --theme-kind: dark;
+  color-scheme: dark;
+}
+
+/* The light keys default to Porcelain's colours, with a light screen. */
+:root[data-theme="custom-light"] {
+  --theme-background: #f0f0ee;
+  --theme-panel: var(--theme-background);
+  --theme-raised: #ffffff;
+  --theme-text: #2a2b2e;
+  --theme-accent: #1d1e20;
+  --theme-selection: #3e63c9;
+  --theme-screen: #fbfbfa;
+  --theme-screen-text: var(--theme-text);
+  --terminal-fg-strong: color-mix(in oklab, var(--theme-screen-text), #000000 40%);
+  --fg-strong: color-mix(in oklab, var(--theme-text), #000000 40%);
+  --accent-text-hover: color-mix(in oklab, var(--theme-accent), #000000 25%);
+  --accent-hover: color-mix(in oklab, var(--theme-accent), #000000 25%);
+  --accent-fg: var(--theme-raised);
+  --focus-contrast: var(--theme-raised);
+  --badge-fg: var(--theme-raised);
+  --overlay-shadow-color: #1818141f;
+  --overlay-shadow-soft-color: #18181412;
+  --composer-lift-color: #18181414;
+  --backdrop: #1818144d;
+  --status-working: #ad4a16;
+  --status-waiting: #8a5a0e;
+  --status-idle: #808185;
+  --status-failed: #b4234d;
+  --status-done: #2f5fcf;
+  --danger-fg: #b4234d;
+  --diff-added: #206c3f;
+  --diff-removed: #b4234d;
+  --diff-added-bg: #206c3f14;
+  --diff-removed-bg: #b4234d14;
+  --mode-plan: #1f5aa6;
+  --mode-accept: #1c6539;
+  --mode-danger: #a8214a;
+  --mode-auto: #6b3fa0;
+  --input-bg: var(--theme-raised);
+  --terminal-color-scheme: light;
+  --theme-kind: light;
+  color-scheme: light;
+}
+}
+
+/* Empty-state structure is shared by every color theme. */
+.conv-hero-wordmark,
+.empty-wordmark { display: none; }
+.conv-hero-copy { margin: 0; }
+
+/* Before React mounts there is no data-theme attribute. Electron sets
+   nativeTheme before creating the window, so this media query is the exact
+   persisted resolution and prevents a light flash on dark launches. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --terminal-drop-bg: #3e63c985;
+    --chrome-bg: #0e0e0d;
+    --editor-bg: #0e0e0d;
+    --surface: #1a1918;
+    --surface-raised: #22211f;
+    --workbench-canvas: #0e0e0d;
+    --workbench-panel: #131312;
+    --terminal-canvas: #0e0e0d;
+    --terminal-content-bg: #0a0a09;
+    --terminal-header-bg: #151514;
+    --terminal-header-border: #1f1e1c;
+    --terminal-header-bg-focused: #1e1d1b;
+    --terminal-header-border-focused: #2a2927;
+    --terminal-tile-edge: #262626;
+    --terminal-focus-edge: #4d4b47;
+    --terminal-color-scheme: dark;
+    --dropdown-bg: #1a1918;
+    --widget-bg: #1a1918;
+    --menu-bg: #1a1918;
+    --overlay-shadow-color: #00000080;
+    --overlay-shadow-soft-color: #00000066;
+    /* The prompt surface: a soft lift instead of a drawn box. */
+    --composer-lift-color: #00000040;
+    --backdrop: #00000099;
+    --border: #ffffff14;
+    --border-strong: #2f2e2b;
+    --selection-border: #8da8f0;
+    --row-hover: #ffffff0a;
+    --row-selected: #ffffff12;
+    --row-selected-blur: #ffffff0a;
+    --sidebar-selected-fill: #ffffff14;
+    --sidebar-selected-edge: #ffffff0f;
+    --sidebar-parent-fill: #ffffff0d;
+    --sidebar-parent-hover: #e4e2de12;
+    --tree-guide: #ffffff33;
+    --fg: #e4e2de;
+    --fg-strong: #f5f3ef;
+    --fg-muted: #bdbab5;
+    --fg-dim: #a8a5a0;
+    --fg-selected-secondary: #b3b0ab;
+    --fg-faint: #6d6b68;
+    --accent: #edebe8;
+    --accent-text: #edebe8;
+    --accent-text-hover: #ffffff;
+    --accent-fg: #0e0e0d;
+    --accent-hover: #ffffff;
+    --focus: #8da8f0;
+    --focus-contrast: #0e0e0d;
+    --selection-accent: #8da8f0;
+    --badge-bg: #8da8f0;
+    --badge-fg: #0e0e0d;
+    --status-working: #ff8a4c;
+    --status-waiting: #efb14a;
+    --status-idle: #87847f;
+    --status-failed: #f2708f;
+    --status-done: #7aa7ff;
+    --danger-fg: #f2708f;
+    --danger-bg: #3a1d24;
+    --diff-added: #a3be8c;
+    --diff-removed: #e6888f;
+    --diff-added-bg: #a3be8c1a;
+    --diff-removed-bg: #e6888f1a;
+    --mode-plan: #8ec2f0;
+    --mode-accept: #a8c98f;
+    --mode-danger: #f2708f;
+    --mode-auto: #c9a9f5;
+    --input-bg: #ffffff0a;
+    --input-fg: #f5f3ef;
+    --input-border: #2f2e2b;
+    --input-placeholder: #9c9994;
+    --scrollbar: #6b686355;
+    --scrollbar-active: #7d7a745f;
+    --selection: #8da8f03d;
+    --theme-kind: dark;
+    color-scheme: dark;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --floating-opacity: 100%;
+    --floating-blur: 0px;
+    --floating-saturate: 100%;
+  }
+}
+
+/* ---- CLI chrome: the FORM axis ----------------------------------------
+   `data-theme` says what colour the app is; `data-chrome` says how BUILT it
+   looks. They are orthogonal and they compose — CLI form over Solarized Light
+   is a legal, intended combination, which is why this is not a twelfth
+   palette. The renderer writes the attribute from a localStorage preference
+   (`uiChrome`), the way it writes data-font; the main process is not involved
+   because nothing here changes the native window background.
+
+   Bare-bones means a terminal console. One monospace ramp, square corners, no
+   elevation and no frosted glass, so containment falls to the --border
+   hairlines the panes already draw instead of to fills that float.
+
+   NO COLOUR TOKEN IS TOUCHED, on purpose. theme-accessibility.test.ts measures
+   every text tier against eight row surfaces in all thirteen palettes, and a
+   form switch has no business moving a measured pair. The material fills are
+   not an exception: every palette already resolves them to its opaque
+   --chrome-bg and --surface grounds, which are in the harness's matrix, and
+   this form only takes the floating surfaces' translucency away.
+
+   There is deliberately NO [data-chrome="refined"] block. Refined is the
+   untouched cascade, so the default cannot drift when this one is edited.
+
+   Kept after the palettes so the independent style axis consistently applies
+   its density, typography and elevation choices over every color theme. */
+:root[data-chrome="cli"] {
+  /* The user's terminal face. MonoLisa is already installed on this Mac and is
+     referenced by family name only — the commercial files are not bundled.
+     Geist Mono stays the fallback so a machine without MonoLisa still has a
+     real mono ramp. The serif assistant-prose rule still outranks this. */
+  --font-ui: "MonoLisa", "MonoLisa-Regular", var(--font-mono);
+
+  /* Square, everywhere. --radius-none is already 0 and --radius-pill is the
+     capsule, so zeroing the five graded steps is what removes the softness;
+     every component that reads them follows. */
+  --radius-control: 0;
+  --radius-container: 0;
+  --radius-overlay: 0;
+  --radius-composer: 0;
+  --radius-pill: 0;
+
+  /* A terminal is denser than the shipped harness. These are geometry only:
+     colour tokens stay with the active palette. */
+  --pane-left: 200px;
+  --titlebar-h: 28px;
+  --row-h: 24px;
+  --section-header-h: 24px;
+  --control-h: 24px;
+  --strip-h: 22px;
+
+  /* No elevation. These are the app's only two lift tokens; the remaining
+     box-shadows are `inset` rings drawn as borders and stay. */
+  --overlay-shadow: none;
+  --composer-lift: none;
+
+  /* Console surfaces keep the shared opaque fills and omit elevation. */
+  --floating-opacity: 100%;
+  --floating-blur: 0px;
+  --floating-saturate: 100%;
+}
+
+/* Settings never inherits this form: App locks data-chrome back to refined
+   for the life of the page, so the product surface (and anything it portals)
+   keeps the shipped harness. */
+
+/* Conversation tiles become boxed consoles, the way a TUI frames each session
+   instead of floating a document on a page. */
+:root[data-chrome="cli"] .workspace-tile {
+  box-shadow: inset 0 0 0 var(--border-w) var(--border);
+}
+:root[data-chrome="cli"] .workspace-tile.is-selected {
+  box-shadow: inset 0 0 0 var(--border-w) var(--fg-faint);
+}
+:root[data-chrome="cli"] .workspace-grid.workspace-count-1 .workspace-tile,
+:root[data-chrome="cli"] .workspace-grid.workspace-count-1 .workspace-tile.is-selected {
+  box-shadow: inset 0 0 0 var(--border-w) var(--border);
+}
+/* No CLI override for the head's fill or the focused pane's name: the base
+   rules already paint the head --editor-bg, and focus is said in weight and in
+   the ring, not in the accent — the app's one hue stays spent on the approval
+   card. */
+
+/* Full-bleed session rows: a TUI highlight is a bar, not a floating pill. */
+:root[data-chrome="cli"] .session-list { padding-inline: 0; }
+/* The header lines up with the rows beneath it (owner, 2026-09-28). */
+:root[data-chrome="cli"] .sidebar-primary-nav { padding: 4px 12px 6px; }
+:root[data-chrome="cli"] .sidebar-nav-button { padding-inline: 10px; }
+:root[data-chrome="cli"] .workspace-toolbar {
+  --control-h: 24px;
+  border-bottom: var(--border-w) solid var(--border);
+}
+:root[data-chrome="cli"] .workspace-toolbar-btn,
+:root[data-chrome="cli"] .workspace-icon-btn,
+:root[data-chrome="cli"] .surface-switch,
+:root[data-chrome="cli"] .surface-switch-tab {
+  border-radius: 0;
+}
+:root[data-chrome="cli"] .statusbar {
+  background: var(--editor-bg);
+  font-family: var(--font-ui);
+}
+
+/* The transcript is a console, not a 720px essay. Local --conv-* vars live on
+   .conv; overriding them here is what lets every measure that already reads
+   them (column, working strip, composer, clocks) follow without restating. */
+:root[data-chrome="cli"] .conv {
+  --conv-measure: 100%;
+  --conv-gutter: 12px;
+  font-size: var(--text-h1);
+  letter-spacing: var(--track-h1);
+  line-height: 1.3;
+}
+:root[data-chrome="cli"] .conv-list { padding: 10px 12px; }
+:root[data-chrome="cli"] .conv-text,
+:root[data-chrome="cli"] .conv-markdown,
+:root[data-chrome="cli"] .conv-turn-user {
+  font-size: var(--text-h1);
+  font-weight: var(--wght-prose);
+  /* Display tracking is an optical-size stand-in for titles. On body copy it
+     packs the line and is the main reason CLI prose looks off next to Claude. */
+  letter-spacing: 0;
+  line-height: 1.5;
+}
+:root[data-chrome="cli"] .conv-ta,
+:root[data-chrome="cli"] .composer-ta {
+  font-size: var(--text-h1);
+  letter-spacing: var(--track-h1);
+  line-height: 1.3;
+}
+
+/* ---- The transcript's own voice, bare CLI only -------------------------
+   Claude Code prints a conversation as glyph-led lines: ● for what the agent
+   said and did, ⎿ for what came back, › for what you said. Everything below is
+   appearance over the markup the pane already emits — no component branches on
+   the chrome for any of it. */
+
+/* Assistant prose: one bullet, drawn in the margin the block reserves for it.
+   Not a hanging indent — .conv-text's only child is the BLOCK .conv-markdown,
+   which would wrap an inline ::before in an anonymous block and drop the glyph
+   onto a line of its own, and text-indent INHERITS, so -1.1em would re-apply to
+   the first line of every paragraph, list item, heading and quote in the
+   markdown. Out of flow, the glyph touches neither. */
+:root[data-chrome="cli"] .conv-text {
+  position: relative;
+  padding-left: 1.1em;
+}
+:root[data-chrome="cli"] .conv-text::before {
+  content: "●";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--fg-strong);
+}
+
+/* The user's turn: a full-measure band, not a chat bubble. --row-selected is
+   already a low-alpha wash in every palette; half of it is a tint you read
+   through. The shipped turn's 1px box goes with the bubble — a band is read by
+   its fill, and an outlined full-width strip reads as a form field.
+   .conv-turn-who stays sr-only, which is where it already was. */
+:root[data-chrome="cli"] .conv-turn-user {
+  width: 100%;
+  max-width: none;
+  padding: 2px 6px;
+  background: color-mix(in srgb, var(--row-selected) 50%, transparent);
+  border: 0;
+  border-radius: 3px;
+}
+/* The caret marks the WORDS, not the turn. .conv-turn-head — the "You" row with
+   its delta chip and Undo control — is the turn's first child, and the attached
+   images come after it, so a ::before on .conv-turn-user draws above both
+   instead of beside the message. .conv-turn-text is an inline span in the
+   markup and inherits everything; display:block is what gives the hanging
+   indent a line box to hang from. */
+:root[data-chrome="cli"] .conv-turn-user .conv-turn-text {
+  display: block;
+  padding-left: 1.1em;
+  text-indent: -1.1em;
+}
+:root[data-chrome="cli"] .conv-turn-user .conv-turn-text::before {
+  content: "› ";
+  color: var(--accent-text);
+}
+
+/* Tool rows: the codicon goes, a state-coloured bullet takes its place, and the
+   summary drops to a second ⎿ line. flex-wrap + flex-basis:100% is what makes
+   one flex row into two without a second element. A run summary takes the same
+   treatment, and so does every diff row's bullet — three shapes wear
+   .conv-diffrow and all three are rows in a transcript, not cards.
+
+   Only the FILE diff row takes the second line. A file-change row is a tool row
+   that happens to name a path, so it reads as one: bullet, verb, stat on line 1
+   and the path on its own ⎿ line, rather than `[icon] Updating ⎿ path` run
+   together across a single row. The other two diff rows carry no .conv-name, so
+   wrapping their summary onto line 2 left line 1 holding nothing but the
+   bullet. */
+:root[data-chrome="cli"] .conv-tool-row .conv-kind,
+:root[data-chrome="cli"] .conv-tool-run-summary .conv-kind,
+:root[data-chrome="cli"] .conv-diffrow .conv-kind { display: none; }
+:root[data-chrome="cli"] .conv-tool-row,
+:root[data-chrome="cli"] .conv-tool-run-summary,
+:root[data-chrome="cli"] .conv-diffrow.conv-filerow {
+  flex-wrap: wrap;
+  /* Wrapping alone would draw the second line and then lose it: .conv-row is
+     height:var(--row-h) in Conversation.tsx, and .conv-card clips what overruns
+     it. The row keeps that height as its FLOOR and grows past it instead.
+     align-items stays whatever .conv-row set — centre — because flex alignment
+     is per LINE, and most of these rows never wrap at all. */
+  height: auto;
+  min-height: var(--row-h);
+}
+:root[data-chrome="cli"] .conv-tool-row::before,
+:root[data-chrome="cli"] .conv-tool-run-summary::before,
+:root[data-chrome="cli"] .conv-diffrow::before {
+  content: "●";
+  flex: none;
+  color: var(--diff-added);
+}
+:root[data-chrome="cli"] .conv-tool-card:has(.conv-state-run) .conv-tool-row::before {
+  color: var(--status-working);
+}
+:root[data-chrome="cli"] .conv-tool-card:has(.conv-state-fail) .conv-tool-row::before {
+  color: var(--status-failed);
+}
+/* order:1 sends the summary to the END of the flex order, so it is the item
+   that wraps. Without it a full-basis item in the middle of the row takes line
+   two by itself and pushes the state and the chevron onto a line THREE. */
+:root[data-chrome="cli"] .conv-tool-row .conv-sum,
+:root[data-chrome="cli"] .conv-tool-run-summary .conv-sum,
+:root[data-chrome="cli"] .conv-diffrow.conv-filerow .conv-sum {
+  flex-basis: 100%;
+  order: 1;
+  padding-left: 1.1em;
+  color: var(--fg-muted);
+}
+:root[data-chrome="cli"] .conv-tool-row .conv-sum::before,
+:root[data-chrome="cli"] .conv-tool-run-summary .conv-sum::before,
+:root[data-chrome="cli"] .conv-diffrow.conv-filerow .conv-sum::before {
+  content: "⎿ ";
+  color: var(--fg-faint);
+}
+/* The first call's own result, drawn only here. Refined chrome keeps the folded
+   line to one sentence; the CLI transcript is the surface where a run has to be
+   readable without opening it. */
+:root[data-chrome="cli"] .conv-run-result {
+  display: block;
+}
+/* The bullet is the row's state, not a fixed green: an edit still running, or
+   one that failed outright, was drawn in --diff-added — the one colour on this
+   row that means it landed. Read exactly as the tool rows' bullet above. */
+:root[data-chrome="cli"] .conv-diffrow:has(.conv-state-run)::before {
+  color: var(--status-working);
+}
+:root[data-chrome="cli"] .conv-diffrow:has(.conv-state-fail)::before {
+  color: var(--status-failed);
+}
+/* The row navigates, so it keeps the pointer affordance refined chrome gives
+   it. Ties with the .conv-filerow rule above on specificity and wins on source
+   order, which is why it is written here and not before it. */
+:root[data-chrome="cli"] .conv-diffrow:hover .conv-sum {
+  color: var(--accent);
+}
+:root[data-chrome="cli"] .conv-diffrow:focus-visible .conv-sum {
+  color: var(--accent);
+}
+
+/* The session's opening card. Only CLI mounts it, and only CLI styles it. */
+:root[data-chrome="cli"] .conv-welcome {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0 0 16px;
+  color: var(--fg-muted);
+}
+:root[data-chrome="cli"] .conv-welcome-mark { width: 28px; height: 28px; margin-bottom: 6px; }
+:root[data-chrome="cli"] .conv-welcome-title {
+  color: var(--fg-strong);
+  font-weight: var(--wght-strong);
+}
+:root[data-chrome="cli"] .conv-welcome-detail { color: var(--fg-dim); }
+:root[data-chrome="cli"] .conv-welcome-path { color: var(--fg-faint); }
+
+/* ✻ Working… — the mark is the provider's own, already breathing. The clock
+   lives inside this line here, and it reticks every second: tabular figures are
+   what stop the sentence twitching a pixel wider on the way from 8s to 9s. */
+:root[data-chrome="cli"] .conv-working { color: var(--fg-muted); }
+:root[data-chrome="cli"] .conv-working-label {
+  color: var(--fg-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ● Turn finished — the settled counterpart, left-aligned under the last row.
+   The row is a flex line, so the bullet is a flex ITEM and a trailing space in
+   its content would be trimmed away; the gap is what separates them. */
+:root[data-chrome="cli"] .conv-turn-clock {
+  justify-content: flex-start;
+  gap: 4px;
+  color: var(--fg-dim);
+}
+:root[data-chrome="cli"] .conv-turn-clock::before {
+  content: "●";
+  color: var(--diff-added);
+}
+
+/* ✗ a failure, ON ONE LINE: the mark, then the engine's own sentence beside it.
+   .conv-notice is already a flex row, so the ::before is simply its first item
+   and the row's own gap spaces them — no display:block anywhere, which would
+   have wrapped the mark in an anonymous block and stranded a bare ✗ on a line
+   of its own. The exit code, the elapsed time and the Restart/View-log actions
+   the design asks for do not exist anywhere in the app — nothing reports them —
+   so this is the shape without the facts, rather than invented facts in the
+   right shape. */
+:root[data-chrome="cli"] .conv-notice-fail { color: var(--status-failed); }
+:root[data-chrome="cli"] .conv-notice-fail .codicon { display: none; }
+:root[data-chrome="cli"] .conv-notice-fail::before { content: "✗"; }
+:root[data-chrome="cli"] .conv-notice-fail > span { color: var(--fg-muted); }
+
+/* The one card that is still a card: something is blocked on you. Only the
+   CORNER is CLI's own. The amber border a blocking card wears is already
+   .conv-approval-pending's, in the pane's own stylesheet, and it is scoped to
+   the pending state on purpose — re-declaring --status-waiting for every
+   .conv-approval here would put the app's blocked-on-you hue on a card that has
+   already been answered, which is the one thing the amber rule forbids. */
+:root[data-chrome="cli"] .conv-approval { border-radius: 3px; }
+:root[data-chrome="cli"] .conv-approval .conv-name { font-weight: var(--wght-strong); }
+:root[data-chrome="cli"] .conv-approval .conv-pre { padding-left: 1.1em; }
+
+/* A TILED transcript is 13px; the single pane keeps the 19px set above. The
+   count includes the Files tile, which is right: anything beside the pane makes
+   it a tile. The size is named rather than typed: --text-body IS 13px, and a
+   literal px font-size in the file that declares the ramp is the drift
+   theme-accessibility.test.ts refuses. */
+:root[data-chrome="cli"] .workspace-grid:not(.workspace-count-1) .conv {
+  font-size: var(--text-body);
+  line-height: 1.5;
+}
+:root[data-chrome="cli"] .workspace-grid:not(.workspace-count-1) .conv-text,
+:root[data-chrome="cli"] .workspace-grid:not(.workspace-count-1) .conv-markdown,
+:root[data-chrome="cli"] .workspace-grid:not(.workspace-count-1) .conv-turn-user,
+:root[data-chrome="cli"] .workspace-grid:not(.workspace-count-1) .conv-ta {
+  font-size: var(--text-body);
+  line-height: 1.5;
+}
+
+/* Prompt as Claude Code draws it: two hairlines, `>`, block caret. */
+:root[data-chrome="cli"] .conv-composer {
+  width: calc(100% - 2 * var(--conv-gutter));
+  margin: 0 auto;
+  background: transparent;
+  box-shadow: none;
+  border: 0;
+  border-radius: 0;
+}
+:root[data-chrome="cli"] .conv-ta-row {
+  display: grid;
+  grid-template-columns: 1.2ch minmax(0, 1fr);
+  align-items: start;
+  column-gap: 8px;
+  padding: 4px 12px;
+  border-top: var(--border-w) solid var(--border);
+  border-bottom: var(--border-w) solid var(--border);
+}
+/* The prompt rule: two hairlines and a caret, the accent only on the pane that
+   has focus — four glowing carets is four claims of "type here". */
+:root[data-chrome="cli"] .conv-prompt-mark {
+  display: block;
+  padding-top: 4px;
+  color: var(--fg-faint);
+  font-family: var(--font-ui);
+  font-size: var(--text-h1);
+  letter-spacing: var(--track-h1);
+  line-height: 1.3;
+  user-select: none;
+}
+:root[data-chrome="cli"] .workspace-tile.is-selected .conv-prompt-mark {
+  color: var(--accent-text);
+}
+:root[data-chrome="cli"] .conv-ta {
+  min-height: 1.3em;
+  padding: 4px 4px 4px 0;
+  color: var(--fg-strong);
+  font-size: var(--text-h1);
+  letter-spacing: var(--track-h1);
+  line-height: 1.3;
+  caret-color: var(--focus);
+  caret-shape: block;
+}
+:root[data-chrome="cli"] .composer-ta {
+  caret-color: var(--focus);
+  caret-shape: block;
+}
+/* The one corner no radius token can express: Send is a disc, and 50% is a
+   shape rather than a size. It is the last survivor of a by-name escape list
+   that zeroed five literal radii here — a second place to remember, which had
+   already gone stale on .quick-open-match after Quick Open was deleted. The
+   queue capsule, the code chip and the monogram tile read --radius-pill and
+   --radius-control now, and the block above zeroes both. The genuinely circular
+   things — status dots, the effort knob, the provider health dot — stay round,
+   because a terminal draws ● as a circle too. */
+:root[data-chrome="cli"] .conv-send {
+  color: var(--fg-dim);
+  background: transparent;
+  border-radius: 0;
+}
+:root[data-chrome="cli"] .conv-send:hover:not(:disabled) {
+  color: var(--fg-strong);
+  background: transparent;
+}
+:root[data-chrome="cli"] .conv-send-queue {
+  width: auto;
+  height: auto;
+  padding: 0;
+  font-size: var(--text-h1);
+  line-height: 1.3;
+  text-transform: lowercase;
+}
+:root[data-chrome="cli"] .conv-send-queue .codicon { display: none; }
+:root[data-chrome="cli"] .composer-box {
+  background: transparent;
+}
+
+/* Slash command autofill as a TUI list: `>` on the active row, `/name`
+   then dim description, no dropdown card or "↑↓ Select" chrome. The caret
+   lives on the option button, which is full-width — not a shrinkable picker. */
+:root[data-chrome="cli"] .provider-command-menu {
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  padding: 8px 0 10px;
+  background: var(--editor-bg);
+  border: 0;
+  box-shadow: none;
+  animation: none;
+  font-size: var(--text-h1);
+  letter-spacing: var(--track-h1);
+  line-height: 1.45;
+}
+:root[data-chrome="cli"] .provider-command-menu.is-inline {
+  margin: 0;
+  max-height: min(36vh, 16em);
+}
+:root[data-chrome="cli"] .provider-command-menu-head { display: none; }
+:root[data-chrome="cli"] .provider-command-option {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  min-height: 1.8em;
+  padding: 5px 12px;
+  border-radius: 0;
+  font-size: inherit;
+  line-height: inherit;
+  background: transparent;
+  transition: none;
+}
+:root[data-chrome="cli"] .provider-command-option::before {
+  content: " ";
+  flex: none;
+  width: 1.2ch;
+  color: var(--fg-muted);
+  white-space: pre;
+}
+:root[data-chrome="cli"] .provider-command-option.is-active::before {
+  content: ">";
+  color: var(--fg-strong);
+}
+:root[data-chrome="cli"] .provider-command-option:hover,
+:root[data-chrome="cli"] .provider-command-option.is-active {
+  color: var(--fg-strong);
+  background: transparent;
+}
+:root[data-chrome="cli"] .provider-command-name {
+  flex: none;
+  min-width: 14ch;
+  overflow: visible;
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--accent-text);
+}
+:root[data-chrome="cli"] .provider-command-option.is-active .provider-command-name {
+  color: var(--accent-text);
+}
+:root[data-chrome="cli"] .provider-command-argument { color: var(--fg-dim); }
+:root[data-chrome="cli"] .provider-command-description {
+  flex: 1 1 auto;
+  display: block;
+  overflow: hidden;
+  color: var(--fg-dim);
+  font-size: inherit;
+  line-height: inherit;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: unset;
+}
+:root[data-chrome="cli"] .provider-command-empty {
+  margin: 0;
+  padding: 1px 12px;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* Claude Code text bar under the prompt: `model · plan · effort · fast` with
+   the meter pushed right, then a hint line, as dim selectable words. Icons,
+   chevrons, and hover fills stay off these lines. Do not attach `content` to
+   `.conv-pills` children — those roots are inline-flex pickers with
+   min-width:0, and a generated pipe collapses the trigger. */
+:root[data-chrome="cli"] .conv-controls {
+  min-height: 1.6em;
+  padding: 6px 12px 10px;
+  gap: 0;
+  font-size: var(--text-h1);
+  letter-spacing: var(--track-h1);
+  line-height: 1.3;
+}
+:root[data-chrome="cli"] .conv-controls > .conv-iconbtn,
+:root[data-chrome="cli"] .conv-controls > .prompt-context,
+:root[data-chrome="cli"] .conv-actions .conv-iconbtn:not(.conv-send-queue) {
+  display: none;
+}
+:root[data-chrome="cli"] .conv-pills {
+  gap: 2px;
+  flex: 1 1 auto;
+  min-width: 0;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  font-family: var(--font-mono);
+}
+/* `flex` above and `align-self` here are what give the meter's margin-left:auto
+   something to push against: without them the pills column and each line in it
+   are shrink-to-fit, and "far right" is the right edge of the longest line. */
+:root[data-chrome="cli"] .conv-session-line {
+  display: flex;
+  align-self: stretch;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  flex-wrap: nowrap;
+  color: var(--fg-dim);
+}
+:root[data-chrome="cli"] .conv-session-model {
+  display: inline-flex;
+  align-items: baseline;
+  color: var(--fg);
+  font-weight: var(--wght-medium);
+}
+:root[data-chrome="cli"] .conv-session-star {
+  margin-right: 0.35em;
+  color: var(--working-spark, var(--fg-dim));
+}
+:root[data-chrome="cli"] .conv-session-plan { color: var(--fg-dim); }
+:root[data-chrome="cli"] .conv-session-line .conv-context-meter { margin-left: auto; }
+:root[data-chrome="cli"] .conv-session-tokens:not(.is-high):not(.is-compacting) {
+  color: var(--fg-faint);
+}
+:root[data-chrome="cli"] .conv-session-hints { color: var(--fg-faint); }
+/* No .conv-pill-sep rule: CLI's session lines are built from their own parts
+   and the `·` separators are never emitted in this chrome (ConfigPills returns
+   before `parts` is used), so styling them was styling nothing. */
+:root[data-chrome="cli"] .conv-config-select {
+  flex-shrink: 0;
+  min-width: max-content;
+  max-width: none;
+}
+:root[data-chrome="cli"] .conv-config-select .app-select-trigger,
+:root[data-chrome="cli"] .effort-picker .app-select-trigger,
+:root[data-chrome="cli"] .conv-fastmode-toggle {
+  width: auto;
+  height: auto;
+  max-width: none;
+  padding: 0;
+  color: var(--fg-dim);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  font-size: inherit;
+  line-height: inherit;
+}
+:root[data-chrome="cli"] .effort-picker .app-select-trigger {
+  text-transform: lowercase;
+}
+:root[data-chrome="cli"] .conv-model-select .app-select-trigger {
+  text-transform: none;
+}
+:root[data-chrome="cli"] .conv-model-select .app-select-value {
+  text-transform: none;
+}
+:root[data-chrome="cli"] .conv-config-select .app-select-trigger:hover:not(:disabled),
+:root[data-chrome="cli"] .conv-config-select .app-select-trigger[aria-expanded="true"],
+:root[data-chrome="cli"] .effort-picker .app-select-trigger:hover:not(:disabled),
+:root[data-chrome="cli"] .effort-picker .app-select-trigger[aria-expanded="true"],
+:root[data-chrome="cli"] .conv-fastmode-toggle:hover:not(:disabled) {
+  color: var(--fg);
+  background: transparent;
+}
+:root[data-chrome="cli"] .conv-config-select .app-select-value,
+:root[data-chrome="cli"] .effort-picker .app-select-value {
+  max-width: none;
+  overflow: visible;
+  color: inherit;
+  font-size: inherit;
+}
+:root[data-chrome="cli"] .conv-config-select .app-select-chevron,
+:root[data-chrome="cli"] .effort-picker .app-select-chevron {
+  display: none;
+}
+:root[data-chrome="cli"] .effort-value-stack { display: inline; }
+:root[data-chrome="cli"] .effort-value-ghost { display: none; }
+:root[data-chrome="cli"] .conv-effort-select .app-select-value {
+  text-transform: lowercase;
+}
+:root[data-chrome="cli"] .conv-fastmode-toggle.is-on {
+  color: var(--accent-text);
+  background: transparent;
+  border: 0;
+}
+:root[data-chrome="cli"] .effort-popover-ends,
+:root[data-chrome="cli"] .effort-popover-head,
+:root[data-chrome="cli"] .effort-track-shell { display: none; }
+:root[data-chrome="cli"] .effort-cli-ladder {
+  display: flex;
+  flex-direction: column;
+  min-width: 12ch;
+  padding: 2px 0;
+}
+:root[data-chrome="cli"] .effort-cli-opt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 1.3em;
+  padding: 1px 10px;
+  color: var(--fg);
+  text-align: left;
+  font: inherit;
+  font-size: var(--text-ui);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+:root[data-chrome="cli"] .effort-cli-opt::before {
+  content: " ";
+  flex: none;
+  width: 1.2ch;
+  color: var(--fg-muted);
+}
+:root[data-chrome="cli"] .effort-cli-opt.is-current { color: var(--fg-strong); }
+:root[data-chrome="cli"] .effort-cli-opt.is-current::before { content: ">"; }
+:root[data-chrome="cli"] .effort-cli-opt:hover,
+:root[data-chrome="cli"] .effort-cli-opt:focus-visible {
+  color: var(--fg-strong);
+  background: var(--row-hover);
+}
+:root[data-chrome="cli"] .effort-popover {
+  min-width: 0;
+  padding: 4px 0;
+  box-shadow: none;
+}
+
+/* Highest effort: the word stays accent-colored while the level is selected.
+   The moving glyph and prompt hairlines play only during the one-shot
+   `.effort-picker-celebrate` window after the user activates that rung. */
+@keyframes effort-cli-hue {
+  to { filter: hue-rotate(360deg); }
+}
+:root[data-chrome="cli"] .effort-picker-maximum .effort-value-current {
+  color: var(--working-spark, var(--accent-text));
+}
+:root[data-chrome="cli"] [data-provider="grok"] .effort-picker-xhigh .effort-value-current {
+  color: var(--accent-text);
+}
+:root[data-chrome="cli"] .effort-popover.is-maximum .effort-cli-opt.is-current {
+  color: var(--working-spark, var(--accent-text));
+}
+:root[data-chrome="cli"] .effort-popover.is-xhigh .effort-cli-opt.is-current {
+  color: var(--accent-text);
+}
+:root[data-chrome="cli"] .effort-picker-celebrate.effort-picker-maximum .effort-value-current {
+  animation: effort-cli-hue 2.4s linear 1;
+}
+:root[data-chrome="cli"] .effort-picker-celebrate.effort-picker-maximum .effort-value-current::before {
+  content: "✶";
+  display: inline-block;
+  width: 1.2ch;
+  margin-right: 0.35ch;
+  color: inherit;
+  animation: cli-glyph 1.2s linear 2;
+}
+
+/* Top-tier effort lights the prompt rules: Claude rainbows the two hairlines,
+   Codex pulses them purple. Drawn as overlay lines so the caret and draft
+   do not hue-shift with the border. */
+@keyframes effort-cli-bar {
+  to { background-position: 200% 0; }
+}
+@keyframes effort-cli-pulse {
+  0%, 100% { opacity: 0.28; }
+  50% { opacity: 1; }
+}
+:root[data-chrome="cli"] .conv-composer:has(.effort-picker-celebrate.effort-picker-maximum) .conv-ta-row,
+:root[data-chrome="cli"] .composer-box:has(.effort-picker-celebrate.effort-picker-maximum) {
+  position: relative;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
+:root[data-chrome="cli"] .composer-box:has(.effort-picker-celebrate.effort-picker-maximum) {
+  border-right-color: transparent;
+  border-left-color: transparent;
+}
+:root[data-chrome="cli"] .conv-composer:has(.effort-picker-celebrate.effort-picker-maximum) .conv-ta-row::before,
+:root[data-chrome="cli"] .conv-composer:has(.effort-picker-celebrate.effort-picker-maximum) .conv-ta-row::after,
+:root[data-chrome="cli"] .composer-box:has(.effort-picker-celebrate.effort-picker-maximum)::before,
+:root[data-chrome="cli"] .composer-box:has(.effort-picker-celebrate.effort-picker-maximum)::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: var(--border-w);
+  pointer-events: none;
+  z-index: 1;
+}
+:root[data-chrome="cli"] .conv-composer:has(.effort-picker-celebrate.effort-picker-maximum) .conv-ta-row::before,
+:root[data-chrome="cli"] .composer-box:has(.effort-picker-celebrate.effort-picker-maximum)::before { top: 0; }
+:root[data-chrome="cli"] .conv-composer:has(.effort-picker-celebrate.effort-picker-maximum) .conv-ta-row::after,
+:root[data-chrome="cli"] .composer-box:has(.effort-picker-celebrate.effort-picker-maximum)::after { bottom: 0; }
+:root[data-chrome="cli"] .conv:not([data-provider="codex"]) .conv-composer:has(.effort-picker-celebrate.effort-picker-maximum) .conv-ta-row::before,
+:root[data-chrome="cli"] .conv:not([data-provider="codex"]) .conv-composer:has(.effort-picker-celebrate.effort-picker-maximum) .conv-ta-row::after,
+:root[data-chrome="cli"] .composer-box:not([data-provider="codex"]):has(.effort-picker-celebrate.effort-picker-maximum)::before,
+:root[data-chrome="cli"] .composer-box:not([data-provider="codex"]):has(.effort-picker-celebrate.effort-picker-maximum)::after {
+  background: linear-gradient(90deg,
+    var(--working-spark, var(--accent-text)),
+    var(--mode-plan),
+    var(--mode-accept),
+    var(--mode-auto),
+    var(--working-spark, var(--accent-text)));
+  background-size: 200% 100%;
+  animation: effort-cli-bar 2.2s linear 1;
+}
+:root[data-chrome="cli"] .conv[data-provider="codex"] .conv-composer:has(.effort-picker-celebrate.effort-picker-maximum) .conv-ta-row::before,
+:root[data-chrome="cli"] .conv[data-provider="codex"] .conv-composer:has(.effort-picker-celebrate.effort-picker-maximum) .conv-ta-row::after,
+:root[data-chrome="cli"] .composer-box[data-provider="codex"]:has(.effort-picker-celebrate.effort-picker-maximum)::before,
+:root[data-chrome="cli"] .composer-box[data-provider="codex"]:has(.effort-picker-celebrate.effort-picker-maximum)::after {
+  background: var(--mode-auto);
+  animation: effort-cli-pulse 1.6s ease-in-out 1;
+}
+
+/* Grok xhigh: an accretion disk, not a rainbow and not a purple pulse.
+   The two prompt rules are the disk seen edge-on — cool ember rim, a white-hot
+   inner ring, a dark core — and they orbit opposite ways. The word mark is
+   the disk face-on, collapsing into the hole and opening again. */
+@keyframes effort-cli-disk {
+  to { background-position: 200% 0; }
+}
+@keyframes cli-glyph-grok-effort {
+  0%, 16% { content: "○"; }
+  17%, 33% { content: "◎"; }
+  34%, 50% { content: "◉"; }
+  51%, 67% { content: "●"; }
+  68%, 84% { content: "◉"; }
+  85%, 100% { content: "◎"; }
+}
+:root[data-chrome="cli"] [data-provider="grok"] .effort-picker-celebrate.effort-picker-xhigh .effort-value-current::before {
+  content: "◉";
+  display: inline-block;
+  width: 1.2ch;
+  margin-right: 0.35ch;
+  color: var(--accent-text);
+  animation: cli-glyph-grok-effort 1.6s linear 1;
+}
+:root[data-chrome="cli"] [data-provider="grok"] .conv-composer:has(.effort-picker-celebrate.effort-picker-xhigh) .conv-ta-row,
+:root[data-chrome="cli"] .composer-box[data-provider="grok"]:has(.effort-picker-celebrate.effort-picker-xhigh) {
+  position: relative;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
+:root[data-chrome="cli"] .composer-box[data-provider="grok"]:has(.effort-picker-celebrate.effort-picker-xhigh) {
+  border-right-color: transparent;
+  border-left-color: transparent;
+}
+:root[data-chrome="cli"] [data-provider="grok"] .conv-composer:has(.effort-picker-celebrate.effort-picker-xhigh) .conv-ta-row::before,
+:root[data-chrome="cli"] [data-provider="grok"] .conv-composer:has(.effort-picker-celebrate.effort-picker-xhigh) .conv-ta-row::after,
+:root[data-chrome="cli"] .composer-box[data-provider="grok"]:has(.effort-picker-celebrate.effort-picker-xhigh)::before,
+:root[data-chrome="cli"] .composer-box[data-provider="grok"]:has(.effort-picker-celebrate.effort-picker-xhigh)::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  pointer-events: none;
+  z-index: 1;
+  /* Cool rim → hot inner → event horizon → hot inner → cool rim.
+     The approaching lobe is brighter (fg-strong); the receding lobe stays ember. */
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--accent-text) 18%,
+    var(--fg-strong) 36%,
+    var(--editor-bg) 50%,
+    var(--accent-text) 64%,
+    var(--accent) 82%,
+    transparent 100%);
+  background-size: 220% 100%;
+  box-shadow: 0 0 8px color-mix(in srgb, var(--accent-text) 55%, transparent);
+  animation: effort-cli-disk 2.2s linear 1;
+}
+:root[data-chrome="cli"] [data-provider="grok"] .conv-composer:has(.effort-picker-celebrate.effort-picker-xhigh) .conv-ta-row::before,
+:root[data-chrome="cli"] .composer-box[data-provider="grok"]:has(.effort-picker-celebrate.effort-picker-xhigh)::before { top: 0; }
+:root[data-chrome="cli"] [data-provider="grok"] .conv-composer:has(.effort-picker-celebrate.effort-picker-xhigh) .conv-ta-row::after,
+:root[data-chrome="cli"] .composer-box[data-provider="grok"]:has(.effort-picker-celebrate.effort-picker-xhigh)::after {
+  bottom: 0;
+  animation-direction: reverse;
+}
+:root[data-chrome="cli"] .conv-config-select .app-select-value {
+  max-width: none;
+  overflow: visible;
+}
+/* The mark is the provider; the value is the model. A 16px logo with a
+   collapsed name reads as "no model". CLI shows the name, like the TUI. */
+:root[data-chrome="cli"] .conv-model-select .app-select-leading { display: none; }
+/* No :root[data-chrome="cli"] .conv-iconbtn size override: it shrank the
+   transcript's icon buttons to 20px, under WCAG 2.5.8's 24px floor that this
+   sheet cites at the pane controls. The GLYPH tightens in CLI chrome; the
+   TARGET does not, and a chrome preference is not a reason to shrink a hit
+   target. Conversation.tsx's base rule already draws them at exactly 24px, so
+   removing the override IS the fix — do not restate it here. */
+:root[data-chrome="cli"] .conv-working,
+:root[data-chrome="cli"] .conv-subrun,
+:root[data-chrome="cli"] .conv-queue-slot {
+  width: calc(100% - 2 * var(--conv-gutter));
+  margin-inline: auto;
+}
+
+/* Queue as a TUI list at the same type size as the prompt: next-up caret,
+   numbered lines, text verbs. No card, no icon toolbar, no 12px chrome. */
+:root[data-chrome="cli"] .conv-queue-slot { padding: 4px 12px 0; }
+:root[data-chrome="cli"] .conv-queue-error {
+  font-size: var(--text-h1);
+  line-height: 1.3;
+}
+:root[data-chrome="cli"] .conv-queue-error .codicon { display: none; }
+:root[data-chrome="cli"] .steering-queue {
+  font-size: var(--text-h1);
+  letter-spacing: var(--track-h1);
+  line-height: 1.3;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+:root[data-chrome="cli"] .steering-queue-head {
+  min-height: 1.3em;
+  padding: 0 0 2px;
+  border-bottom: 0;
+}
+:root[data-chrome="cli"] .steering-queue-title,
+:root[data-chrome="cli"] .steering-queue-count,
+:root[data-chrome="cli"] .steering-queue-clear,
+:root[data-chrome="cli"] .steering-queue-copy,
+:root[data-chrome="cli"] .steering-queue-context,
+:root[data-chrome="cli"] .steering-queue-state,
+:root[data-chrome="cli"] .steering-queue-index,
+:root[data-chrome="cli"] .steering-queue-empty,
+:root[data-chrome="cli"] .steering-queue-clear-confirm,
+:root[data-chrome="cli"] .steering-queue-iconbtn,
+:root[data-chrome="cli"] .steering-queue-button,
+:root[data-chrome="cli"] .steering-queue-button-primary,
+:root[data-chrome="cli"] .steering-queue-textarea {
+  font-size: inherit;
+  font-weight: var(--wght-regular);
+  line-height: inherit;
+}
+:root[data-chrome="cli"] .steering-queue-title,
+:root[data-chrome="cli"] .steering-queue-count { color: var(--fg-dim); }
+:root[data-chrome="cli"] .steering-queue-clear {
+  height: auto;
+  padding: 0;
+  color: var(--fg-dim);
+}
+:root[data-chrome="cli"] .steering-queue-clear:not(:disabled):hover,
+:root[data-chrome="cli"] .steering-queue-clear:not(:disabled):focus-visible {
+  color: var(--fg-strong);
+  background: transparent;
+}
+:root[data-chrome="cli"] .steering-queue-list { padding: 0; }
+:root[data-chrome="cli"] .steering-queue-item {
+  align-items: baseline;
+  gap: 8px;
+  padding: 1px 0;
+  border-radius: 0;
+}
+:root[data-chrome="cli"] .steering-queue-item:hover,
+:root[data-chrome="cli"] .steering-queue-item:focus-visible { background: transparent; }
+:root[data-chrome="cli"] .steering-queue-item:focus-visible .steering-queue-copy {
+  color: var(--fg-strong);
+}
+:root[data-chrome="cli"] .steering-queue-caret {
+  display: inline-block;
+  flex: none;
+  width: 1.2ch;
+  color: var(--fg-strong);
+  white-space: pre;
+}
+:root[data-chrome="cli"] .steering-queue-index {
+  width: auto;
+  height: auto;
+  min-width: 2ch;
+  justify-content: flex-end;
+  color: var(--fg-dim);
+}
+:root[data-chrome="cli"] .steering-queue-index::after { content: "."; }
+:root[data-chrome="cli"] .steering-queue-context .codicon { display: none; }
+:root[data-chrome="cli"] .steering-queue-actions { gap: 0; }
+:root[data-chrome="cli"] .steering-queue-iconbtn {
+  width: auto;
+  height: auto;
+  min-height: 1.3em;
+  padding: 0;
+  color: var(--fg-dim);
+  border-radius: 0;
+}
+:root[data-chrome="cli"] .steering-queue-iconbtn + .steering-queue-iconbtn {
+  margin-left: 0.8ch;
+}
+:root[data-chrome="cli"] .steering-queue-iconbtn .codicon { display: none; }
+:root[data-chrome="cli"] .steering-queue-cli-act { display: inline; }
+:root[data-chrome="cli"] .steering-queue-iconbtn:not(:disabled):hover,
+:root[data-chrome="cli"] .steering-queue-iconbtn:not(:disabled):focus-visible {
+  color: var(--fg-strong);
+  background: transparent;
+}
+:root[data-chrome="cli"] .steering-queue-send { color: var(--fg); }
+:root[data-chrome="cli"] .steering-queue-textarea {
+  min-height: 2.6em;
+  padding: 2px 0;
+  background: transparent;
+  border: 0;
+  border-bottom: var(--border-w) solid var(--border);
+  border-radius: 0;
+  caret-color: var(--focus);
+  caret-shape: block;
+}
+:root[data-chrome="cli"] .steering-queue-edit-actions,
+:root[data-chrome="cli"] .steering-queue-clear-confirm {
+  padding: 2px 0;
+  border-top: 0;
+}
+:root[data-chrome="cli"] .steering-queue-button,
+:root[data-chrome="cli"] .steering-queue-button-primary {
+  height: auto;
+  padding: 0;
+  color: var(--fg-dim);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+:root[data-chrome="cli"] .steering-queue-button + .steering-queue-button { margin-left: 0.8ch; }
+:root[data-chrome="cli"] .steering-queue-button:hover:not(:disabled),
+:root[data-chrome="cli"] .steering-queue-button-primary:hover:not(:disabled) {
+  color: var(--fg-strong);
+  background: transparent;
+}
+:root[data-chrome="cli"] .steering-queue-button-primary { color: var(--fg-strong); }
+:root[data-chrome="cli"] .steering-queue-state {
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  color: var(--fg-dim);
+}
+
+/* Sidebar destinations read as commands, not toolbar buttons. The type drops to
+   --text-ui; the target holds at --control-h (24px in this chrome), because 22px
+   was under WCAG 2.5.8's floor and these are the app's top-level navigation. */
+:root[data-chrome="cli"] .sidebar-nav-button {
+  height: var(--control-h);
+  font-size: var(--text-ui);
+}
+
+/* Agentic CLI work marks — one ticker per provider, the way each CLI
+   actually draws "thinking". Claude keeps the floral sparkle; Codex uses
+   the braille spinner GPT's TUI runs; Grok uses a block wave, the same
+   motion its accent line rides. */
+@keyframes cli-glyph {
+  0%, 9% { content: "·"; }
+  10%, 19% { content: "✢"; }
+  20%, 29% { content: "✳"; }
+  30%, 39% { content: "✶"; }
+  40%, 49% { content: "✻"; }
+  50%, 59% { content: "✽"; }
+  60%, 69% { content: "✻"; }
+  70%, 79% { content: "✶"; }
+  80%, 89% { content: "✳"; }
+  90%, 100% { content: "✢"; }
+}
+@keyframes cli-glyph-codex {
+  0%, 9% { content: "⠋"; }
+  10%, 19% { content: "⠙"; }
+  20%, 29% { content: "⠹"; }
+  30%, 39% { content: "⠸"; }
+  40%, 49% { content: "⠼"; }
+  50%, 59% { content: "⠴"; }
+  60%, 69% { content: "⠦"; }
+  70%, 79% { content: "⠧"; }
+  80%, 89% { content: "⠇"; }
+  90%, 100% { content: "⠏"; }
+}
+@keyframes cli-glyph-grok {
+  0%, 16% { content: "○"; }
+  17%, 33% { content: "◎"; }
+  34%, 50% { content: "◉"; }
+  51%, 67% { content: "●"; }
+  68%, 84% { content: "◉"; }
+  85%, 100% { content: "◎"; }
+}
+:root[data-chrome="cli"] .conv-working-mark { display: none; }
+:root[data-chrome="cli"] .conv-working::before {
+  content: "✶";
+  flex: none;
+  color: var(--working-spark, var(--status-working));
+  font-family: var(--font-ui);
+  font-size: var(--text-h1);
+  letter-spacing: var(--track-h1);
+  line-height: 1;
+  animation: cli-glyph 1.2s steps(1) infinite;
+  animation-play-state: var(--ambient-play-state);
+}
+:root[data-chrome="cli"] .dot-working.dot-pulse::before {
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  content: "✶";
+  color: var(--working-spark, var(--status-working));
+  font-family: var(--font-ui);
+  font-size: var(--text-ui);
+  line-height: 1;
+  animation: cli-glyph 1.2s steps(1) infinite;
+  animation-play-state: var(--ambient-play-state);
+}
+:root[data-chrome="cli"] [data-provider="codex"].conv-working::before,
+:root[data-chrome="cli"] [data-provider="codex"].dot-working.dot-pulse::before,
+:root[data-chrome="cli"] [data-provider="codex"] .dot-working.dot-pulse::before {
+  content: "⠋";
+  animation: cli-glyph-codex 0.8s steps(1) infinite;
+  animation-play-state: var(--ambient-play-state);
+}
+:root[data-chrome="cli"] [data-provider="grok"].conv-working::before,
+:root[data-chrome="cli"] [data-provider="grok"].dot-working.dot-pulse::before,
+:root[data-chrome="cli"] [data-provider="grok"] .dot-working.dot-pulse::before {
+  content: "○";
+  animation: cli-glyph-grok 1.2s steps(1) infinite;
+  animation-play-state: var(--ambient-play-state);
+}
+@media (prefers-reduced-motion: reduce) {
+  :root[data-chrome="cli"] .conv-working::before,
+  :root[data-chrome="cli"] .dot-working.dot-pulse::before,
+  :root[data-chrome="cli"] .effort-picker-celebrate.effort-picker-maximum .effort-value-current,
+  :root[data-chrome="cli"] .effort-picker-celebrate.effort-picker-maximum .effort-value-current::before,
+  :root[data-chrome="cli"] .conv-composer:has(.effort-picker-celebrate.effort-picker-maximum) .conv-ta-row::before,
+  :root[data-chrome="cli"] .conv-composer:has(.effort-picker-celebrate.effort-picker-maximum) .conv-ta-row::after,
+  :root[data-chrome="cli"] .composer-box:has(.effort-picker-celebrate.effort-picker-maximum)::before,
+  :root[data-chrome="cli"] .composer-box:has(.effort-picker-celebrate.effort-picker-maximum)::after,
+  :root[data-chrome="cli"] [data-provider="grok"] .effort-picker-celebrate.effort-picker-xhigh .effort-value-current::before,
+  :root[data-chrome="cli"] [data-provider="grok"] .conv-composer:has(.effort-picker-celebrate.effort-picker-xhigh) .conv-ta-row::before,
+  :root[data-chrome="cli"] [data-provider="grok"] .conv-composer:has(.effort-picker-celebrate.effort-picker-xhigh) .conv-ta-row::after,
+  :root[data-chrome="cli"] .composer-box[data-provider="grok"]:has(.effort-picker-celebrate.effort-picker-xhigh)::before,
+  :root[data-chrome="cli"] .composer-box[data-provider="grok"]:has(.effort-picker-celebrate.effort-picker-xhigh)::after {
+    animation: none;
+    filter: none;
+  }
+  :root[data-chrome="cli"] .conv-working::before,
+  :root[data-chrome="cli"] .dot-working.dot-pulse::before {
+    content: "✶";
+  }
+  :root[data-chrome="cli"] [data-provider="codex"].conv-working::before,
+  :root[data-chrome="cli"] [data-provider="codex"].dot-working.dot-pulse::before,
+  :root[data-chrome="cli"] [data-provider="codex"] .dot-working.dot-pulse::before {
+    content: "⠙";
+  }
+  :root[data-chrome="cli"] [data-provider="grok"].conv-working::before,
+  :root[data-chrome="cli"] [data-provider="grok"].dot-working.dot-pulse::before,
+  :root[data-chrome="cli"] [data-provider="grok"] .dot-working.dot-pulse::before {
+    content: "◉";
+  }
+}
+
+/* Hidden in the shipped harness; CLI reveals it as the prompt glyph. */
+.conv-prompt-mark { display: none; }
+.conv-ta-row { display: contents; }
+
+/* Floating menus and dialogs reveal a little of the blurred content beneath
+   them. The sidebar keeps its independently selected native window material. */
+.is-floating:not(.sidebar) {
+  --material-blur: var(--floating-blur);
+  --material-saturate: var(--floating-saturate);
+  --dropdown-bg: var(--floating-dropdown-bg);
+  --widget-bg: var(--floating-widget-bg);
+  --menu-bg: var(--floating-menu-bg);
+  --material-widget: var(--floating-widget-bg);
+}
+.is-floating {
+  -webkit-backdrop-filter: blur(var(--material-blur)) saturate(var(--material-saturate));
+  backdrop-filter: blur(var(--material-blur)) saturate(var(--material-saturate));
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--editor-bg);
+  color: var(--fg);
+  font-family: var(--font-ui);
+  font-size: var(--text-body);
+  font-weight: var(--wght-regular);
+  line-height: var(--lh-ui);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Geist carries no opsz axis, so this is inert for it today and correct the
+     day it gains one, or the day --font-ui points at a face that has one. The
+     tracking tiers below are what actually stands in for optical sizing. */
+  font-optical-sizing: auto;
+}
+
+/* The three browser defaults that are sized in ems and so route around both
+   ramps: <small> is .8em of whatever it inherits, <strong>/<b> take the face's
+   own `bolder` step past the 560 ceiling, and h4–h6 carry the UA's heading
+   scale. Left alone they are the one way a size or a weight enters this app
+   without passing through a token. Bare element selectors, so anything with a
+   class of its own still wins — the transcript's .conv-md-h4/h5/h6 already say
+   --text-body and keep saying it. */
+small { font-size: var(--text-meta); }
+strong, b { font-weight: var(--wght-strong); }
+h4, h5, h6 { font-size: var(--text-body); }
+
+/* OPTICAL SIZING, APPROXIMATED. A real opsz axis reshapes the glyph — thinner
+   hairlines and tighter fit as the type grows. With a wght-only face the
+   closest honest stand-in is tracking, because the spacing half of that effect
+   is the half the eye reads as "set well". Only the display tiers get it:
+   below ~17px Geist's default fit is already right, and tightening small dense
+   UI text is how a transcript becomes hard to scan. */
+:root {
+  --track-h1: -0.011em;
+}
+
+/* Claude uses serif only for assistant prose. Chrome, user turns, tools,
+   and the composer stay on --font-ui. */
+:root[data-font="serif"] .conv-text,
+:root[data-font="serif"] .conv-markdown {
+  font-family: var(--font-ui-serif);
+  line-height: var(--lh-prose);
+}
+
+::selection { background: var(--selection); }
+
+/* Overlay scrollbars, sized like VS Code's. */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--scrollbar); border-radius: var(--radius-none); }
+::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-active); }
+::-webkit-scrollbar-corner { background: transparent; }
+
+/* The app's focus ring, from the two tokens that state it. Named Ghostty themes
+   inherit this shared selector.
+
+   Links are in the list because a transcript's markdown links are real tab
+   stops and were the one keyboard-reachable thing in this app with no visible
+   focus state at all. .conv-md-link is an <a> today and so already covered by
+   the element; it is named as well so a future span-with-tabindex link keeps
+   the ring. */
+:where(a, .conv-md-link, button, [role="button"], input, textarea, select,
+  [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: var(--focus-ring-w) solid var(--focus);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* ---- shared primitives ------------------------------------------------- */
+
+/* Visually hidden, still read aloud: a live status or a label that only a
+   screen reader needs. terminal.css keeps the same rule as .terminal-sr-only
+   for the terminal surfaces that load it. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Access-mode colour, one vocabulary for both pickers that show it: the launch
+   card's mode select and the live session's permission pill. Both are
+   AppSelect triggers, so both hang the tone class on the picker root and the
+   value inherits it — written here once rather than in each component's own
+   stylesheet, where four colours would be free to drift apart.
+
+   The class lands on the ROOT and targets the value, which is what puts these
+   at two classes: .app-select-value already declares --fg, and the trigger's
+   hover and expanded rules re-declare it, so a single-class rule would lose to
+   the control's own resting state. access-modes.ts decides which class this is
+   and emits none at all for a neutral mode.
+
+   Only the VALUE is tinted, never the whole trigger. The armed danger pill in
+   Composer.tsx is the one control allowed to repaint itself entirely, because
+   there the colour is a warning rather than a label. */
+.access-tone-plan .app-select-value { color: var(--mode-plan); }
+.access-tone-accept .app-select-value { color: var(--mode-accept); }
+.access-tone-danger .app-select-value { color: var(--mode-danger); }
+.access-tone-auto .app-select-value { color: var(--mode-auto); }
+
+/* One full-width product rail over two inset workbench panels. The hierarchy
+   comes from the space between those panels, not from copied destinations. */
+.app-grid {
+  display: grid;
+  grid-template-columns: var(--pane-left) minmax(0, 1fr);
+  grid-template-rows: var(--titlebar-h) minmax(0, 1fr) auto;
+  column-gap: var(--shell-gap);
+  box-sizing: border-box;
+  height: 100vh;
+  padding: 0 var(--shell-inset) var(--shell-inset);
+  overflow: hidden;
+  background: var(--workbench-canvas);
+  transition: grid-template-columns var(--motion-slow) var(--ease-out);
+}
+.app-grid > .workspace-toolbar { grid-row: 1; grid-column: 1 / -1; }
+.app-grid > .sidebar,
+.app-grid > .workspace-shell,
+.app-grid > .detail-pane,
+.app-grid > .sidebar-backdrop { grid-row: 2; }
+.app-grid > .statusbar { grid-row: 3; grid-column: 1 / -1; }
+/* Larger workspace labels need room on desktop displays. Keep the existing
+   compact window and overlay widths so this space comes from a wide canvas. */
+@media (min-width: 1440px) {
+  .app-grid { --pane-left: 264px; }
+  :root[data-chrome="cli"] .app-grid { --pane-left: 256px; }
+}
+/* The rail's toggle hides the sidebar. Its column collapses to zero rather than
+   disappearing, so the track count stays the same and the grid transition above
+   can slide it (owner, 2026-09-17, after the Claude app). The panel keeps its
+   width and rides the collapsing track's right edge off the window; the shell's
+   negative margin absorbs the column gap so the reading area ends flush with
+   the window inset, exactly where the old one-column form put it.
+
+   Hidden here rather than unmounted in App.tsx, and that is load-bearing, not a
+   style preference: the sidebar force-expands the group holding the selection
+   once per mount, so unmounting on this toggle re-ran a first-pass behaviour
+   every time the pane came back and wiped out any group the user had collapsed
+   by hand. visibility:hidden, applied once the slide ends, takes it out of the
+   tab order and the accessibility tree. */
+@media (min-width: 841px) {
+  .app-grid > .sidebar {
+    justify-self: end;
+    box-sizing: border-box;
+    width: var(--pane-left);
+    transition: translate var(--motion-slow) var(--ease-out), visibility 0s;
+  }
+  .app-grid > .workspace-shell { transition: margin-left var(--motion-slow) var(--ease-out); }
+  .app-grid.no-sidebar { grid-template-columns: 0px minmax(0, 1fr); }
+  .app-grid.no-sidebar > .sidebar {
+    visibility: hidden;
+    translate: calc(-1 * var(--shell-inset)) 0;
+    transition-delay: 0s, var(--motion-slow);
+  }
+  .app-grid.no-sidebar > .workspace-shell { margin-left: calc(-1 * var(--shell-gap)); }
+  /* Hidden, it comes back over the work while the pointer rests on the rail
+     toggle above it (owner, 2026-10-20, after Codex; sidebar-peek.ts). It
+     slides out along the track it left by, to exactly where its column puts
+     it, and floats there: the columns stay hidden, so no pane moves or refits.
+     The rail toggle pins it from there without a jump, because the opening
+     column and this translate run the same curve in opposite directions.
+     Stacked over the shell whenever it is hidden, so it is still on top while
+     it slides back out; off-window it covers nothing. */
+  .app-grid.no-sidebar > .sidebar { position: relative; z-index: 30; }
+  .app-grid.no-sidebar.sidebar-peek > .sidebar {
+    visibility: visible;
+    translate: var(--pane-left) 0;
+    box-shadow: var(--overlay-shadow);
+    transition-delay: 0s, 0s;
+  }
+  /* visibility:hidden does not stop CSS animations, and the CLI working glyphs
+     step `content`, which ticks the main thread every frame. Working marks in
+     the stowed panel wait until it returns. Important because each provider's
+     glyph rule resets play state through the animation shorthand at a higher
+     specificity. */
+  .app-grid.no-sidebar:not(.sidebar-peek) > .sidebar .dot-pulse,
+  .app-grid.no-sidebar:not(.sidebar-peek) > .sidebar .dot-pulse::before { animation-play-state: paused !important; }
+}
+/* Settings fills the window under the titlebar; the sidebar, work area and
+   status bar stay mounted underneath it. */
+/* Exists as an accessible button in App, but participates only in the narrow
+   overlay layout below. It must not add a tab stop or visual layer on desktop. */
+.sidebar-backdrop { display: none; }
+
+/* ---- the subagent detail column -----------------------------------------
+   A THIRD APP-LEVEL COLUMN THAT PUSHES, not an overlay. Reading a subagent
+   cell and its detail together is the entire reason the cell is allowed to be
+   one row, and an overlay covers the transcript the cell lives in. This app
+   has also already assigned the overlay layer to transient modal surfaces
+   (--widget-bg / --backdrop: palette, quick open, dialogs), so a persistent
+   inspector arriving there reads as a dialog that will not close. Pushing
+   keeps .workspace-grid's container queries meaningful too: the work area
+   narrows and the tiles re-flow through breakpoints they already have, where
+   an overlay would leave a four-tile grid laid out at a width nobody can see.
+
+   It is chrome OUTSIDE .workspace-grid, not a pane — the tile cap stays four
+   and ordinary navigation still never increases the pane count.
+
+   NOT CLAUDE CODE PARITY: Claude Code's task list sits below its prompt. This
+   is this app's own answer to a desktop window running up to four sessions.
+
+   The base .app-grid rule is deliberately untouched; the column arrives as a
+   modifier, and only above the width where three columns actually fit. */
+/* The Threads Changes panel reads code, so it takes a wider column than the
+   subagent detail (redesign, 2026-10-06): about a third of the window. */
+.app-grid.has-thread-diff { --pane-detail: clamp(400px, 36vw, 560px); }
+@media (min-width: 1081px) {
+  .app-grid.has-detail {
+    grid-template-columns: var(--pane-left) minmax(0, 1fr) var(--pane-detail);
+    grid-template-rows: var(--titlebar-h) minmax(0, 1fr) auto;
+  }
+  .app-grid.no-sidebar.has-detail {
+    grid-template-columns: 0px minmax(0, 1fr) var(--pane-detail);
+  }
+}
+/* The grid child. SubagentPanel paints itself and declares no position and no
+   width, so the shell alone decides where the column is and how wide. */
+.detail-pane {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  min-width: 0;
+  overflow: hidden;
+  transform-origin: 100% 50%;
+  animation: detail-pane-in var(--motion-slow) var(--ease-out) both;
+}
+/* Closing, it slides back the way it came before its track closes. */
+.detail-pane.is-leaving {
+  pointer-events: none;
+  animation: detail-pane-out var(--motion-base) var(--ease-in) both;
+}
+/* Below the width where three columns fit, the column floats over the WORK
+   AREA as a non-modal side sheet. There is deliberately no backdrop: the
+   remaining transcript stays operable by pointer and keyboard, matching the
+   complementary-region semantics the panel exposes. */
+@media (max-width: 1080px) {
+  .app-grid.has-detail .detail-pane {
+    position: fixed;
+    z-index: 20;
+    top: var(--titlebar-h);
+    right: var(--shell-inset);
+    width: min(var(--pane-detail), 86vw);
+    height: calc(100vh - var(--titlebar-h) - var(--shell-inset) - 24px);
+    border: var(--border-w) solid var(--border-strong);
+    border-radius: var(--radius-overlay);
+    box-shadow: var(--overlay-shadow);
+  }
+}
+
+.pane {
+  min-width: 0;               /* let children ellipsis instead of stretching */
+  min-height: 0;
+  overflow: auto;
+  background: var(--workbench-panel);
+  border: var(--border-w) solid var(--border-strong);
+  border-radius: var(--radius-overlay);
+}
+/* ---- agent workspace --------------------------------------------------- */
+
+/* Every surface sits on the bare canvas (owner, 2026-09-28): terminal panes
+   are their own cards, and Agent and Chat no longer add a full-height frame
+   the Code launcher never had. */
+.workspace-shell {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--workbench-canvas);
+  border: 0;
+  border-radius: 0;
+}
+
+.workspace-toolbar {
+  --control-h: 28px;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  height: var(--titlebar-h);
+  padding: 0 10px;
+  color: var(--fg-muted);
+  background: var(--workbench-canvas);
+  border-bottom: 0;
+  -webkit-app-region: drag;
+}
+
+.workspace-toolbar-leading,
+.workspace-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.workspace-toolbar-leading { width: min(100%, calc(var(--pane-left) - 10px)); }
+.workspace-toolbar-actions { justify-content: flex-end; }
+.workspace-menu-shortcut { margin-left: auto; color: var(--fg-dim); font: inherit; }
+.workspace-menu-end { display: flex; align-items: center; margin-left: auto; }
+/* The ··· button carries the attention badge the bell used to (owner,
+   2026-09-26), inside its own hit target. */
+.workspace-icon-btn.workspace-more-button {
+  width: auto;
+  min-width: var(--control-h);
+  gap: 4px;
+  padding-inline: 4px;
+}
+/* Usage opens from the ··· menu: its box is a zero-width hanger pinned to
+   the ··· button's right edge, taking no room in the row, so the panel hangs
+   from ··· like the menu does. */
+.workspace-more-anchor { position: relative; display: flex; align-items: center; }
+.workspace-more-anchor > .usage-menu { position: absolute; top: 0; right: 0; width: 0; height: 100%; }
+/* The fullest plan window, always in view (owner, 2026-10-01): provider mark,
+   percent, a short bar and the window's name. Opens the usage panel. */
+.workspace-usage-readout {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--radius-container);
+  background: color-mix(in srgb, var(--fg) 6%, transparent);
+  color: var(--fg-dim);
+  font: inherit;
+  font-size: var(--text-meta);
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+}
+.workspace-usage-readout:hover { color: var(--fg-muted); background: var(--row-hover); }
+.workspace-usage-readout:focus-visible { outline: var(--focus-ring-w) solid var(--focus); outline-offset: var(--focus-ring-offset); }
+.workspace-usage-readout .provider-logo { width: 12px; height: 12px; }
+/* The window and percent ("7d 62%") over a 2px bar as wide as the text. */
+.workspace-usage-readout-text { display: inline-flex; flex-direction: column; gap: 2px; }
+.workspace-usage-readout-value { color: var(--fg); font-variant-numeric: tabular-nums; line-height: var(--lh-tight); }
+.workspace-usage-readout-bar {
+  display: flex;
+  height: 2px;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--fg) 14%, transparent);
+}
+.workspace-usage-readout-bar > span { border-radius: inherit; background: var(--fg-muted); }
+.workspace-usage-readout.is-high .workspace-usage-readout-bar > span { background: var(--fg-strong); }
+.workspace-usage-readout.is-full .workspace-usage-readout-bar > span { background: var(--status-failed); }
+@media (max-width: 960px) {
+  .workspace-usage-readout-bar { display: none; }
+}
+/* The terminal surface portals its layout menu in here. The toolbar is the
+   window's drag region, so the slot has to opt out or its button never
+   receives a click. */
+.workspace-toolbar-terminal {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  -webkit-app-region: no-drag;
+}
+.workspace-toolbar-traffic { flex: none; width: 70px; height: 100%; }
+.workspace-brand {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: var(--fg-strong);
+  font-size: var(--text-body);
+  font-weight: var(--wght-strong);
+}
+/* The Fold on its plate, the app icon in miniature: 18px beside the wordmark
+   (the bare 16px stroke read as a » control). The same mark heads the launcher
+   and greys its plate and stroke for empty states. */
+.interface-mark { color: var(--brand-tile-fg); }
+.interface-mark-tile { fill: var(--brand-tile-bg); }
+:root[data-build="dev"] {
+  --brand-tile-bg: var(--product-dev-bg);
+  --brand-tile-fg: var(--product-dev-fg);
+}
+.workspace-brand-mark {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+.empty-mark {
+  --brand-tile-bg: color-mix(in srgb, var(--fg) 8%, transparent);
+  width: 40px;
+  height: 40px;
+  margin: 0 auto 12px;
+  color: var(--fg-faint);
+}
+.workspace-brand-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.product-dev-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.38em;
+  padding: 0.05em 0.42em 0.08em;
+  border-radius: 0.28em;
+  background: var(--product-dev-bg);
+  color: var(--product-dev-fg);
+  font-size: 0.72em;
+  font-weight: var(--wght-strong);
+  letter-spacing: var(--track-caps);
+  line-height: var(--lh-tight);
+  vertical-align: 0.12em;
+  text-transform: none;
+}
+
+.workspace-toolbar-btn,
+.workspace-icon-btn {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: var(--control-h);
+  padding: 0 7px;
+  font: inherit;
+  font-size: var(--text-ui);
+  color: var(--fg-muted);
+  background: transparent;
+  border: var(--border-w) solid transparent;
+  border-radius: var(--radius-control);
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+  transition: color var(--motion-fast) linear,
+    background-color var(--motion-fast) linear,
+    transform var(--motion-fast) var(--ease-out);
+}
+/* PRESS, said once for every button primitive in the app. The sheet had three
+   :active rules against a hundred-odd :hover ones, at two different scales, so
+   most controls went hover → click → nothing and the two that answered
+   disagreed about how far. .98 is the smaller of the two and the one .btn
+   already used. Named per selector rather than on a shared class because these
+   primitives have none; .sidebar-nav-button and
+   .surface-switch-tab draw their resting state elsewhere (SIDEBAR_CSS and the
+   surface switch below) and only borrow the press. Most of the list lives in a
+   component sheet for the same reason — the transcript, composer, settings
+   rail, plans and terminal chrome all name their primitive here rather than
+   adding a second :active rule of their own, which is what let the two
+   original ones drift apart.
+
+   Not guarded for reduced motion: the global block at the foot of this file
+   collapses transition-duration, so the scale lands instantly rather than
+   animating — a state change, which is what that preference asks for. It does
+   not reset transform, and a press that leaves no trace is the accessibility
+   problem, not the fix. */
+.btn:active:not(:disabled),
+.btn-danger:active:not(:disabled),
+.workspace-toolbar-btn:active:not(:disabled),
+.workspace-icon-btn:active:not(:disabled),
+.sidebar-nav-button:active:not(:disabled),
+.surface-switch-tab:active:not(:disabled),
+.settings-nav-link:active:not(:disabled),
+.app-select-trigger:active:not(:disabled),
+.conv-iconbtn:active:not(:disabled),
+.conv-send:active:not(:disabled),
+.conv-anchor-step:active:not(:disabled),
+.composer-icon-btn:active:not(:disabled),
+.composer-submit:active:not(:disabled),
+.fastmode-toggle:active:not(:disabled),
+.terminal-launcher-profile:active:not(:disabled),
+.terminal-launcher-count:active:not(:disabled),
+.terminal-launcher-close:active:not(:disabled),
+.terminal-launcher-review-link:active:not(:disabled),
+.adversarial-review-button:active:not(:disabled),
+.terminal-pane-action:active:not(:disabled),
+.terminal-tab-close:active:not(:disabled),
+.terminal-center-action:active:not(:disabled) { transform: scale(.98); }
+.workspace-icon-btn { width: var(--control-h); padding: 0; }
+.workspace-toolbar-btn:hover:not(:disabled),
+.workspace-icon-btn:hover:not(:disabled) { color: var(--fg-strong); background: var(--row-hover); }
+/* With the sidebar hidden, its footer's "needs setup" notice is a small amber
+   dot on the toggle that brings it back (owner, 2026-11-15). */
+.workspace-icon-btn:has(> .sidebar-toggle-setup-dot) { position: relative; }
+.sidebar-toggle-setup-dot {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--status-waiting);
+  pointer-events: none;
+}
+.workspace-toolbar-btn.is-active,
+.workspace-icon-btn.is-active {
+  color: var(--fg-strong);
+  background: var(--row-selected);
+}
+.workspace-toolbar-btn:disabled,
+.workspace-icon-btn:disabled { color: var(--fg-faint); cursor: default; background: transparent; }
+/* The update control (owner, 2026-10-01, design D4): a small blue-violet tile
+   and its words in the same colours. Downloading turns the tile into a
+   progress ring; ready gives it a popping dot and lets the colour drift
+   through the words. light-dark() follows each palette's color-scheme. */
+.workspace-toolbar-btn.workspace-toolbar-update {
+  --update-tile-from: #5b8cff;
+  --update-tile-to: #a06bff;
+  --update-words-from: light-dark(#3d5bd9, #86a6ff);
+  --update-words-to: light-dark(#7a43d8, #c3a2ff);
+  --update-dot: light-dark(#d15a1c, #ff8a4c);
+  gap: 7px;
+  padding: 0 6px 0 4px;
+}
+.workspace-update-tile,
+.workspace-update-ring {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+}
+.workspace-update-tile {
+  border-radius: calc(var(--radius-container) - 2px);
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--update-tile-from), var(--update-tile-to));
+  box-shadow: 0 3px 10px -4px var(--update-tile-to), inset 0 0 0 1px rgb(255 255 255 / 16%);
+}
+.workspace-toolbar-update.is-ready .workspace-update-tile::after {
+  content: "";
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--update-dot);
+  box-shadow: 0 0 0 2px var(--workbench-canvas);
+}
+/* A ready update says so three times, then rests with its dot showing
+   (owner, 2026-10-22, battery: looping, this control alone held Interface near
+   35% CPU for as long as an update waited). Coming back to Interface matches
+   the rule again, so it says so three more times. */
+:root:not([data-window-active="false"]) .workspace-toolbar-update.is-ready .workspace-update-tile::after {
+  animation: workspace-update-pop 1.8s ease-in-out 3;
+}
+.workspace-update-ring {
+  border-radius: 50%;
+  background: conic-gradient(var(--update-tile-from), var(--update-tile-to) var(--update-progress, 0%),
+    color-mix(in srgb, var(--fg) 18%, transparent) var(--update-progress, 0%));
+}
+/* No percent yet: a quarter of the ring turns until one arrives. */
+.workspace-update-ring.is-waiting { background: color-mix(in srgb, var(--fg) 18%, transparent); }
+.workspace-update-ring.is-waiting::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(var(--update-tile-from), var(--update-tile-to) 25%, transparent 25%);
+  animation: workspace-update-spin 1.2s steps(14) infinite;
+  animation-play-state: var(--ambient-play-state);
+}
+.workspace-update-ring > span {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--workbench-canvas);
+  color: var(--update-words-to);
+}
+.workspace-update-words {
+  color: transparent;
+  background: linear-gradient(90deg, var(--update-words-from), var(--update-words-to), var(--update-words-from));
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  font-weight: var(--wght-strong);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+:root:not([data-window-active="false"]) .workspace-toolbar-update.is-ready .workspace-update-words {
+  animation: workspace-update-drift 3s linear 3;
+}
+.workspace-toolbar-btn.workspace-toolbar-update:disabled .workspace-update-words {
+  color: var(--fg-faint);
+  background: none;
+}
+/* Narrow windows keep the tile alone, so the rail never runs into the switch. */
+@media (max-width: 960px) {
+  .workspace-toolbar-btn.workspace-toolbar-update { width: var(--control-h); padding: 0; }
+  .workspace-update-words { display: none; }
+}
+@keyframes workspace-update-pop { 50% { transform: scale(1.35); } }
+@keyframes workspace-update-spin { to { transform: rotate(1turn); } }
+@keyframes workspace-update-drift { to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-window-active="false"]) .workspace-toolbar-update.is-ready .workspace-update-tile::after,
+  .workspace-update-ring.is-waiting::before,
+  :root:not([data-window-active="false"]) .workspace-toolbar-update.is-ready .workspace-update-words { animation: none; }
+}
+/* No .workspace-toolbar-ide / -count / -alert / -update / -warning: provider
+   health and the IDE affordances moved to the status bar, and what stayed
+   behind was five rules styling markup App.tsx no longer emits — one of them
+   holding the app's scarcest hue for a class nothing renders.
+   workspace-ui.test.ts asserts App.tsx does not use them; they are gone from
+   this sheet now too, so a selector here can no longer imply markup exists. */
+
+/* Equal side rails keep Agent / Code / Chat centered in the window. */
+/* Porcelain (owner, 2026-09-26): a flat recessed track, no outline; the
+   active tab is the one raised surface, edged by a hairline. */
+.surface-switch {
+  display: inline-flex;
+  gap: 0;
+  padding: 2px;
+  background: color-mix(in srgb, var(--fg) 6%, transparent);
+  border: 0;
+  border-radius: var(--radius-container);
+  -webkit-app-region: no-drag;
+}
+.surface-switch-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+  min-width: 52px;
+  height: 24px;
+  padding: 0 10px;
+  font: inherit;
+  font-size: var(--text-ui);
+  font-weight: var(--wght-strong);
+  color: var(--fg-muted);
+  background: transparent;
+  border: 0;
+  border-radius: calc(var(--radius-container) - 2px);
+  cursor: pointer;
+  transition: color var(--motion-fast) linear, background-color var(--motion-fast) linear;
+}
+.surface-switch-tab:hover { color: var(--fg-strong); background: var(--row-hover); }
+/* SELECTED, said in two looks and only two. Selection is one idea in this app,
+   so it may not also be a colour choice per surface — every list and every tab
+   strip picks the look its geometry calls for and paints it in --selection-accent
+   and --fg-strong, never in the accent, never in a hue of its own:
+
+     a horizontal tab strip — box-shadow: inset 0 -2px 0 var(--selection-accent);
+                              color: var(--fg-strong)
+     a vertical list row    — background: var(--row-selected);
+                              color: var(--fg-strong)
+
+   The owner-requested window switch uses its own neutral selection fill,
+   while content selections retain the two recipes above. */
+.surface-switch-tab.is-active {
+  color: var(--fg-strong);
+  background: var(--surface);
+  box-shadow: 0 0 0 var(--border-w) var(--border);
+}
+
+.statusbar {
+  display: flex;
+  flex: none;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+  /* 24px, the same floor every other strip in this app answers to. It was 22,
+     described here as a deliberate step tighter than --strip-h — but the row
+     carries BUTTONS (provider health, rate limit, update), and WCAG 2.5.8's
+     24px minimum is not a density preference. The two overlay panes below
+     subtract this height from 100vh; that number moves with this one. */
+  height: 24px;
+  padding: 0 6px;
+  color: var(--fg-dim);
+  background: var(--workbench-canvas);
+  border-top: 0;
+  font-size: var(--text-meta);
+  line-height: 1;
+}
+.statusbar-cluster {
+  display: flex;
+  min-width: 0;
+  align-items: stretch;
+  gap: 2px;
+  overflow: hidden;
+}
+.statusbar-item {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  height: 100%;
+  min-height: 24px;
+  padding: 0 6px;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  font: inherit;
+  font-size: var(--text-meta);
+  cursor: pointer;
+}
+.statusbar-text { cursor: default; }
+.statusbar-item:hover { color: var(--fg); background: var(--row-hover); }
+.statusbar-item.is-active { color: var(--fg-strong); background: var(--row-selected); }
+/* A provider that needs setup lives in the sidebar's Settings row as an amber
+   dot and one line (.sidebar-footer-alert, owner 2026-11-15; a red row under
+   Settings since 2026-09-28), not in this strip. */
+/* Rate limited KEEPS amber: it is the near-limit fact at the wall, the same
+   "you cannot proceed until this clears" the usage meter spends it on. */
+.statusbar-warning { color: var(--status-waiting); }
+
+/* ---- voice assistant ------------------------------------------------------
+   Four live states and one failed one. Speaking and thinking take the accent,
+   listening takes the working hue, and only error takes danger — the mic being
+   open is not a warning, and colouring it like one would make the app's real
+   alarms cheaper. */
+.voice-toggle.is-listening,
+.voice-toggle.is-speaking { color: var(--accent-text); }
+.voice-toggle.is-error { color: var(--danger-fg); }
+.voice-indicator { cursor: default; gap: 6px; }
+.voice-indicator.is-listening,
+.voice-indicator.is-speaking { color: var(--accent-text); }
+.voice-indicator.is-thinking,
+.voice-indicator.is-starting { color: var(--status-working); }
+.voice-indicator.is-error { color: var(--danger-fg); }
+/* Truncated rather than wrapped: the statusbar is one 24px strip, and a partial
+   transcript that grows it would move every other item on the row while the
+   user is still speaking. */
+.voice-partial,
+.voice-message {
+  min-width: 0;
+  max-width: 32ch;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--fg-dim);
+}
+/* The same strip carries a `notify` sentence on a healthy state, so the failed
+   one keeps the colour that says which is which. */
+.voice-indicator.is-error .voice-message { color: var(--danger-fg); }
+.voice-meter {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 1px;
+  height: 9px;
+}
+/* The token, not the 1px it resolves to here: a 2px-wide box clamps both
+   corners of a side to half its width, so --radius-control draws the same
+   softened cap today and squares with everything else under CLI chrome. */
+.voice-bar {
+  width: 2px;
+  height: 100%;
+  background: color-mix(in srgb, currentcolor 22%, transparent);
+  border-radius: var(--radius-control);
+}
+.voice-bar.is-lit { background: currentcolor; }
+
+.workspace-content {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--workbench-canvas);
+  container: workspace / inline-size;
+}
+/* Layout containment gives the stacking context and fixed-position containing
+   block the surface relies on. A backdrop-filter here was always blur(0px) and
+   still made the whole work area its own render surface. */
+.workspace-surface { width: 100%; height: 100%; min-width: 0; min-height: 0;
+  contain: layout; }
+.workspace-surface:not(.is-hidden) {
+  animation: workspace-surface-in var(--motion-base) var(--ease-out) both;
+}
+/* Reading surfaces appear in place: fading their ancestor fades the text too,
+   and transforming an xterm ancestor can leave its GPU bitmaps offset. */
+.workspace-surface.conversation-pane-surface:not(.is-hidden),
+.workspace-surface:not(.is-hidden):has(.terminal-center) {
+  animation: none;
+}
+.workspace-surface.is-hidden { display: none; }
+/* The canvas surface stacks the graph over the coordination console. */
+.canvas-stack:not(.is-hidden) { display: flex; flex-direction: column; overflow-y: auto; }
+/* An expanded worker form grows the page, so fields never compete with the
+   graph for a tiny internal scroll area on short windows. */
+.canvas-stack > .canvas { flex: 1 0 auto; height: auto; min-height: 0; }
+.canvas-coordination {
+  flex: none;
+  max-height: 45%;
+  padding: 0 16px 16px;
+  overflow: auto;
+  background: var(--workbench-canvas);
+  border-top: var(--border-w) solid var(--border);
+}
+/* Settings fills the window below the toolbar (owner, 2026-11-15): no scrim,
+   no card. It sits over the sidebar's hover peek (30) and under the
+   toolbar's own menus (40) and every floating menu and dialog. */
+.workspace-settings-overlay {
+  position:fixed; z-index:35; inset:var(--titlebar-h) 0 0 0; min-width:0; min-height:0;
+  display:flex; align-items:stretch; justify-content:stretch;
+  overflow:hidden; background:var(--editor-bg);
+}
+
+/* One file/review surface plus up to four independent agents.  The 2x2 shape
+   matches Cursor's tiled conversations; one and two agent layouts stay wide
+   enough for a useful transcript instead of preserving a 420px fixed rail. */
+.workspace-grid {
+  display: grid;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  padding: var(--tile-gap);
+  background: var(--workbench-canvas);
+  gap: var(--tile-gap);
+}
+.workspace-grid.workspace-count-1 { grid-template-columns: minmax(0, 1fr); }
+.workspace-grid.workspace-count-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.workspace-grid.workspace-count-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.workspace-grid.workspace-count-4 { grid-template: repeat(2, minmax(0, 1fr)) / repeat(2, minmax(0, 1fr)); }
+.workspace-grid.workspace-count-3 > .workspace-tile:last-child { grid-column: 1 / -1; }
+.workspace-grid.has-maximized { display: block; background: var(--workbench-canvas); }
+.workspace-grid.has-maximized > .workspace-tile:not(.is-maximized) { display: none; }
+.workspace-grid.has-maximized > .workspace-tile.is-maximized { width: 100%; height: 100%; }
+
+.workspace-tile {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--workbench-panel);
+  border: 0;
+  border-radius: var(--tile-radius);
+  box-shadow: inset 0 0 0 var(--border-w) var(--border);
+  animation: workspace-tile-in var(--motion-slow) var(--ease-out) both;
+  transition: box-shadow var(--motion-base) var(--ease-standard);
+}
+/* In a multi-pane workspace the selected edge uses the same cool interaction
+   hue as launcher choices and focus rings. A single pane still suppresses the
+   distinction below because there is nothing to distinguish it from. */
+.workspace-tile.is-selected {
+  box-shadow: inset 0 0 0 var(--border-w) var(--selection-accent);
+}
+/* One pane cannot be "the focused one of several", so the ring drops back to the
+   ordinary edge — it does NOT drop to nothing, or a single tile would lose the
+   border every other tile has. */
+.workspace-grid.workspace-count-1 .workspace-tile.is-selected {
+  box-shadow: inset 0 0 0 var(--border-w) var(--border);
+}
+.workspace-tile-head {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  height: var(--tile-head-h);
+  padding: 0 8px 0 10px;
+  background: var(--editor-bg);
+  border-bottom: var(--border-w) solid color-mix(in srgb, var(--border) 60%, transparent);
+  transition: background-color var(--motion-base) var(--ease-standard);
+}
+/* The pane's state, from the data-status the tile already carries. No new
+   state: AgentTile writes data-status on the section, and these rules are the
+   whole rendering of it. Scoped to .workspace-agent — AgentTile, which only the
+   Threads grid draws — so a non-agent tile with a head draws nothing.
+   A failed pane keeps its 6px dot; the dot's column stays for the title's left
+   edge in every state. */
+.workspace-agent .workspace-tile-head::before {
+  content: "";
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: transparent;
+}
+.workspace-agent[data-status="failed"] .workspace-tile-head::before {
+  background: var(--status-failed);
+}
+/* THE LIVE HEAD (owner, 2026-10-07, "a live turn"). A working thread holds a
+   still 2px line of the theme's accent along the head's bottom edge (its
+   project's hues until the Claude-app look, 2026-10-23), neutral in a plain
+   chat, in place of the old running dot (it swept until
+   the owner asked for less motion the same day). A thread
+   blocked on its owner holds a still amber line and says "Needs you" before
+   Changes; the amber is read once, here, for both. */
+.workspace-agent .workspace-tile-head { position: relative; }
+.workspace-agent .workspace-tile-head::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: calc(-1 * var(--border-w));
+  width: 45%;
+  height: 2px;
+  pointer-events: none;
+  background: transparent;
+}
+.workspace-agent[data-status="working"] .workspace-tile-head::after {
+  width: 100%;
+  background: color-mix(in srgb, var(--fg-dim) 45%, transparent);
+}
+.workspace-agent:where([class*="project-hue-"]:not(.project-hue-none))[data-status="working"] .workspace-tile-head::after {
+  background: color-mix(in srgb, var(--accent) 60%, transparent);
+}
+.workspace-agent[data-status="waiting"] .workspace-tile-head { --tile-waiting: var(--status-waiting); }
+.workspace-agent[data-status="waiting"] .workspace-tile-head::after {
+  width: 100%;
+  background: color-mix(in srgb, var(--tile-waiting) 70%, transparent);
+}
+/* Filled, so it reads at a glance among four panes: the amber as its fill,
+   the surface's own colour as its ink — dark on a dark palette's bright
+   amber, light on a light palette's deep one (theme-accessibility holds 4.5:1). */
+.workspace-tile-needs {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  height: 20px;
+  padding: 0 8px;
+  color: var(--surface);
+  background: var(--tile-waiting);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-meta);
+  font-weight: var(--wght-strong);
+  line-height: var(--lh-tight);
+  white-space: nowrap;
+}
+/* The Changes chip: its totals pop in when they first become known, and the
+   chip flashes the theme's accent in a project (a neutral wash in a plain
+   chat) when they change. Two flash names alternate so each change replays
+   it (AgentTile). */
+.workspace-agent { --tile-hue: var(--fg-dim); }
+.workspace-agent:where([class*="project-hue-"]:not(.project-hue-none)) { --tile-hue: var(--accent); }
+.workspace-agent .workspace-tile-head[data-changes-cue="pop"] :is(.thread-head-changes-stat, .diffstat-bar) {
+  animation: tile-changes-pop 240ms cubic-bezier(.34, 1.56, .64, 1) both;
+}
+.workspace-agent .workspace-tile-head[data-changes-cue="flash-a"] .thread-head-changes {
+  animation: tile-changes-flash-a 700ms var(--ease-out);
+}
+.workspace-agent .workspace-tile-head[data-changes-cue="flash-b"] .thread-head-changes {
+  animation: tile-changes-flash-b 700ms var(--ease-out);
+}
+@keyframes tile-changes-pop {
+  0% { transform: scale(.3); }
+  70% { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+@keyframes tile-changes-flash-a { from { background-color: color-mix(in srgb, var(--tile-hue) 24%, transparent); } }
+@keyframes tile-changes-flash-b { from { background-color: color-mix(in srgb, var(--tile-hue) 24%, transparent); } }
+/* Reduced motion: the working line holds still across the head, and the chip
+   neither pops nor flashes. The global reset below would only shorten these. */
+@media (prefers-reduced-motion: reduce) {
+  .workspace-agent[data-status="working"] .workspace-tile-head::after {
+    width: 100%;
+    transform: translateX(0);
+    animation: none;
+  }
+  .workspace-agent .workspace-tile-head[data-changes-cue] :is(.thread-head-changes, .thread-head-changes-stat, .diffstat-bar) {
+    animation: none;
+  }
+}
+.workspace-tile-title {
+  display: flex;
+  /* Sized to the breadcrumb, so the workspace chip reads right after the
+     title (Threads redesign, 2026-10-06); the actions take the slack. */
+  flex: 0 1 auto;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  font: inherit;
+  color: var(--fg);
+  text-align: left;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+/* Focus is a step UP the text ramp and nothing else: unfocused panes sit at
+   --fg-muted, the focused one at --fg-strong in the heavier weight below. */
+.workspace-tile-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--fg-muted);
+  font-size: var(--text-body);
+  line-height: var(--lh-ui);
+}
+.workspace-tile.is-selected .workspace-tile-name { color: var(--fg-strong); font-weight: var(--wght-strong); }
+/* No .workspace-tile-identity / -meta / -status / -separator / -model: the pane
+   header's second line is gone. Status is the 6px dot above and the status word
+   in the tile's aria-label; the model is the access pill's own business.
+   AgentTile.test.ts asserts the markup is not rendered — these rules were the
+   half of that removal nobody deleted. */
+/* Always visible. A control that appears on hover is a control a four-pane
+   workspace teaches you not to look for, and split/maximize/close are the three
+   things a pane is for. Quiet at rest, full strength under the pointer.
+
+   Quiet is --fg-muted, the token comment's own "quiet-control tier", NOT
+   --fg-faint: these glyphs are the sole indicator of three live actions, which
+   is exactly the case --fg-faint is documented (:88-95) as illegal for. At
+   --fg-faint they measured 2.18-4.18:1 and fell under WCAG 1.4.11's 3:1
+   graphical floor in five shipped themes.
+
+   The GLYPH is 16px (--icon-size, which is what the codicon already renders at);
+   the BUTTON keeps --control-h. Shrinking the button to the glyph would take the
+   target under WCAG 2.5.8's 24px and this app cites that criterion elsewhere —
+   the design asks for 16px icons, not 16px targets. */
+.workspace-tile-actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  margin-left: auto;
+  gap: 10px;
+  color: var(--fg-muted);
+}
+.workspace-tile-actions .workspace-icon-btn { color: inherit; }
+.workspace-tile-actions .workspace-icon-btn:hover:not(:disabled),
+.workspace-tile-actions .workspace-icon-btn:focus-visible:not(:disabled) {
+  color: var(--fg);
+  background: transparent;
+}
+/* `color: inherit` above ties with .workspace-icon-btn:disabled at (0,2,0) and
+   wins on source order, which would leave the split button at the four-pane
+   ceiling pixel-identical to a live one — the tooltip would say "full" and
+   nothing else would. --fg-faint is the app's disabled tier and now the whole
+   refusal: with the resting glyphs at --fg-muted the two tiers already differ,
+   and stacking opacity 0.5 on top of the faintest token drove the disabled
+   glyph to 1.51-1.98:1 — invisible rather than refused, which is the opposite
+   of "visible before the pointer arrives". One dimming step, not two. */
+.workspace-tile-actions .workspace-icon-btn:disabled {
+  color: var(--fg-faint);
+}
+/* No .workspace-tile-access: the access mode moved from the pane head to the
+   composer's access chip in the Threads redesign (owner, 2026-10-06), and the
+   provider mark with it, so the mark appears once per pane. */
+.workspace-tile-body { flex: 1 1 auto; min-width: 0; min-height: 0; overflow: hidden; }
+
+.workspace-empty {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 0;
+  padding: 16px;
+  color: var(--fg-muted);
+  background: var(--editor-bg);
+  text-align: center;
+}
+.workspace-empty-inner { max-width: 420px; }
+.workspace-empty h2 { margin: 0 0 6px; color: var(--fg-strong); font-size: var(--text-h1); font-weight: var(--wght-strong); }
+.workspace-empty p { margin: 0 0 12px; }
+
+.workspace-overlay-stack {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  right: 0;
+  left: 0;
+  max-height: min(35vh, 280px);
+  overflow-y: auto;
+  pointer-events: none;
+}
+.workspace-overlay-stack > * { pointer-events: auto; }
+/* Over the launcher a notice or error takes room instead of covering the
+   heading (owner, 2026-09-28). Terminal panes keep the overlay: resizing live
+   panes for an eight-second message would redraw every CLI twice. */
+.workspace-content:has(> .workspace-overlay-stack > *) .terminal-launcher { padding-top: 88px; }
+
+.workspace-composer-panel {
+  position: absolute;
+  z-index: 10;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  background: var(--editor-bg);
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.workspace-composer-panel > .composer-card,
+.workspace-composer-panel > .composer-loading-state { width: 100%; height: 100%; }
+
+/* Narrow: several panes stack in a scrolling column. One pane still fills the
+   area — a Threads pane beside the Changes column is narrow and alone, and a
+   620px tile there left its composer floating mid-pane (2026-10-06). */
+@container workspace (max-width: 719px) {
+  .workspace-grid:not(.has-maximized):not(.workspace-count-1) {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  .workspace-grid:not(.has-maximized):not(.workspace-count-1) > .workspace-tile {
+    flex: 0 0 min(70vh, 620px);
+    min-height: 360px;
+  }
+}
+
+@container workspace (min-width: 1140px) {
+  .workspace-grid.workspace-count-3 { grid-template: minmax(0, 1fr) / repeat(3, minmax(0, 1fr)); }
+  .workspace-grid.workspace-count-3 > .workspace-tile:last-child { grid-column: auto; }
+}
+
+@media (max-width: 840px) {
+  .app-grid { grid-template-columns: minmax(0, 1fr); }
+  .app-grid .sidebar { display: none; }
+  .app-grid.sidebar-overlay .sidebar-backdrop {
+    position: fixed;
+    z-index: 19;
+    inset: var(--titlebar-h) 0 0;
+    display: block;
+    padding: 0;
+    background: var(--backdrop);
+    border: 0;
+    cursor: default;
+    animation: workspace-backdrop-in var(--motion-base) var(--ease-standard) both;
+  }
+  .app-grid.sidebar-overlay .sidebar {
+    position: fixed;
+    z-index: 20;
+    top: var(--titlebar-h);
+    left: var(--shell-inset);
+    display: flex;
+    width: min(var(--pane-left), 86vw);
+    height: calc(100vh - var(--titlebar-h) - var(--shell-inset) - 24px);
+    box-shadow: var(--overlay-shadow);
+    animation: sidebar-drawer-in var(--motion-slow) var(--ease-out) both;
+  }
+  /* Dismissed, the drawer and its scrim glide back out before the overlay
+     class drops (App keeps it for the exit). Nothing takes a click meanwhile. */
+  .app-grid.is-drawer-leaving .sidebar-backdrop {
+    pointer-events: none;
+    animation: workspace-backdrop-out var(--motion-base) var(--ease-in) both;
+  }
+  .app-grid.is-drawer-leaving .sidebar {
+    pointer-events: none;
+    animation: sidebar-drawer-out var(--motion-base) var(--ease-in) both;
+  }
+}
+
+/* The toolbar spans the whole window, so viewport width is its responsive
+   boundary. This used to query workspace-shell while the toolbar lived inside
+   that element; after the full-width rail move such a sibling query can never
+   match. Every width at or under 840px also matches here, so this spacing is
+   the narrow-window toolbar's too. */
+@media (max-width: 1080px) {
+  .workspace-toolbar { gap: 2px; padding-inline: 4px; }
+  .workspace-toolbar-leading { gap: 4px; }
+  .workspace-toolbar-actions { gap: 2px; }
+}
+@media (max-width: 840px) {
+  .workspace-toolbar-leading { width: auto; }
+  .workspace-brand { font-size: var(--text-body); }
+  :root[data-chrome="refined"] .workspace-toolbar { --control-h: 24px; }
+}
+:root[data-chrome="cli"] .surface-switch { padding: 1px; }
+:root[data-chrome="cli"] .surface-switch-tab { height: 24px; }
+
+/* No .badge here any more. Cursor labels engine tags, cloud markers, subagent
+   types and model ids as plain dim text, which is why that rule stopped being a
+   pill — and then nothing emitted the class at all, leaving a selector that
+   matched nothing above the sheet's real capsule. .badge now means the pill,
+   declared once beside .dot with its quiet variant; the dim-text labels keep
+   their own names (.badge-cloud). */
+
+/* Secondary button: transparent, outlined — Cursor's button.secondaryBackground
+   is fully transparent, not a filled grey. */
+.btn {
+  font: inherit;
+  font-size: var(--text-ui);
+  height: var(--control-h);
+  padding: 0 10px;
+  color: var(--fg);
+  background: transparent;
+  border: var(--border-w) solid var(--border-strong);
+  border-radius: var(--radius-control);
+  cursor: pointer;
+  transition: color var(--motion-fast) linear,
+    background-color var(--motion-fast) linear,
+    border-color var(--motion-fast) linear,
+    transform var(--motion-fast) var(--ease-out);
+}
+/* .btn:active lives with the other button primitives in the shared press rule
+   above; only the transition it animates is declared here. */
+/* Scoped off .btn-primary: an unscoped .btn:hover outranks .btn-primary and
+   would repaint the accent CTA in --surface-raised while its text stays
+   --accent-fg. */
+.btn:not(.btn-primary):hover:not(:disabled) { background: var(--row-hover); }
+/* DISABLED IS A COLOUR, NOT AN OPACITY. Fading the whole control fades its
+   border and its glyph by a different amount than its label and composites
+   against whatever happens to be behind it, which is why disabled buttons in
+   this app were dim by five different amounts. --fg-faint at full opacity is
+   the tier that exists for exactly this, and the comment at the top of the
+   token block already says so. */
+.btn:disabled { color: var(--fg-faint); cursor: default; }
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-fg);
+  font-weight: var(--wght-strong);
+}
+/* The filled variant needs its ground back too: --fg-faint on the accent fill
+   is a disabled control that still reads as the primary action. */
+.btn-primary:disabled { background: var(--surface-raised); border-color: var(--border); }
+/* Explicit hover colour, not filter: brightness() — a filter also lightens the
+   glyph and is a generic-theme tell. */
+.btn-primary:hover:not(:disabled) { background: var(--accent-hover); border-color: var(--accent-hover); }
+
+/* ---- sidebar ----------------------------------------------------------- */
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  padding: 0;                 /* the list carries its own inset */
+  background: var(--material-chrome);
+  overflow: hidden;           /* the list scrolls, not the whole pane */
+}
+
+/* The declutter filter's row (.sidebar-filter*) is NOT here. It is rendered
+   only by Sidebar.tsx and needs :hover descendant rules, so it lives in that
+   file's SIDEBAR_CSS beside its markup, per the convention that file states. */
+
+.session-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 4px;             /* the 4px side inset is what makes a selected row a floating pill */
+  display: flex;
+  flex-direction: column;
+  gap: 0;                     /* --row-h rows touch */
+  min-height: 0;              /* without this a flex child refuses to shrink */
+  overflow-y: auto;
+}
+
+/* One 8px indent step of nesting plus the 16px status column: group chevron at
+   4px, group label at 20px, status glyph at 12px, session title at 28px.
+
+   The right padding is the row menu's lane, reserved at rest. It is absolutely
+   positioned over this row (Sidebar.tsx owns it), --icon-size wide; a 6px
+   padding would leave cloud and rate-limit glyphs sitting underneath,
+   14 of their 16px hidden the moment the row was hovered. Reserved always
+   rather than widened on :hover, because widening it on hover would slide those
+   glyphs sideways under the pointer. All secondary actions, including local
+   hide and explicit split, live behind this one affordance. */
+.session-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  height: var(--row-h);
+  padding: 0 calc(var(--icon-size) + 8px) 0 var(--indent);
+  font: inherit;
+  color: var(--fg);
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-control);
+  cursor: pointer;
+  transition: color var(--motion-fast) linear,
+    background-color var(--motion-fast) linear;
+}
+.session-row:hover { background: var(--row-hover); }
+/* Selection is a fill and stronger text, never a rail or outline. */
+.session-row.is-selected {
+  background: var(--row-selected);
+  color: var(--fg-strong);
+}
+
+.session-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.badge-cloud { color: var(--fg-dim); }
+
+/* Status glyph — a 6px dot centred in the 16px icon column, one modifier per
+   badge value. The dot earns its place: it carries state. */
+.dot {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--icon-size);
+  height: var(--icon-size);
+}
+.dot::before {
+  content: "";
+  width: var(--dot-size);
+  height: var(--dot-size);
+  border-radius: 50%;
+  background: var(--status-idle);
+}
+.dot-waiting::before { background: var(--status-waiting); }
+.dot-working::before { background: var(--status-working); }
+/* Idle draws NOTHING (owner, 2026-09-12): a grey dot on every resting row
+   made the list read as bulleted and hid the one green dot that mattered. The
+   column stays so titles keep their left edge; absence is the idle state. */
+.dot-idle::before    { background: transparent; }
+.dot-failed::before  { background: var(--status-failed); }
+/* A terminal agent finished a turn nobody has looked at (owner, 2026-09-25). */
+.dot-done::before    { background: var(--status-done); }
+
+/* THE PILL, stated once. Eight rules across Plans, Orchestration,
+   Collaboration, the canvas and the agent menu each drew their own state
+   capsule — different pads, different radii, and the reason --badge-bg landed
+   under --fg-dim in one of them and under --danger-fg in another. Two
+   variants and nothing else: the filled default for a count or a state worth
+   looking at, and quiet for a label that only needs an edge.
+   --radius-pill is zeroed by the Bare-CLI form axis, so these square with the
+   rest of the app there without a second rule. */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-meta);
+  font-weight: var(--wght-medium);
+  line-height: var(--lh-tight);
+  background: var(--badge-bg);
+  color: var(--badge-fg);
+  white-space: nowrap;
+}
+.badge-quiet {
+  background: transparent;
+  color: var(--fg-dim);
+  box-shadow: inset 0 0 0 var(--border-w) var(--border-strong);
+}
+
+/* VS Code's viewsWelcome pattern: a short sentence, and a single command button
+   for the zero-session case only. */
+.empty {
+  padding: 16px;
+  color: var(--fg-muted);
+  font-size: var(--text-body);
+}
+.empty-text { margin: 0 0 8px; }
+/* The second line of a zero-state: why the list is empty and what to do about
+   it. Quieter than the statement above it, but still text — --fg-dim, never
+   --fg-faint, which this file rules non-text only. */
+.empty-hint {
+  margin: 0;
+  color: var(--fg-dim);
+  font-size: var(--text-ui);
+  line-height: var(--lh-ui);
+}
+/* The Agent surface's zero-state is a direct child of the workspace surface,
+   not a tile-grid cell, so it centers and sizes itself against the whole pane. */
+.workspace-welcome-title { margin:0 0 12px; max-width:28ch; color:var(--fg-strong);
+  font-size:var(--text-display); font-weight:var(--wght-strong); line-height:var(--lh-tight); overflow-wrap:anywhere; }
+.agent-empty > .empty-text { max-width:46ch; color:var(--fg-muted); font-size:var(--text-body); line-height:var(--lh-ui); }
+.agent-empty > .empty-actions { margin-top:12px; }
+.agent-empty {
+  padding:32px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  height: 100%;
+  text-align: center;
+}
+
+/* The renderer's crash fallback (main.tsx ErrorBoundary) is the one view mounted
+   at the document root, so — unlike every pane zero-state that reuses `.empty`
+   below a titlebar — it sits directly under the macOS traffic lights. It reserves
+   and drags that strip itself, matching the product rail that cannot mount in
+   an error boundary, so the copy clears the buttons and the crashed window stays
+   movable and closable. It lives here in theme.css (always loaded), never in a
+   component whose own crash could keep its injected <style> from mounting. */
+.crash-fallback::before {
+  content: "";
+  display: block;
+  height: var(--titlebar-h);
+  min-height: var(--titlebar-h);
+  -webkit-app-region: drag;
+}
+.crash-fallback button { -webkit-app-region: no-drag; }
+
+/* The same treatment the composer gives its own validation errors: a launch
+   that failed in the main process is one more reason the session did not
+   start, so it must not read as a different class of message. */
+.launch-error {
+  padding: 8px 4px 0;
+  color: var(--danger-fg);
+  font-size: var(--text-ui);
+}
+
+/* ---- subagent cell ----------------------------------------------------- */
+
+/* A spawned subagent inside the transcript. ONE ROW, in the language of the
+   tool and diff rows around it: the same --row-h, the same 6px padding and
+   gap, the same state glyphs.
+
+   IT USED TO BE A CARD — filled, bordered, 8px radius, an 8px margin, a 2px
+   status rail and a second metadata line under the row. Measured at the 420px
+   pane width this project designs for, that is 52px plus margin against a tool
+   row's 28px: three parallel agents filled the pane, and read as three boxes
+   dropped into a column of rows.
+
+   Everything the card carried is still reachable. The per-status rail is gone
+   because StateGlyph already paints the same four states the way every other
+   row in this transcript paints them, so the rail was a second copy of the
+   status in a vocabulary nothing else used. The metadata line is gone because
+   its two fields moved: the activity into the row's summary slot, the model
+   into the detail panel. The 2px rail comes back below as the SELECTION
+   marker, on exactly one row at a time, which is what a rail is for. */
+.sub {
+  position: relative;
+  margin: 0 0 2px;
+}
+
+/* Matches .conv-row exactly (Conversation.tsx), because it IS one now. It is a
+   flex item rather than width:100% — the fold button beside it is its sibling,
+   not its parent — so it needs min-width:0 to ellipsise instead of overflow. */
+.sub-row {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  height: var(--row-h);
+  padding: 0 6px;
+  font: inherit;
+  font-size: var(--text-body);   /* 13px: the transcript row size */
+  color: var(--fg);
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-control);
+  cursor: pointer;
+}
+.sub-row:hover:not(:disabled) { background: var(--row-hover); }
+.sub-row:disabled { cursor: default; }
+
+/* The one cell the detail column is describing. The inset rail is 2px of
+   --accent against --row-selected; --accent clears 3:1 against every shipped
+   row-selected value, and the row's own text keeps its AA composite because
+   --row-selected is the same wash the sidebar's selected row uses. */
+.sub.is-selected .sub-row {
+  background: var(--row-selected);
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+
+.sub-caret { flex: none; }
+
+/* The row's identity, shaped like .conv-name: shrinkable and ellipsised rather
+   than capped at a fraction of the row. The old 35% cap was measured giving
+   the duplicate description MORE width than the name it duplicated. */
+.sub-type {
+  /* SHRINK PRIORITY, not width. Flex shrink is weighted by content basis, so
+     three equal-priority slots hand the MOST pixels to the longest string — the
+     summary — and clip the name to `rend…`, which makes two spawns of the same
+     task indistinguishable. Measured at the 420px pane: 46px of name at equal
+     priority, 158px at these weights, same 28px row. */
+  flex: 0 0.15 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--fg-strong);
+  font-weight: var(--wght-strong);   /* size inherited from the row, exactly as .conv-name is */
+}
+
+.sub-desc {
+  flex: 1 3 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--fg-muted);
+}
+
+/* Scoped: .conv-sum is shared with the tool rows, whose own distribution is
+   already correct. Only the subagent row has three text slots competing. */
+.sub-row .conv-sum { flex-shrink: 8; }
+
+.sub-state {
+  flex: none;
+  margin-left: auto;
+  font-size: var(--text-meta);
+  color: var(--fg-muted);
+}
+/* The dot carries the working hue. Muted text stays above the contrast floor
+   in every shipped light and dark palette. */
+.sub-state-run { color: var(--fg-muted); }
+.sub-state-failed { color: var(--danger-fg); }  /* text tier */
+
+/* The nested transcript, quiet with its parent: no border, no second ground.
+   The indent puts a child's chevron column under its parent's robot glyph —
+   .sub-row starts 22px in (6px fold padding + 16px chevron), and a child row
+   adds its own 6px, so 22px here lands the child's chevron at the parent's
+   glyph. The guide sits in the middle of that indent. */
+.sub-kids {
+  position: relative;
+  padding: 2px 0 2px 22px;
+}
+.sub-kids::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 11px;
+  width: 1px;
+  background: var(--tree-guide);
+}
+.sub-kids .sub { margin-bottom: 2px; }
+
+/* ---- notices ------------------------------------------------------------
+   One-line statements the app owes the user about something that already
+   happened somewhere else: a worktree kept because it still holds uncommitted
+   work, the result of an import. Not errors, and not modal — they sit above the
+   pane's content and are dismissed by hand, because the worktree path is the
+   only place its location is ever stated. */
+.notice {
+  display: flex;
+  flex: none;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 10px 10px 0;
+  padding: 6px 8px;
+  color: var(--fg);
+  background: var(--material-surface);
+  border: var(--border-w) solid var(--border-strong);
+  border-radius: var(--radius-container);
+  font-size: var(--text-ui);
+  line-height: var(--lh-ui);
+}
+.notice-region {
+  flex: 0 1 auto;
+  min-height: 0;
+  max-height: min(30vh, 240px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+/* A worktree notice reports what was already done ("kept the worktree", "started
+   from the last commit"), dismissed by hand and never blocking. Quiet glyph
+   tier: nothing here is waiting on the user. */
+.notice-glyph { flex: none; color: var(--fg-dim); }
+.notice-text { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
+.notice-path { font-family: var(--font-mono); color: var(--fg-muted); }
+.notice-close {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  font: inherit;
+  line-height: 1;
+  color: var(--fg-muted);     /* a control: 3:1 minimum, and --fg-faint fails it */
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-control);
+  cursor: pointer;
+}
+.notice-close:hover { color: var(--fg-strong); background: var(--row-hover); }
+/* A notice's one action (Reveal a set-aside file): a quiet outlined button
+   beside the close, so the way to look stays next to what happened. */
+.notice-action {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  height: 24px;
+  padding: 0 8px;
+  font: inherit;
+  color: var(--fg-strong);
+  background: transparent;
+  border: var(--border-w) solid var(--border-strong);
+  border-radius: var(--radius-control);
+  cursor: pointer;
+}
+.notice-action:hover { background: var(--row-hover); }
+
+/* ---- corner notices ------------------------------------------------------
+   Errors (and a rollback's result) are small cards in the bottom-right corner
+   of the main area (owner, 2026-11-15; a full-width bar across its top
+   before): a dot, the message in plain words, Try again where a retry exists,
+   and Dismiss. Newest on top, three at most and "N more". The stack rises
+   above any composer it would cover (`--corner-notice-lift`, measured by
+   CornerNotices) and stays under the composer panel and Settings. */
+.corner-notices {
+  position: absolute;
+  z-index: 5;
+  right: 20px;
+  bottom: var(--corner-notice-lift, 20px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  max-width: min(520px, calc(100% - 40px));
+  max-height: calc(100% - var(--corner-notice-lift, 20px) - 20px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.corner-notice {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 10px 14px;
+  color: var(--fg);
+  background: var(--surface);
+  border: var(--border-w) solid var(--border-strong);
+  border-radius: var(--radius-overlay);
+  box-shadow: var(--overlay-shadow);
+  font-size: var(--text-ui);
+  line-height: var(--lh-ui);
+}
+.corner-notice-dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  margin-right: -6px;          /* 8px from the words, as the mockup draws it */
+  border-radius: var(--radius-pill);
+  background: var(--danger-fg);
+}
+.corner-notice.is-status .corner-notice-dot { background: var(--fg-dim); }
+.corner-notice-text { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
+/* Try again and Dismiss read as quiet links; a control still meets 3:1. */
+.corner-notice-action,
+.corner-notice-more {
+  flex: none;
+  padding: 2px 0;
+  font: inherit;
+  color: var(--fg-muted);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-control);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+.corner-notice-action:hover,
+.corner-notice-more:hover { color: var(--fg-strong); text-decoration-color: currentColor; }
+.corner-notice-action:focus-visible,
+.corner-notice-more:focus-visible { outline: var(--focus-ring-w) solid var(--focus); outline-offset: 2px; }
+.corner-notice-more {
+  padding: 4px 14px;
+  background: var(--surface);
+  border: var(--border-w) solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--overlay-shadow);
+  text-decoration: none;
+}
+/* Folded under "N more": still mounted, so its own countdown runs. */
+.corner-notice.is-folded {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+/* Errors leave on their own: fully legible for seven seconds, gone by eight.
+   The element's onAnimationEnd clears the state, so this is the only place
+   the timing lives. Hover or focus anywhere in the stack holds every one, so
+   a message cannot vanish while it is being read or copied. */
+.corner-notice.is-error, .sidebar-say-error { animation: error-linger 8s linear forwards; }
+.corner-notices:hover .corner-notice, .corner-notices:focus-within .corner-notice,
+.sidebar-say-error:hover, .sidebar-say-error:focus-within { animation-play-state: paused; }
+@keyframes error-linger {
+  0%, 87.5% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ---- usage menu ---------------------------------------------------------
+   One toolbar button opening a popover with every provider's names and
+   windows. The titlebar stays quiet; this is a thing you check, not a place
+   you work. */
+.usage-menu {
+  position: relative;
+  flex: none;
+  min-width: 0;
+  -webkit-app-region: no-drag;
+}
+.usage-menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: var(--control-h);
+  padding: 0 7px;
+  overflow: hidden;
+  font: inherit;
+  font-size: var(--text-ui);
+  color: var(--fg-muted);
+  background: transparent;
+  border: var(--border-w) solid transparent;
+  border-radius: var(--radius-control);
+  cursor: pointer;
+}
+.usage-menu-trigger:hover,
+.usage-menu-trigger.is-open {
+  color: var(--fg);
+  background: var(--row-hover);
+}
+.usage-menu-label { flex: none; }
+.usage-menu-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  width: min(360px, calc(100vw - 16px));
+  max-height: min(70vh, 520px);
+  overflow: hidden;
+  color: var(--fg);
+  background: var(--dropdown-bg);
+  border: var(--border-w) solid var(--border-strong);
+  border-radius: var(--radius-container);
+  box-shadow: var(--overlay-shadow);
+}
+
+.usage-head {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  height: var(--section-header-h);
+  padding: 0 8px;
+  border-bottom: var(--border-w) solid var(--border);
+}
+.usage-title { flex: none; color: var(--fg-dim); font-size: var(--text-meta); font-weight: var(--wght-strong); }
+/* WHEN the numbers under it were read. Stated on every render, not only once
+   they age: this menu holds one snapshot for as long as the app is open, and
+   the chips drop their percents once it goes stale. Past USAGE_STALE_MS the
+   line says so in words (" — may have moved since") and stays in the quiet
+   text tier; it is deliberately NOT amber, because an old reading is not an
+   agent blocked on you. There is no `.is-stale` class at all — the words are
+   the whole signal. Text tier is --fg-dim; --fg-faint is non-text only. */
+.usage-read { flex: none; color: var(--fg-dim); font-size: var(--text-meta); }
+.usage-head-actions { display: flex; align-items: center; gap: 6px; margin-left: auto; }
+.usage-body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+  padding: 10px;
+  overflow-y: auto;
+}
+.usage-provider { padding: 8px 2px; border-bottom: var(--border-w) solid var(--border); }
+.usage-provider:last-child { border-bottom: 0; }
+.usage-provider.is-unavailable { color: var(--fg-dim); }
+.usage-provider-head { display: flex; align-items: center; gap: 6px; }
+.usage-engine { flex: none; color: var(--fg-strong); font-size: var(--text-body); font-weight: var(--wght-strong); }
+
+.usage-plan { color: var(--fg-muted); font-size: var(--text-meta); }
+.usage-cost { margin-left: auto; color: var(--fg-dim); font-variant-numeric: tabular-nums; font-size: var(--text-meta); }
+/* The whole point of the panel: an engine that could not answer says so in
+   words. It never renders a bar, because a bar at 0% is a number the user would
+   act on and it would be wrong. */
+.usage-unknown { margin-top: 6px; color: var(--fg-dim); font-size: var(--text-ui); }
+.usage-note { margin-top: 6px; color: var(--fg-dim); font-size: var(--text-meta); line-height: var(--lh-ui); }
+.usage-window { margin-top: 8px; }
+.usage-window-head {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: var(--text-meta);
+  color: var(--fg-dim);
+}
+.usage-window-label { flex: none; color: var(--fg-muted); }
+.usage-pct { margin-left: auto; color: var(--fg); font-variant-numeric: tabular-nums; }
+/* An unknown reads as words, in the quiet tier — never as a number. */
+.usage-pct-unknown { color: var(--fg-dim); font-variant-numeric: normal; }
+.usage-bar {
+  height: 6px;
+  margin-top: 4px;
+  overflow: hidden;
+  background: var(--surface-raised);
+  border-radius: var(--radius-control);
+}
+.usage-bar-fill { height: 100%; background: var(--accent); }
+/* Amber past 80, red at the wall. The same two tokens the rest of the app uses
+   for "needs you" and "this stopped". */
+.usage-bar-fill.is-high { background: var(--status-waiting); }
+.usage-bar-fill.is-full { background: var(--status-failed); }
+.usage-reset { flex: none; color: var(--fg-dim); }
+
+/* The zero-state's escape hatches. More than one is normal — "your filter hid
+   them" and "import the ones you already have" are different doors out of the
+   same empty pane. */
+.empty-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+
+/* ---- motion ------------------------------------------------------------
+   Brief surface arrival and state transitions explain causality. Transcript
+   rows do not animate on mount; active-work indicators are the only loops. */
+
+@keyframes workspace-surface-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes workspace-tile-in {
+  from { opacity: 0; transform: scale(.992); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes detail-pane-in {
+  from { opacity: 0; transform: translateX(12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes detail-pane-out { to { opacity: 0; transform: translateX(12px); } }
+@keyframes workspace-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes workspace-backdrop-out { to { opacity: 0; } }
+@keyframes sidebar-drawer-in {
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes sidebar-drawer-out { to { opacity: 0; transform: translateX(-12px); } }
+
+/* Floating surfaces arrive rather than blink. Menus drop a few pixels from
+   their trigger as they fade in (the composer's context meter opens upward, so
+   it rises); dialogs rise and settle over a fading scrim; a side column glides
+   in. Opacity and the individual translate/scale properties only: popovers
+   measure their own box to place themselves, and a scaled box measures small.
+   :where() keeps every rule at zero specificity, so a surface that declares
+   its own motion (the palette, the session library, Bare CLI's inline command
+   list) keeps it. Menus still close at once: a chosen item's effect is the
+   feedback, and a lingering menu would cover it. */
+:where(.terminal-menu-panel, .usage-menu-panel, .app-select-popover, .row-menu,
+  .prompt-context-menu, .agent-thread-past-menu) {
+  animation: popover-drop-in var(--motion-base) var(--ease-out) both;
+}
+:where(.conv-context-meter-panel) { animation: popover-rise-in var(--motion-base) var(--ease-out) both; }
+:where(.confirm-dialog-backdrop, .context-value-backdrop, .terminal-rename-backdrop,
+  .adversarial-review-backdrop, .agent-dialog-backdrop, .task-inspector-backdrop,
+  .away-backdrop) {
+  animation: workspace-backdrop-in var(--motion-base) var(--ease-standard) both;
+}
+:where(.confirm-dialog, .context-value-dialog, .terminal-rename-dialog, .adversarial-review-dialog,
+  .agent-dialog, .task-inspector, .away-panel) {
+  animation: dialog-rise-in var(--motion-slow) var(--ease-out) both;
+}
+/* Side columns that appear beside their work: the task inspector, the sidebar
+   search row, the archive confirmation and the archived projects list. */
+:where(.agent-task-inspector:not([hidden])) { animation: detail-pane-in var(--motion-slow) var(--ease-out) both; }
+:where(.sidebar-search, .project-confirm, .archived-projects) {
+  animation: popover-drop-in var(--motion-base) var(--ease-out) both;
+}
+/* Disclosures in panels and dialogs reveal their contents. Not the
+   transcript's: search scrolls to hits inside them and its plan header is
+   sticky, both of which need the contents in place at once. Nor the past
+   threads disclosure, whose contents are its own floating menu. */
+details:not(.conv-plan, .conv-tool-run, .agent-thread-past)[open]::details-content {
+  animation: popover-drop-in var(--motion-base) var(--ease-out);
+}
+@keyframes popover-drop-in { from { opacity: 0; translate: 0 -4px; } }
+@keyframes popover-rise-in { from { opacity: 0; translate: 0 4px; } }
+@keyframes dialog-rise-in { from { opacity: 0; translate: 0 8px; scale: .98; } }
+
+/* Running only: a heartbeat on the status glyph, same colour token as the
+   sidebar badge it matches.
+
+   Not the one loop in the app, and no inventory of them is kept here: the last
+   one went stale as loops were added (search the sheets for `infinite`). The
+   Effort popover's loops are declared paused and run only while it is hovered
+   or holds focus, so a resting window spends nothing on them. The
+   reduced-motion reset below covers every loop; the budget is what wants
+   watching.
+
+   The budget (owner, 2026-10-22, battery): a running loop makes Chromium draw
+   the whole window at the display's refresh rate, `steps()` or not, so loops
+   rest after about three seconds of motion (loop-rest.ts, 2026-10-27). Every
+   loop also steps at about 12 frames a second (steps per keyframe segment =
+   segment seconds × 12) and
+   reads `--ambient-play-state`, which rests it while Interface is not the app
+   in front (window-activity.ts). window-activity.test.ts holds each sheet's
+   `infinite` rules to both. */
+:root { --ambient-play-state: running; }
+:root[data-window-active="false"] { --ambient-play-state: paused; }
+.dot-pulse { animation: dot-pulse 1.6s steps(10) infinite; animation-play-state: var(--ambient-play-state); }
+@keyframes dot-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+/* The loading skeletons' one cadence, for the sidebar and the transcript alike:
+   dot-pulse's curve, declared once and here because a keyframe name is global
+   and this is the sheet both surfaces always load. */
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  /* The running state must stay legible, not merely still. */
+  .dot-pulse { opacity: 1; }
+  .conv-caret { opacity: 1; }
+  .codicon-modifier-spin { animation: none; }
+  .workspace-surface, .workspace-settings-overlay, .workspace-tile,
+  .detail-pane, .sidebar-backdrop, .sidebar { animation: none !important; }
+  /* Arrivals appear in place: the 0.01ms reset would still paint a filled
+     first frame, a menu 4px off or a dialog at nothing. */
+  :where(.terminal-menu-panel, .usage-menu-panel, .app-select-popover, .row-menu,
+    .prompt-context-menu, .agent-thread-past-menu, .conv-context-meter-panel,
+    .confirm-dialog-backdrop, .context-value-backdrop, .terminal-rename-backdrop,
+    .adversarial-review-backdrop, .agent-dialog-backdrop, .task-inspector-backdrop,
+    .away-backdrop,
+    .confirm-dialog, .context-value-dialog, .terminal-rename-dialog, .adversarial-review-dialog,
+    .agent-dialog, .task-inspector, .away-panel,
+    .agent-task-inspector, .sidebar-search, .project-confirm, .archived-projects) { animation: none; }
+  details:not(.conv-plan, .conv-tool-run, .agent-thread-past)[open]::details-content { animation: none; }
+  .app-grid, .app-grid > .sidebar, .app-grid > .workspace-shell { transition: none; }
+  /* Error auto-dismiss keeps its eight seconds here; the reset above would
+     otherwise end it in 0.01ms. It ends with a cut instead of a fade. */
+  .corner-notice.is-error, .sidebar-say-error {
+    animation-duration: 8s !important;
+    animation-timing-function: steps(1, end) !important;
+  }
+}

@@ -1,0 +1,218 @@
+{
+  "accepted": [
+    {
+      "version": 1,
+      "terminalFontSize": 12,
+      "pinnedWorkspaces": []
+    },
+    {
+      "version": 1,
+      "terminalFontSize": 20,
+      "pinnedWorkspaces": []
+    },
+    {
+      "version": 1,
+      "terminalFontSize": 26,
+      "pinnedWorkspaces": [
+        "workspace-a"
+      ]
+    }
+  ],
+  "rejected": [
+    null,
+    {},
+    {
+      "version": 2,
+      "terminalFontSize": 20,
+      "pinnedWorkspaces": []
+    },
+    {
+      "version": 1,
+      "terminalFontSize": 11,
+      "pinnedWorkspaces": []
+    },
+    {
+      "version": 1,
+      "terminalFontSize": 27,
+      "pinnedWorkspaces": []
+    },
+    {
+      "version": 1,
+      "terminalFontSize": 20.5,
+      "pinnedWorkspaces": []
+    },
+    {
+      "version": 1,
+      "terminalFontSize": "20",
+      "pinnedWorkspaces": []
+    },
+    {
+      "version": 1,
+      "terminalFontSize": 20,
+      "pinnedWorkspaces": [
+        "a",
+        "a"
+      ]
+    },
+    {
+      "version": 1,
+      "terminalFontSize": 20,
+      "pinnedWorkspaces": [
+        "../escape"
+      ]
+    },
+    {
+      "version": 1,
+      "terminalFontSize": 20,
+      "pinnedWorkspaces": [
+        ""
+      ]
+    },
+    {
+      "version": 1,
+      "terminalFontSize": 20,
+      "pinnedWorkspaces": [
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x",
+        "x"
+      ]
+    },
+    {
+      "version": 1,
+      "terminalFontSize": 20,
+      "pinnedWorkspaces": null
+    },
+    {
+      "version": 1,
+      "terminalFontSize": 20,
+      "pinnedWorkspaces": [],
+      "unknown": true
+    }
+  ]
+}

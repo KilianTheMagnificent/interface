@@ -1,0 +1,151 @@
+{
+  "description": "Phone roster v4 (terminals carry the host's attention) and phone Threads v1: the list, a thread's detail, an approval answer and a follow-up. Rust (interface-contracts remote.rs, remote_threads.rs), TypeScript (electron/src/remote/phone-v4.test.ts) and Swift (MacAddressTests.swift) read it.",
+  "roster": {
+    "version": 4,
+    "workspaces": [
+      {
+        "id": "saved-workspace",
+        "name": "Interface",
+        "root": "/Projects/Interface",
+        "terminals": [
+          {
+            "id": "00000000-0000-4000-8000-000000000011",
+            "generation": 2,
+            "title": "Fix the parser",
+            "root": "/Projects/Interface",
+            "cwd": "/Projects/Interface",
+            "launch": {
+              "version": 1,
+              "profileId": "claude"
+            },
+            "state": "running",
+            "size": {
+              "columns": 80,
+              "rows": 24
+            },
+            "createdAt": "2026-10-14T08:00:00.000Z",
+            "updatedAt": "2026-10-14T09:12:00.000Z",
+            "attention": {
+              "version": 1,
+              "since": "2026-10-14T09:12:00.000Z"
+            }
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000012",
+            "generation": 2,
+            "title": "Ship the phone build",
+            "root": "/Projects/Interface",
+            "cwd": "/Projects/Interface",
+            "launch": {
+              "version": 1,
+              "profileId": "codex"
+            },
+            "state": "running",
+            "size": {
+              "columns": 80,
+              "rows": 24
+            },
+            "createdAt": "2026-10-14T08:00:00.000Z",
+            "updatedAt": "2026-10-14T09:20:00.000Z"
+          }
+        ]
+      }
+    ],
+    "projects": {
+      "00000000-0000-4000-8000-000000000011": "/Projects/Interface",
+      "00000000-0000-4000-8000-000000000012": null
+    }
+  },
+  "threads": {
+    "version": 1,
+    "threads": [
+      {
+        "key": "claude#4b1c2a9e-0000-4000-8000-000000000001",
+        "engine": "claude",
+        "sessionId": "4b1c2a9e-0000-4000-8000-000000000001",
+        "title": "Migrate the settings store",
+        "project": "/Projects/Interface",
+        "status": "needsYou",
+        "section": "active",
+        "unread": true,
+        "lastActivity": "2026-10-14T09:31:00.000Z"
+      },
+      {
+        "key": "codex#0199e0a1-0000-7000-8000-000000000002",
+        "engine": "codex",
+        "sessionId": "0199e0a1-0000-7000-8000-000000000002",
+        "title": "Speed up the gate",
+        "project": "/Projects/Interface",
+        "status": "working",
+        "section": "pinned",
+        "unread": false,
+        "lastActivity": "2026-10-14T09:30:00.000Z"
+      },
+      {
+        "key": "claude#4b1c2a9e-0000-4000-8000-000000000003",
+        "engine": "claude",
+        "sessionId": "4b1c2a9e-0000-4000-8000-000000000003",
+        "title": "What is a good name for a bakery?",
+        "status": "idle",
+        "section": "active",
+        "unread": false,
+        "lastActivity": "2026-10-14T08:02:00.000Z"
+      },
+      {
+        "key": "acp:grok#ses_fixture4",
+        "engine": "acp:grok",
+        "sessionId": "ses_fixture4",
+        "title": "Summarize the release notes",
+        "project": "/Projects/Notes",
+        "status": "failed",
+        "section": "settled",
+        "unread": false,
+        "lastActivity": "2026-10-13T22:10:00.000Z"
+      }
+    ]
+  },
+  "detail": {
+    "version": 1,
+    "thread": {
+      "key": "claude#4b1c2a9e-0000-4000-8000-000000000001",
+      "engine": "claude",
+      "sessionId": "4b1c2a9e-0000-4000-8000-000000000001",
+      "title": "Migrate the settings store",
+      "project": "/Projects/Interface",
+      "status": "needsYou",
+      "section": "active",
+      "unread": true,
+      "lastActivity": "2026-10-14T09:31:00.000Z"
+    },
+    "turns": [
+      {
+        "prompt": "Move the settings store to the new schema.",
+        "reply": "I read the store and its tests. The new schema needs one migration step.",
+        "tools": 4,
+        "clipped": false
+      },
+      {
+        "prompt": "Go ahead and write the migration.",
+        "reply": "Writing it now. I need to run the migration tests.",
+        "tools": 2,
+        "clipped": true
+      }
+    ],
+    "olderTurns": 3,
+    "approval": {
+      "id": "toolu_fixture",
+      "tool": "Bash",
+      "summary": "cargo test -p interface-settings migration",
+      "answerable": true
+    }
+  },
+  "approvalResponse": {
+    "version": 1,
+    "approvalId": "toolu_fixture",
+    "decision": "allowOnce"
+  },
+  "send": {
+    "version": 1,
+    "text": "Run the migration tests again."
+  }
+}

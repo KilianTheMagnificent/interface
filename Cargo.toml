@@ -1,0 +1,115 @@
+[workspace]
+members = [
+  "apps/iface",
+  "apps/interface-host",
+  "crates/interface-common",
+  "crates/interface-remote",
+  "crates/interface-contracts",
+  "crates/interface-collaboration",
+  "crates/interface-storage",
+  "crates/interface-registry",
+  "crates/interface-review",
+  "crates/interface-desktop-services",
+  "crates/interface-terminal",
+  "crates/interface-settings",
+  "crates/interface-orchestration",
+  "crates/interface-prompt-context",
+  "crates/interface-workspace",
+  "crates/interface-updater",
+  "crates/interface-voice",
+  "crates/interface-engine",
+  "crates/interface-runtime",
+  "crates/engine-codex",
+  "crates/engine-acp",
+  "crates/engine-claude",
+  "crates/provider-replay",
+  "xtask",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.3.10"
+edition = "2024"
+rust-version = "1.88"
+license = "MIT"
+
+[workspace.dependencies]
+hpke = { version = "=0.13.0", default-features = false, features = ["alloc", "p256"] }
+rand_core = { version = "=0.9.5", default-features = false, features = ["os_rng"] }
+tokio-tungstenite = { version = "=0.29.0", default-features = false, features = ["connect", "rustls-tls-webpki-roots"] }
+mdns-sd = { version = "=0.21.2", default-features = false }
+qrcode = { version = "=0.14.1", default-features = false }
+anyhow = "1.0.100"
+async-trait = "0.1.89"
+axum = { version = "=0.8.9", default-features = false, features = ["http1", "json", "query", "tokio", "ws"] }
+base64 = "0.22.1"
+chrono = { version = "0.4.42", default-features = false, features = ["clock", "serde"] }
+chrono-tz = "=0.10.4"
+clap = { version = "4.6.6", features = ["derive"] }
+crossterm = "0.29.0"
+directories = "6.0.0"
+fs2 = "0.4.3"
+futures = { version = "0.3.31", default-features = false, features = ["std"] }
+image = { version = "0.25.8", default-features = false, features = ["bmp", "gif", "jpeg", "png", "webp"] }
+libc = "0.2.177"
+# Substring search over a CLI executable for the provider canary.
+# Already resolved through regex.
+memchr = "2.8.3"
+portable-pty = "0.9.0"
+ratatui = { version = "0.30.2", default-features = false, features = ["crossterm", "layout-cache", "underline-color"] }
+regex = "1.12.2"
+# Ed25519 for the signed update manifest. Already resolved through rustls.
+ring = "0.17.14"
+# Plain fsync(2) for checkpoint blobs; std's sync_all is F_FULLFSYNC on Apple.
+# Already resolved through crossterm and tempfile.
+rustix = { version = "1.1.4", default-features = false, features = ["fs", "std"] }
+serde = { version = "1.0.229", features = ["derive"] }
+# raw_value: the whole-registry push is serialized once, straight from its rows.
+serde_json = { version = "1.0.145", features = ["raw_value"] }
+sha2 = "0.10.9"
+tempfile = "3.23.0"
+toml = "=1.1.6"
+thiserror = "2.0.17"
+tokio = { version = "1.53.1", features = ["fs", "io-std", "io-util", "macros", "net", "process", "rt-multi-thread", "signal", "sync", "time"] }
+tokio-util = { version = "0.7.17", features = ["codec"] }
+tracing = { version = "0.1.41", default-features = false, features = ["std"] }
+tracing-subscriber = { version = "0.3.20", default-features = false, features = ["fmt", "std", "smallvec", "tracing-log"] }
+url = { version = "2.5.7", features = ["serde"] }
+# HTTPS client for the public update feed (interface-updater only): rustls
+# with ring and the bundled web roots, the stack the phone relay already uses.
+ureq = { version = "=3.5.2", default-features = false, features = ["rustls"] }
+unicode-normalization = "0.1"
+uuid = { version = "1.18.1", features = ["serde", "v4"] }
+
+[profile.dev]
+# The gate reads panic messages and backtraces, never a debugger's locals, so
+# full DWARF for every dependency is weight nobody spends. `unpacked` leaves the
+# object files where rustc emitted them instead of copying them into the linked
+# binary, which matters most for the one test binary the gate links per crate.
+# The test profile inherits both.
+debug = "line-tables-only"
+split-debuginfo = "unpacked"
+
+# Third-party crates are optimised even in debug builds: the Dev app's host,
+# every gate test executable and xtask otherwise run serde_json, tokio, regex,
+# the HPKE/P-256 stack and sha2 unoptimised (xtask SHA-512s each ~140 MB
+# artifact about seven times per promote and SHA-256s the source tree for
+# every gate receipt; unoptimised sha2 hashes at ~60 MB/s, optimised at
+# ~800 MB/s). Workspace crates keep fast unoptimised incremental builds.
+# Dependencies rebuild once after a toolchain or lockfile change, as before.
+[profile.dev.package."*"]
+opt-level = 2
+
+[profile.release]
+# The packaged host ships this profile. Cross-crate ThinLTO keeps parallel
+# codegen units so promote builds use multiple cores; nothing in the tree
+# catches an unwind, and the shipped binary carries no symbols a user could read.
+lto = "thin"
+strip = "symbols"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+all = "warn"
+pedantic = "warn"

@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "intents": {
+    "request": {
+      "agentId": "one",
+      "fingerprint": "bca859323b41b581695c4a2d88b350bac0a89843675409935554fbd435479fb2",
+      "sessionKey": null,
+      "definitelyUnsent": false
+    }
+  }
+}

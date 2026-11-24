@@ -1,0 +1,35 @@
+/* AN AWAY LOOP'S THREAD (review B3). The round line stands where a work
+   round's prompt bubble would; the review and report cards sit under turns
+   like the changes card, on the same surface and hairline. Neutral ink and
+   the existing status tiers only: no colour of its own. */
+.taway-round { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin:4px 0 10px;
+  font-size:var(--text-ui); color:var(--fg-muted); }
+.taway-glyph { flex:none; color:var(--fg-dim); }
+.taway-round-line { color:var(--fg); font-weight:var(--wght-medium); }
+.taway-instructions { flex-basis:100%; }
+.taway-instructions > summary { width:max-content; color:var(--fg-dim); cursor:pointer; }
+.taway-instructions > summary:hover { color:var(--fg); }
+.taway-instructions > p { max-height:220px; margin:6px 0 0; padding:8px 10px; overflow:auto;
+  white-space:pre-wrap; overflow-wrap:anywhere; color:var(--fg-muted); background:var(--surface);
+  border:var(--border-w) solid var(--border); border-radius:var(--radius-container); }
+
+.taway-card { margin:0 0 12px; padding:0 12px 10px; background:var(--surface);
+  border:var(--border-w) solid var(--border); border-radius:calc(var(--radius-container) + 4px);
+  font-size:var(--text-body); color:var(--fg); }
+.taway-card-head { display:flex; align-items:center; gap:8px; min-height:40px; margin:0 -6px 0 0; }
+.taway-card-title { flex:none; font-weight:var(--wght-medium); }
+.taway-verdict { flex:1 1 auto; min-width:0; color:var(--fg-muted); }
+.taway-review.is-ok .taway-glyph { color:var(--diff-added); }
+.taway-review.is-blocked .taway-glyph,
+.taway-report.is-blocked .taway-glyph,
+.taway-report.is-unknown .taway-glyph { color:var(--status-failed); }
+.taway-card .taway-open, .taway-card .taway-stop { margin-left:auto; }
+.taway-card .taway-review-changes { margin-left:auto; }
+.taway-card p { margin:0 0 6px; line-height:var(--lh-prose); overflow-wrap:anywhere; }
+.taway-summary { color:var(--fg); }
+.taway-checks { margin:0 0 6px; padding-left:18px; font-family:var(--font-mono);
+  font-size:var(--text-ui); color:var(--fg-muted); }
+.taway-checks > li { overflow-wrap:anywhere; }
+.taway-note, .taway-meta { font-size:var(--text-ui); color:var(--fg-dim); }
+.taway-detail { color:var(--fg-muted); }
+.taway-final { padding-top:2px; }

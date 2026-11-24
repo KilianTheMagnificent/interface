@@ -1,0 +1,98 @@
+appId: com.andreromero.interface
+productName: Interface
+
+directories:
+  output: ../release
+  buildResources: build
+
+# Vite bundles every renderer package into dist/. electron-builder adds only
+# package.json `dependencies`, which therefore list just what dist-main loads
+# (scripts/package-parity.test.mjs holds the two in step).
+files:
+  - dist/**
+  - dist-main/**
+  - '!dist-main/**/*.tsbuildinfo'
+  - package.json
+
+# The renderer never executes these directly. Electron resolves and supervises
+# the signed first-party host by this absolute Resources-relative location.
+#
+# xtask resolves Cargo's actual target directory and exports it relative to this
+# project. electron-builder resolves `from` before expanding environment macros,
+# so an absolute macro value incorrectly gets appended to the project path.
+# Never assume `../target`: an explicit Cargo target may live elsewhere.
+# An unset variable fails closed rather than packaging a stale binary.
+extraResources:
+  - from: dist-remote
+    to: remote
+  - from: ${env.INTERFACE_TARGET_DIR}/release/interface-host
+    to: bin/interface-host
+  - from: ${env.INTERFACE_TARGET_DIR}/release/iface
+    to: bin/iface
+  - from: ${env.INTERFACE_TARGET_DIR}/release/interface-voice
+    to: bin/interface-voice
+
+asar: true
+
+electronFuses:
+  runAsNode: false
+  enableCookieEncryption: true
+  enableNodeOptionsEnvironmentVariable: false
+  enableNodeCliInspectArguments: false
+  enableEmbeddedAsarIntegrityValidation: true
+  onlyLoadAppFromAsar: true
+
+# Re-read the fuse wire from the already-signed app. A package where a fuse
+# silently stayed at Electron's stock value is not a valid Interface build.
+afterSign: scripts/verify-fuses.cjs
+
+mac:
+  target:
+    - target: zip
+      arch: [arm64]
+  category: public.app-category.developer-tools
+  icon: build/icon.icns
+  publish:
+    provider: generic
+    url: https://updates.interface.invalid/
+  electronUpdaterCompatibility: ">=2.16"
+  # Signing identity resolves from CSC_NAME or local Keychain auto-discovery
+  # (scripts/sign-mac.cjs), never a hardcoded personal email in source.
+  # File Provider can reattach provenance metadata beneath Desktop while
+  # codesign walks the generated app. Sign a clean generated copy in
+  # /private/tmp and atomically copy the verified signature back.
+  sign: scripts/sign-mac.cjs
+  signIgnore:
+    - "\\.pak$"
+  # Hardened runtime and Apple's secure timestamp on every build, with the
+  # free Apple Development certificate and no notarization (sign-mac.cjs).
+  # The app bundle is pinned to its signing team so installed copies keep
+  # updating across certificate renewals.
+  hardenedRuntime: true
+  notarize: false
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.inherit.plist
+  extendInfo:
+    NSDesktopFolderUsageDescription: >-
+      Interface opens the project folders your agent sessions run in, so it can
+      show their files and the changes an agent proposes.
+    NSDocumentsFolderUsageDescription: >-
+      Interface opens the project folders your agent sessions run in, so it can
+      show their files and the changes an agent proposes.
+    NSDownloadsFolderUsageDescription: >-
+      Interface opens the project folders your agent sessions run in, so it can
+      show their files and the changes an agent proposes.
+    NSMicrophoneUsageDescription: Interface uses the microphone for the voice assistant.
+    NSLocalNetworkUsageDescription: Interface uses your local network so the iPhone app can reach this Mac when you turn on phone access.
+    NSBonjourServices:
+      - _interface._tcp
+    NSCameraUsageDescription: Interface lets a web page in its Browser use the camera when you allow it.
+    # macOS asks on Interface's behalf when a tool running in one of its
+    # terminals or agent sessions wants one of these (entitlements.mac.plist).
+    NSAppleEventsUsageDescription: A tool running in an Interface terminal or agent session wants to control another app.
+    NSContactsUsageDescription: A tool running in an Interface terminal or agent session wants to read your contacts.
+    NSCalendarsUsageDescription: A tool running in an Interface terminal or agent session wants to use your calendars.
+    NSCalendarsFullAccessUsageDescription: A tool running in an Interface terminal or agent session wants to use your calendars.
+    NSLocationUsageDescription: A tool running in an Interface terminal or agent session wants to know this Mac's location.
+    NSLocationWhenInUseUsageDescription: A tool running in an Interface terminal or agent session wants to know this Mac's location.
+    NSPhotoLibraryUsageDescription: A tool running in an Interface terminal or agent session wants to use your photo library.

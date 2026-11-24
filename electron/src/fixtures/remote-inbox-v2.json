@@ -1,0 +1,53 @@
+{
+  "version": 2,
+  "items": [
+    {
+      "id": "claude#4b1c2a9e-0000-4000-8000-000000000001",
+      "source": "thread",
+      "title": "Migrate the settings store",
+      "status": "needsYou",
+      "detail": "",
+      "canSend": true,
+      "thread": {
+        "key": "claude#4b1c2a9e-0000-4000-8000-000000000001",
+        "engine": "claude",
+        "sessionId": "4b1c2a9e-0000-4000-8000-000000000001",
+        "title": "Migrate the settings store",
+        "project": "/Projects/Interface",
+        "status": "needsYou",
+        "section": "active",
+        "unread": true,
+        "lastActivity": "2026-10-14T09:31:00.000Z"
+      }
+    },
+    {
+      "id": "run:daily",
+      "source": "agentTask",
+      "title": "Daily research",
+      "status": "working",
+      "detail": "Queued",
+      "canSend": false,
+      "agentName": "Researcher"
+    },
+    {
+      "id": "run:done",
+      "source": "agentTask",
+      "title": "Weekly brief",
+      "status": "idle",
+      "detail": "Completed: brief saved",
+      "canSend": false,
+      "agentName": "Researcher",
+      "thread": {
+        "key": "claude#agent-done",
+        "engine": "claude",
+        "sessionId": "agent-done",
+        "title": "Migrate the settings store",
+        "project": "/Projects/Interface",
+        "status": "idle",
+        "section": "active",
+        "unread": true,
+        "lastActivity": "2026-10-14T09:31:00.000Z"
+      }
+    }
+  ]
+}

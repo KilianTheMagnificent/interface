@@ -1,0 +1,399 @@
+/* ---- the Threads composer (owner, 2026-11-16: the TN Code look) ------------
+   Only a pane in the Threads grid draws this (ConversationComposer's
+   threadLayout); every other pane keeps .conv-composer exactly as it was.
+
+   One rounded card on the transcript's reading lane, 12px under the
+   transcript and 24px over the pane's foot: the field first, then one quiet
+   row — a round "+" and the access chip on the left; the model, effort and
+   Fast chips as borderless pills, then the verbs, on the right, Send a filled
+   circle. The card is the theme's surface with a hairline ring and a soft
+   lift (adapted from TN Code's composer sheet; see ThreadTranscript.css).
+   Every size and colour
+   is a token, so the Bare-CLI form axis squares the corners and drops the
+   lift here as it does everywhere else. Selectors are prefixed with the card
+   so they outrank the shared primitives they sit on (.conv-iconbtn,
+   .app-select-trigger) whichever sheet the bundle happens to load last. */
+
+.thread-composer { position:relative; box-sizing:border-box;
+  width:min(calc(100% - 2 * var(--conv-gutter)), var(--conv-measure));
+  margin:12px auto 24px; overflow:visible; background:var(--surface);
+  border:var(--border-w) solid var(--border);
+  border-radius:calc(var(--radius-composer) * 11 / 7);
+  box-shadow:var(--composer-lift); container:thread-composer / inline-size;
+  transition:border-color var(--motion-base) var(--ease-standard),
+    box-shadow var(--motion-base) var(--ease-standard); }
+/* Refined chrome: the edge is a hairline ring in the shadow (the border
+   stays, transparent, for the waiting amber), over a soft second layer of
+   lift. Bare CLI drops its shadows, so there the border above is the edge. */
+:where(:root:not([data-chrome="cli"])) .thread-composer {
+  background:light-dark(color-mix(in srgb, var(--surface) 92%, transparent),
+    color-mix(in srgb, var(--surface-raised) 90%, transparent));
+  border-color:transparent;
+  box-shadow:0 0 0 .5px var(--tn-separator), var(--composer-lift),
+    0 8px 24px -10px color-mix(in srgb, var(--composer-lift-color) 90%, transparent); }
+:where(:root[data-chrome="cli"]) .thread-composer:focus-within { border-color:var(--border-strong); }
+
+/* ---- the live turn (owner, 2026-10-07) ------------------------------------
+   The frame around a running turn: the request docked above the card, and the
+   card's waiting state. --thread-amber reads the app's one amber once, for the
+   dock and the waiting card — both say the turn is blocked on you, and nothing
+   else here takes it. Running draws nothing on the card: the live turn's
+   status line and the head's line say it. */
+.thread-composer, .thread-dock { --thread-amber:var(--status-waiting); }
+
+/* Waiting on the owner: an amber edge and a soft, still 3px ring. */
+.thread-composer.is-waiting { border-color:var(--thread-amber); }
+:where(:root:not([data-chrome="cli"])) .thread-composer.is-waiting {
+  box-shadow:0 0 0 3px color-mix(in srgb, var(--thread-amber) 22%, transparent),
+    var(--composer-lift),
+    0 8px 24px -10px color-mix(in srgb, var(--composer-lift-color) 90%, transparent); }
+
+/* ---- the dock: what blocks the turn, above the card ------------------------
+   ThreadApprovalDock's cards, on the card's lane, 16px over it. Waiting on the
+   owner, a card wears an amber edge and its glyph an amber tile; it arrives
+   (rises 18px and fades in, then two amber rings ping out) and then holds
+   still; reduced motion shows it in place with a still ring. */
+.thread-dock { display:flex; flex-direction:column; gap:8px; box-sizing:border-box;
+  width:min(calc(100% - 2 * var(--conv-gutter)), var(--conv-measure)); margin:12px auto 16px;
+  min-width:0; }
+.thread-dock-card { position:relative; box-sizing:border-box; min-width:0; padding:16px 18px 12px;
+  color:var(--fg); background:var(--surface); border:var(--border-w) solid var(--tn-separator);
+  border-radius:var(--radius-composer); font-size:var(--text-body);
+  line-height:var(--lh-ui); }
+.thread-dock-card:focus-visible { outline:var(--focus-ring-w) solid var(--focus);
+  outline-offset:var(--focus-ring-offset); }
+.thread-dock-card.is-pending { border-color:var(--thread-amber);
+  animation:thread-dock-in 260ms cubic-bezier(.2, .8, .2, 1) both,
+    thread-dock-ping 1.1s ease-out 260ms 2; }
+@keyframes thread-dock-in { from { opacity:0; transform:translateY(18px); } }
+@keyframes thread-dock-ping {
+  from { box-shadow:0 0 0 0 color-mix(in srgb, var(--thread-amber) 45%, transparent); }
+  to { box-shadow:0 0 0 10px color-mix(in srgb, var(--thread-amber) 0%, transparent); } }
+@media (prefers-reduced-motion: reduce) {
+  .thread-dock-card.is-pending { animation:none;
+    box-shadow:0 0 0 3px color-mix(in srgb, var(--thread-amber) 22%, transparent); }
+}
+/* The question: what it is about on a 30px tile (a command, an edit, a new
+   file, a question, in the Threads icons), then the words. Amber while the
+   request blocks the turn; a sent or checking card's tile drops to the dim
+   tier with its glyph. */
+.thread-dock-head { display:flex; align-items:center; gap:12px; min-width:0;
+  color:var(--fg-strong); font-weight:var(--wght-strong); }
+.thread-dock-head > .thread-dock-tile { display:inline-flex; flex:none; align-items:center;
+  justify-content:center; width:30px; height:30px; color:var(--fg-dim);
+  background:color-mix(in srgb, var(--fg-dim) 10%, transparent);
+  border-radius:var(--radius-container); }
+.thread-dock-head > .thread-dock-tile.thread-dock-glyph { color:var(--thread-amber);
+  background:color-mix(in srgb, var(--thread-amber) 14%, transparent); }
+.thread-dock-title { flex:none; }
+.thread-dock-sum { min-width:0; overflow:hidden; color:var(--fg-dim); font-weight:var(--wght-regular);
+  text-overflow:ellipsis; white-space:nowrap; }
+.thread-dock-body { display:flex; flex-direction:column; gap:8px; min-width:0; margin-top:16px; }
+/* The command, whole and wrapping, on the pane's own ground, scrolling past
+   six lines. */
+.thread-dock-card .thread-dock-command { margin:0; max-height:calc(6 * var(--lh-ui) * 1em + 24px);
+  overflow-y:auto; padding:12px 14px; color:var(--fg-strong); background:var(--editor-bg);
+  border:var(--border-w) solid var(--border); border-radius:var(--radius-container);
+  font-family:var(--font-mono); font-size:var(--text-ui); line-height:var(--lh-ui);
+  white-space:pre-wrap; overflow-wrap:anywhere; }
+.thread-dock-prompt { color:var(--fg-dim); user-select:none; }
+/* A request with no shape of its own shows its input, on the same block. */
+.thread-dock-card .conv-input { margin:0; padding:0; border:0; }
+.thread-dock-card .conv-pre { max-height:calc(6 * var(--lh-ui) * 1em + 16px); padding:8px 12px;
+  color:var(--fg-strong); background:var(--editor-bg); border:var(--border-w) solid var(--border);
+  border-radius:var(--radius-container); }
+.thread-dock-files { display:flex; flex-direction:column; gap:4px; margin:0; padding:0;
+  list-style:none; }
+.thread-dock-file { display:flex; align-items:center; gap:8px; min-width:0; color:var(--fg-dim);
+  font-size:var(--text-ui); }
+.thread-dock-path { min-width:0; overflow:hidden; color:var(--fg); text-overflow:ellipsis;
+  white-space:nowrap; }
+.thread-dock-stat { display:inline-flex; flex:none; gap:4px; margin-left:auto;
+  font-variant-numeric:tabular-nums; }
+.thread-dock-added { color:var(--diff-added); }
+.thread-dock-removed { color:var(--diff-removed); }
+.thread-dock-diff { display:flex; flex-direction:column; padding:6px 0; overflow:hidden;
+  background:var(--editor-bg); border:var(--border-w) solid var(--border);
+  border-radius:var(--radius-container);
+  font-family:var(--font-mono); font-size:var(--text-ui); line-height:var(--lh-prose); }
+.thread-dock-line { display:flex; gap:8px; min-width:0; padding:0 12px; color:var(--fg); }
+.thread-dock-line.is-added { background:var(--diff-added-bg); }
+.thread-dock-line.is-removed { background:var(--diff-removed-bg); }
+.thread-dock-sign { flex:none; width:1ch; }
+.thread-dock-line.is-added .thread-dock-sign { color:var(--diff-added); }
+.thread-dock-line.is-removed .thread-dock-sign { color:var(--diff-removed); }
+.thread-dock-code { min-width:0; white-space:pre-wrap; overflow-wrap:anywhere; }
+.thread-dock-more { padding:2px 12px 0; color:var(--fg-dim); font-family:var(--font-ui);
+  font-size:var(--text-meta); }
+.thread-dock-card .conv-q { max-height:min(40vh, 320px); overflow-y:auto; }
+.thread-dock-card .conv-verdict-err { margin:12px 0 0; }
+/* The footnote on the left; Deny, then the one filled Allow once, on the right. */
+.thread-dock-foot { display:flex; flex-wrap:wrap; align-items:center; gap:8px; min-width:0;
+  margin-top:16px; }
+.thread-dock-meta { min-width:0; color:var(--fg-dim); font-size:var(--text-meta);
+  font-variant-numeric:tabular-nums; }
+.thread-dock-acts { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-left:auto; }
+.thread-dock-acts.is-denying { flex:1 1 auto; }
+.thread-dock-acts.is-denying .conv-note { flex:1 1 160px; min-width:0; }
+.thread-dock-card .thread-dock-acts .btn { display:inline-flex; align-items:center; gap:8px;
+  height:28px; padding:0 14px; border-radius:var(--radius-pill);
+  font-size:var(--text-body); font-weight:var(--wght-medium); }
+/* The buttons are their words and their keys: the verdict's glyph is the
+   transcript card's, not the dock's. */
+.thread-dock-card .thread-dock-acts .btn > .codicon { display:none; }
+.thread-dock-card .thread-dock-acts .thread-dock-ghost { color:var(--fg); background:transparent;
+  border:var(--border-w) solid var(--border-strong); }
+.thread-dock-card .thread-dock-acts .thread-dock-ghost:hover:not(:disabled) {
+  color:var(--fg-strong); background:var(--row-hover); }
+/* The deciding button: the strongest ink as its fill, the surface as its words. */
+.thread-dock-card .thread-dock-acts .btn-primary:not(:disabled) { color:var(--surface);
+  background:var(--fg-strong); border-color:var(--fg-strong); }
+.thread-dock-card .thread-dock-acts .btn-primary:hover:not(:disabled) {
+  background:color-mix(in srgb, var(--fg-strong) 86%, var(--surface));
+  border-color:color-mix(in srgb, var(--fg-strong) 86%, var(--surface)); }
+.thread-dock-card .thread-dock-acts .btn-primary:not(:disabled) .kbd-hint { color:var(--surface);
+  border-color:color-mix(in srgb, var(--surface) 40%, transparent); }
+.thread-dock-card .conv-verdict { margin-left:auto; padding:0; }
+
+/* Two lines at rest, growing with the draft up to a bound, then scrolling. */
+.thread-composer .thread-composer-input { display:block; box-sizing:border-box; width:100%;
+  min-height:calc(16px + 2 * var(--lh-prose) * 1em); max-height:min(40vh, 240px);
+  field-sizing:content; overflow-y:auto; resize:none;
+  padding:14px 16px 0; font:inherit; font-size:var(--text-label); line-height:var(--lh-prose);
+  color:var(--fg-strong); background:transparent; border:0; outline:none; }
+.thread-composer .thread-composer-input::placeholder { color:var(--input-placeholder); }
+.thread-composer .thread-composer-input:disabled { color:var(--fg-muted); }
+/* Above the field: the attached context, why the card is locked, a refused
+   command — on the field's own inset, 8px over its first line. */
+.thread-composer > :is(.conv-context-row, .conv-lock-reason, .conv-command-error) {
+  padding:6px 18px 0; }
+.thread-composer > :is(.conv-context-row, .conv-lock-reason, .conv-command-error):first-child {
+  padding-top:14px; }
+.thread-composer > :is(.conv-context-row, .conv-lock-reason, .conv-command-error) ~ .thread-composer-input {
+  padding-top:8px; }
+
+/* 10px under the field and 12px over the card's edge. The left inset is the
+   field's 18px less the + button's own 6px, so its glyph sits on the text's
+   edge; the right one is Send's. */
+.thread-composer-foot { display:flex; flex-wrap:wrap; align-items:center; gap:2px;
+  min-width:0; padding:8px 10px 10px; }
+
+/* ---- the "+" button and its menu ---------------------------------------- */
+/* Not positioned: the menu below anchors to the card, so it opens above the
+   composer's left edge rather than over the field. */
+.thread-composer-plus { display:inline-flex; flex:none; }
+/* Stashed (n) (T3 section 9): a quiet chip by +, its list on the menu's surface. */
+.thread-composer-stash { display:inline-flex; flex:none; }
+.thread-composer-stash-row { display:flex; align-items:center; gap:2px; }
+.thread-composer-stash-row > .thread-composer-menu-row { flex:1 1 auto; min-width:0; }
+.thread-composer-stash-row > .thread-composer-icon { flex:none; }
+.thread-composer .thread-composer-icon { width:28px; height:28px; color:var(--tn-label-2);
+  border-radius:50%; }
+.thread-composer .thread-composer-icon:hover:not(:disabled),
+.thread-composer .thread-composer-icon[aria-expanded="true"] {
+  color:var(--fg-strong); background:var(--tn-fill-strong); }
+/* "+" is a filled circle at rest, as in Messages. */
+.thread-composer .thread-composer-plus .thread-composer-icon { margin-right:6px; background:var(--tn-fill); }
+
+.thread-composer-menu { position:absolute; z-index:6; left:0; bottom:calc(100% + 8px);
+  box-sizing:border-box; width:min(320px, calc(100vw - 24px)); max-width:100%; max-height:min(420px, 60vh);
+  overflow-y:auto; padding:6px; color:var(--fg); background:var(--dropdown-bg);
+  border:var(--border-w) solid var(--tn-separator); border-radius:var(--radius-composer);
+  box-shadow:var(--overlay-shadow); font-family:var(--font-ui); }
+.thread-composer-menu-heading { padding:8px 10px 4px; color:var(--fg-dim);
+  font-size:var(--text-ui); font-weight:var(--wght-medium); line-height:var(--lh-tight); }
+.thread-composer-menu-sep { height:var(--border-w); margin:4px 6px; background:var(--border); }
+.thread-composer-menu-row { display:grid;
+  grid-template-columns:var(--icon-size) minmax(0, 1fr) auto auto;
+  align-items:start; column-gap:10px; box-sizing:border-box; width:100%;
+  min-height:30px; padding:6px 10px; color:var(--fg); text-align:left;
+  background:transparent; border:0; border-radius:calc(var(--radius-container) + 1px);
+  font:inherit; font-size:var(--text-body); line-height:var(--lh-ui); cursor:pointer; }
+.thread-composer-menu-row:hover:not(.is-disabled),
+.thread-composer-menu-row:focus-visible { background:var(--row-hover); }
+.thread-composer-menu-row:focus-visible { outline:var(--focus-ring-w) solid var(--focus);
+  outline-offset:calc(-1 * var(--focus-ring-offset)); }
+.thread-composer-menu-row.is-disabled { color:var(--fg-muted); cursor:default; }
+.thread-composer-menu-glyph { display:inline-flex; align-items:center; justify-content:center;
+  width:var(--icon-size); height:var(--icon-size); color:var(--fg-dim); }
+.thread-composer-menu-copy { display:flex; flex-direction:column; gap:1px; min-width:0; }
+.thread-composer-menu-label { min-width:0; overflow:hidden; text-overflow:ellipsis;
+  white-space:nowrap; }
+.thread-composer-menu-detail { color:var(--fg-dim); font-size:var(--text-meta);
+  line-height:var(--lh-ui); }
+.thread-composer-menu-figures { display:flex; flex-direction:column; gap:1px; padding-top:2px;
+  color:var(--fg-dim); font-size:var(--text-meta); line-height:var(--lh-ui);
+  font-variant-numeric:tabular-nums; }
+.thread-composer-menu-figure { display:flex; justify-content:space-between; gap:12px; }
+.thread-composer-menu-figure-value { color:var(--fg-muted); text-align:right; }
+/* The glyph, the meta and the chevron sit on the label's line, so a row with a
+   detail line or figures under it keeps them beside the words they qualify. */
+.thread-composer-menu-meta { display:inline-flex; align-items:center; min-height:16px;
+  color:var(--fg-dim); font-size:var(--text-meta);
+  font-variant-numeric:tabular-nums; white-space:nowrap; }
+.thread-composer-menu-meta.is-high { color:var(--danger-fg); }
+.thread-composer-menu-more { display:inline-flex; align-items:center; min-height:16px;
+  color:var(--fg-dim); }
+
+/* ---- run settings: access on the left, model · effort · Fast on the right -- */
+.thread-composer-settings { display:flex; flex:1 1 auto; flex-wrap:wrap; align-items:center;
+  gap:2px; min-width:0; }
+.thread-composer-run { display:flex; flex:0 1 auto; align-items:center; gap:4px; min-width:0;
+  margin-left:auto; }
+.thread-composer .thread-composer-chip { display:inline-flex; flex:0 1 auto; align-items:center;
+  min-width:0; }
+
+/* One chip look for the pickers' triggers, the read-only model chip and the
+   Queue / Steer verbs: 28px, borderless, dim words, a wash on hover. */
+.thread-composer .thread-composer-chip .app-select-trigger,
+.thread-composer .thread-composer-model.is-static,
+.thread-composer .thread-composer-verb {
+  box-sizing:border-box; width:auto; height:28px; gap:6px; padding:0 10px;
+  color:var(--tn-label-2); background:transparent; border:0;
+  border-radius:var(--radius-pill);
+  font-size:var(--text-body); white-space:nowrap; }
+.thread-composer .thread-composer-chip .app-select-trigger:hover:not(:disabled),
+.thread-composer .thread-composer-chip .app-select-trigger[aria-expanded="true"] {
+  color:var(--fg-strong); background:var(--tn-fill); }
+.thread-composer .thread-composer-chip .app-select-trigger:disabled { color:var(--fg-faint); }
+.thread-composer .thread-composer-chip .app-select-value { color:inherit; }
+.thread-composer .thread-composer-model .app-select-value { max-width:200px; }
+/* The model chip is a borderless pop-up button like the rest: its provider's
+   mark, then its name in the body tier. */
+.thread-composer .thread-composer-model .app-select-trigger,
+.thread-composer .thread-composer-model.is-static { color:var(--fg); }
+.thread-composer .thread-composer-model .app-select-trigger:hover:not(:disabled),
+.thread-composer .thread-composer-model .app-select-trigger[aria-expanded="true"] {
+  color:var(--fg-strong); }
+.thread-composer .thread-composer-model.is-static { display:inline-flex; align-items:center;
+  cursor:default; }
+.thread-composer-chip-leading { display:inline-flex; flex:none; align-items:center; }
+.thread-composer-chip-value { min-width:0; overflow:hidden; text-overflow:ellipsis; }
+/* The effort ladder keeps its own top-tier accent; quiet is not the same as
+   unable to say "maximum". */
+.thread-composer .thread-composer-effort.effort-picker-maximum .app-select-value,
+.thread-composer .thread-composer-effort.effort-picker-xhigh .app-select-value {
+  color:var(--accent-text); }
+
+/* The access chip carries the mode's colour on its shield, and on its words
+   only for the modes that end the conversation about approvals. */
+.thread-composer .thread-composer-access .app-select-leading { color:var(--fg-dim); }
+.thread-composer .thread-composer-access.access-tone-plan .app-select-leading {
+  color:var(--mode-plan); }
+.thread-composer .thread-composer-access.access-tone-accept .app-select-leading {
+  color:var(--mode-accept); }
+.thread-composer .thread-composer-access.access-tone-auto .app-select-leading {
+  color:var(--mode-auto); }
+.thread-composer .thread-composer-access.access-tone-danger .app-select-leading,
+.thread-composer .thread-composer-access.access-tone-danger .app-select-value {
+  color:var(--mode-danger); }
+
+.thread-composer .thread-composer-fast { width:28px; height:28px;
+  border-radius:50%; }
+
+/* ---- the verbs ----------------------------------------------------------- */
+/* At the row's right end, and still there when a narrow card wraps them under
+   the settings. */
+.thread-composer-actions { display:flex; flex:none; align-items:center; gap:4px;
+  margin-left:auto; padding-left:2px; }
+.thread-composer .thread-composer-verb { display:inline-flex; align-items:center; }
+/* Mid-turn, Queue and Steer are small filled chips left of Stop, both
+   neutral washes — the owner's own words never take a hue — each with its
+   key hint. */
+.thread-composer .thread-composer-verb.is-queue {
+  color:var(--fg); background:color-mix(in srgb, var(--fg) 5%, transparent); }
+.thread-composer .thread-composer-verb.is-queue:hover:not(:disabled) {
+  color:var(--fg-strong); background:color-mix(in srgb, var(--fg) 9%, transparent); }
+.thread-composer .thread-composer-verb.is-steer {
+  color:var(--fg-strong); background:color-mix(in srgb, var(--fg-dim) 10%, transparent); }
+.thread-composer .thread-composer-verb.is-steer:hover:not(:disabled) {
+  background:color-mix(in srgb, var(--fg-dim) 16%, transparent); }
+.thread-composer .thread-composer-verb:disabled { color:var(--fg-faint); }
+.thread-composer-kbd { display:inline-flex; align-items:center; justify-content:center;
+  box-sizing:border-box; min-width:16px; height:16px; padding:0 4px;
+  color:var(--fg-dim); border:var(--border-w) solid var(--border);
+  border-radius:var(--radius-control); font-family:var(--font-mono);
+  font-size:var(--text-meta); line-height:1; }
+.thread-composer .thread-composer-verb:disabled .thread-composer-kbd { color:var(--fg-faint); }
+
+/* Send and Stop: 32px circles, the one pair of filled controls on the row. */
+.thread-composer .thread-composer-round { flex:none; width:32px; height:32px;
+  border-radius:50%; }
+.thread-composer-glyph { flex:none; }
+/* Send is the accent, with the accent's own ink for its arrow, drawn a little
+   heavier than the line set so it holds on the fill. */
+.thread-composer .thread-composer-foot .thread-composer-send {
+  color:var(--accent-fg); background:var(--accent); }
+.thread-composer .thread-composer-foot .thread-composer-send:hover:not(:disabled) {
+  color:var(--accent-fg); background:var(--accent-hover); }
+.thread-composer .thread-composer-foot .thread-composer-send:disabled {
+  color:var(--fg-faint); background:var(--surface-raised); }
+.thread-composer .thread-composer-send .thread-composer-glyph { stroke-width:2; }
+/* Stop is the strongest ink, with the surface as its square. */
+.thread-composer .thread-composer-foot .thread-composer-stop {
+  color:var(--surface); background:var(--fg-strong); }
+.thread-composer .thread-composer-foot .thread-composer-stop:hover:not(:disabled) {
+  color:var(--surface); background:color-mix(in srgb, var(--fg-strong) 86%, var(--surface)); }
+
+/* The slash menu: the popover above the card, in the canvas's family. */
+.thread-composer .provider-command-menu { left:0; right:0; bottom:calc(100% + 8px); padding:6px;
+  border-color:var(--tn-separator); border-radius:var(--radius-composer); }
+.thread-composer .provider-command-option { min-height:30px; padding:6px 10px;
+  border-radius:calc(var(--radius-container) + 1px); }
+
+/* A narrow pane keeps every control: the access chip drops its words for its
+   shield (its name and title still say the mode), the key hints go, and the
+   verbs wrap under the settings rather than squeezing the field. */
+@container thread-composer (max-width: 520px) {
+  .thread-composer .thread-composer-access .app-select-value { display:none; }
+  .thread-composer-kbd { display:none; }
+}
+@container thread-composer (max-width: 380px) {
+  .thread-composer .thread-composer-model .app-select-value { max-width:96px; }
+}
+
+/* CLI chrome writes the shared effort picker as bare lowercase words
+   (theme.css). In this row it stays a chip like the two beside it. */
+:root[data-chrome="cli"] .thread-composer .thread-composer-effort .app-select-trigger {
+  height:28px; padding:0 9px; color:var(--fg-dim); font-size:var(--text-body);
+  text-transform:none; }
+:root[data-chrome="cli"] .thread-composer .thread-composer-effort .app-select-chevron {
+  display:inline-block; }
+
+/* ---- the kept prompt, on the card's top edge (owner, 2026-11-15) ----------
+   One line across the top of the composer card, a hairline under it: what was
+   kept and its first words on the left, Put it back and Discard (Retry or
+   Continue safely first when the message did not finish) on the right, as
+   quiet text buttons. The words open the whole message and its attachments
+   beneath. Plain .conv-composer panes (Agent) take the same line. */
+.kept-prompt { box-sizing:border-box; min-width:0; padding:8px 14px;
+  color:var(--fg-muted); border-bottom:var(--border-w) solid var(--border);
+  font-size:var(--text-ui); line-height:var(--lh-tight); }
+.kept-prompt-line, .kept-prompt-confirm { display:flex; align-items:center; gap:16px; min-width:0; }
+.kept-prompt-confirm { margin-top:8px; }
+.kept-prompt-confirm > span:first-child { flex:1 1 auto; min-width:0; }
+.kept-prompt-words { display:inline-flex; flex:1 1 auto; align-items:center; gap:6px; min-width:0;
+  padding:0; color:inherit; background:transparent; border:0; border-radius:var(--radius-control);
+  font:inherit; text-align:left; cursor:pointer; }
+.kept-prompt-words:hover { color:var(--fg-strong); }
+.kept-prompt-text { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.kept-prompt-count { flex:none; color:var(--fg-dim); }
+.kept-prompt-actions { display:inline-flex; flex:none; align-items:center; gap:14px; }
+.kept-prompt .kept-prompt-action { height:auto; min-height:0; margin:0; padding:0; color:var(--fg-muted);
+  background:transparent; border:0; border-radius:var(--radius-control); font:inherit;
+  text-decoration:underline; text-decoration-color:color-mix(in srgb, currentColor 40%, transparent);
+  text-underline-offset:2px; cursor:pointer; }
+.kept-prompt .kept-prompt-action:hover:not(:disabled) { color:var(--fg-strong); }
+.kept-prompt .kept-prompt-action.is-danger { color:var(--danger-fg); }
+.kept-prompt .kept-prompt-action:disabled { color:var(--fg-faint); cursor:default; }
+.kept-prompt :is(.kept-prompt-words, .kept-prompt-action):focus-visible {
+  outline:var(--focus-ring-w) solid var(--focus); outline-offset:var(--focus-ring-offset); }
+.kept-prompt-more { margin-top:8px; }
+.kept-prompt-more p { margin:0 0 6px; color:var(--fg-dim); line-height:var(--lh-ui); }
+.kept-prompt-more pre { margin:0; max-height:180px; overflow:auto; padding:8px 10px; color:var(--fg);
+  background:var(--input-bg); border:var(--border-w) solid var(--border);
+  border-radius:var(--radius-control); font-family:var(--font-mono); font-size:var(--text-meta);
+  white-space:pre-wrap; overflow-wrap:anywhere; }
+.kept-prompt-more ul { display:flex; flex-wrap:wrap; gap:4px 14px; margin:6px 0 0; padding:0;
+  color:var(--fg-dim); list-style:none; font-size:var(--text-meta); }
+.kept-prompt-error { margin:6px 0 0; color:var(--danger-fg); }

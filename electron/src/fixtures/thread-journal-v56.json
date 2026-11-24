@@ -1,0 +1,52 @@
+{
+  "channel": "iface:threadJournal",
+  "protocol": 56,
+  "requests": [
+    { "kind": "read", "key": "claude#11111111-1111-4111-8111-111111111111" },
+    { "kind": "read", "key": "claude#11111111-1111-4111-8111-111111111111", "afterSeq": 12, "limit": 100 },
+    { "kind": "tail", "key": "acp:grok#session-2", "limit": 2000 },
+    { "kind": "search", "query": "flaky test" }
+  ],
+  "refused": [
+    { "kind": "read", "key": "" },
+    { "kind": "read", "key": "no-separator" },
+    { "kind": "tail", "key": "claude#a", "limit": 0 },
+    { "kind": "tail", "key": "claude#a", "limit": 2001 },
+    { "kind": "search", "query": "   " },
+    { "kind": "search", "query": "q", "extra": true },
+    { "kind": "write", "key": "claude#a" }
+  ],
+  "header": { "v": 1, "key": "claude#11111111-1111-4111-8111-111111111111", "firstSeq": 1 },
+  "lines": [
+    { "seq": 1, "at": 1731630000000, "turn": 0, "entry": { "kind": "turnStarted", "origin": "launch", "prompt": "Fix the flaky test", "digest": "3b0c" } },
+    { "seq": 2, "at": 1731630000100, "turn": 0, "entry": { "kind": "message", "text": "Looking at the test now." } },
+    { "seq": 3, "at": 1731630000200, "turn": 0, "entry": { "kind": "toolCall", "callId": "call-1", "tool": "Bash", "summary": "npm test", "input": { "command": "npm test" } } },
+    { "seq": 4, "at": 1731630000300, "turn": 0, "entry": { "kind": "toolResult", "callId": "call-1", "ok": true, "summary": "12 passed" } },
+    { "seq": 5, "at": 1731630000400, "turn": 0, "entry": { "kind": "approvalRequested", "approvalId": "approval-1", "tool": "Edit", "summary": "Edit src/a.ts" } },
+    { "seq": 6, "at": 1731630000500, "turn": 0, "entry": { "kind": "diff", "callId": "call-2", "path": "src/a.ts", "before": "a", "after": "b", "agentKey": "agent-1", "cut": true } },
+    { "seq": 7, "at": 1731630000600, "turn": 0, "entry": { "kind": "plan", "entries": [{ "content": "Run the tests", "priority": "high", "status": "in_progress" }] } },
+    { "seq": 8, "at": 1731630000700, "turn": 0, "entry": { "kind": "subagentStarted", "agentKey": "agent-1", "subagentType": "Explore", "description": "Find the test", "model": "haiku" } },
+    { "seq": 9, "at": 1731630000800, "turn": 0, "entry": { "kind": "subagentFinished", "agentKey": "agent-1", "ok": true, "summary": "Found it" } },
+    { "seq": 10, "at": 1731630000900, "turn": 0, "entry": { "kind": "peerResult", "operationId": "op-1", "sourceEngine": "codex", "sourceSessionId": "s-2", "objective": "Review", "text": "Looks right", "untrusted": true } },
+    { "seq": 11, "at": 1731630001000, "turn": 0, "entry": { "kind": "notice", "message": "Retrying", "tone": "warning" } },
+    { "seq": 12, "at": 1731630001100, "turn": 0, "entry": { "kind": "error", "message": "Rate limited", "retryable": true, "cause": "signedOut" } },
+    { "seq": 13, "at": 1731630001200, "turn": 0, "entry": { "kind": "compact", "trigger": "auto", "preTokens": 1000, "postTokens": 200, "ok": true } },
+    { "seq": 14, "at": 1731630001300, "turn": 0, "entry": { "kind": "turnEnded", "outcome": "completed" } },
+    { "seq": 15, "at": 1731630001400, "turn": 1, "entry": { "kind": "turnStarted", "origin": "owner", "prompt": "And the other one", "digest": "9f1e", "cut": true } },
+    { "seq": 16, "at": 1731630001500, "turn": 1, "entry": { "kind": "turnRetracted" } },
+    { "seq": 17, "at": 1731630001600, "turn": 1, "entry": { "kind": "message", "text": "Partial answer", "agentKey": "agent-1", "cut": true } },
+    { "seq": 18, "at": 1731630001700, "turn": 1, "entry": { "kind": "turnEnded", "outcome": "interrupted", "reason": "restart" } },
+    { "seq": 19, "at": 1731630001800, "turn": 1, "entry": { "kind": "sessionClosed" } }
+  ],
+  "refusedLines": [
+    { "seq": 1, "at": 1, "entry": { "kind": "message", "text": "x", "extra": 1 } },
+    { "seq": 1, "at": 1, "entry": { "kind": "status", "status": "idle" } },
+    { "seq": 1, "entry": { "kind": "sessionClosed" } }
+  ],
+  "responses": [
+    { "page": { "key": "claude#11111111-1111-4111-8111-111111111111", "entries": [{ "seq": 2, "at": 1731630000100, "turn": 0, "entry": { "kind": "message", "text": "Looking at the test now." } }], "firstSeq": 2, "lastSeq": 19, "floorSeq": 1, "hasMore": true } },
+    { "page": { "key": "acp:grok#session-2", "entries": [], "lastSeq": 0, "floorSeq": 0, "hasMore": false } },
+    { "hits": [{ "key": "claude#11111111-1111-4111-8111-111111111111", "seq": 1, "turn": 0, "role": "prompt", "excerpt": "Fix the flaky test", "at": 1731630000000 }, { "key": "acp:grok#session-2", "seq": 4, "role": "message", "excerpt": "…the flaky test was a race…", "at": 1731630000000 }] },
+    { "hits": [] }
+  ]
+}

@@ -1,0 +1,5 @@
+[
+  {"version":1,"root":"/project","tool":"files"},
+  {"version":1,"root":"/project","tool":"browser","url":"http://localhost:3000/path?q=1"},
+  {"version":1,"root":"/project","tool":"ios-simulator"}
+]

@@ -1,0 +1,2651 @@
+{
+  "schemaVersion": 1,
+  "routes": [
+    {
+      "id": "interface-common",
+      "summary": "Shared path, timestamp and bounded-process helpers",
+      "keywords": [
+        "date",
+        "ISO",
+        "timestamp",
+        "normalization",
+        "polling",
+        "poison",
+        "uid"
+      ],
+      "roots": [
+        "crates/interface-common"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/persistence-and-services.md"
+      ],
+      "entrypoints": [
+        "crates/interface-common/src/lib.rs",
+        "crates/interface-common/src/time.rs",
+        "crates/interface-common/src/paths.rs",
+        "crates/interface-common/src/sync.rs",
+        "crates/interface-common/src/unix.rs"
+      ],
+      "tests": [
+        "crates/interface-common/src/time.rs"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-common"
+      ],
+      "constraints": [
+        "Keep caller-specific policy outside this leaf crate; timestamp bytes are compatibility contracts."
+      ]
+    },
+    {
+      "id": "interface-contracts",
+      "summary": "Wire DTOs, validation and channel vocabulary",
+      "keywords": [
+        "IPC",
+        "schema",
+        "wire",
+        "protocol",
+        "camelCase",
+        "channel",
+        "validation"
+      ],
+      "roots": [
+        "crates/interface-contracts"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/contracts.md"
+      ],
+      "entrypoints": [
+        "crates/interface-contracts/src/lib.rs",
+        "crates/interface-contracts/src/ipc.rs",
+        "crates/interface-contracts/src/validation.rs"
+      ],
+      "tests": [
+        "crates/interface-contracts/src/ipc.rs"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-contracts"
+      ],
+      "constraints": [
+        "Wire changes need an explicit version and cross-language tests; retained channels are not dead code."
+      ]
+    },
+    {
+      "id": "interface-engine",
+      "summary": "Provider-neutral traits, certainty and framed transport",
+      "keywords": [
+        "transport",
+        "delivery",
+        "certainty",
+        "NDJSON",
+        "JSON-RPC",
+        "replay"
+      ],
+      "roots": [
+        "crates/interface-engine"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/runtime-core.md"
+      ],
+      "entrypoints": [
+        "crates/interface-engine/src/lib.rs",
+        "crates/interface-engine/src/outcome.rs",
+        "crates/interface-engine/src/jsonrpc.rs",
+        "crates/interface-engine/src/event_stream.rs",
+        "crates/interface-engine/src/event_budget.rs"
+      ],
+      "tests": [
+        "crates/interface-engine/src/jsonrpc.rs"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-engine"
+      ],
+      "constraints": [
+        "Only DefinitelyUnsent permits replay; transport phases advance monotonically."
+      ]
+    },
+    {
+      "id": "interface-runtime",
+      "summary": "Session open/resume, history and management",
+      "keywords": [
+        "session",
+        "resume",
+        "rename",
+        "fork",
+        "import",
+        "history",
+        "event pump"
+      ],
+      "roots": [
+        "crates/interface-runtime"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/runtime-core.md"
+      ],
+      "entrypoints": [
+        "crates/interface-runtime/src/lib.rs",
+        "crates/interface-runtime/src/runtime.rs",
+        "crates/interface-runtime/src/management.rs"
+      ],
+      "tests": [
+        "crates/interface-runtime/src/history_tests.rs"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-runtime"
+      ],
+      "constraints": [
+        "Only live attachments authorize effects; provider-first failures may be OutcomeUnknown."
+      ]
+    },
+    {
+      "id": "interface-orchestration",
+      "summary": "Event-sourced reducer, projections and durable snapshots",
+      "keywords": [
+        "orchestrator",
+        "state machine",
+        "event",
+        "reducer",
+        "replay"
+      ],
+      "roots": [
+        "crates/interface-orchestration"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/runtime-core.md"
+      ],
+      "entrypoints": [
+        "crates/interface-orchestration/src/lib.rs",
+        "crates/interface-orchestration/src/reducer.rs",
+        "crates/interface-orchestration/src/store.rs"
+      ],
+      "tests": [
+        "crates/interface-orchestration/src/projection_tests.rs"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-orchestration"
+      ],
+      "constraints": [
+        "Reducer stays pure; observable transitions must preserve replay of existing stores."
+      ]
+    },
+    {
+      "id": "interface-collaboration",
+      "summary": "Consult/handoff journal, broker and coordinator",
+      "keywords": [
+        "consult",
+        "handoff",
+        "broker",
+        "MCP",
+        "journal",
+        "capability"
+      ],
+      "roots": [
+        "crates/interface-collaboration"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/collaboration.md"
+      ],
+      "entrypoints": [
+        "crates/interface-collaboration/src/lib.rs",
+        "crates/interface-collaboration/src/coordinator.rs",
+        "crates/interface-collaboration/src/state/mod.rs"
+      ],
+      "tests": [
+        "crates/interface-collaboration/src/mcp_tests.rs"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-collaboration"
+      ],
+      "constraints": [
+        "Recover before admission; started effects become unknown and are never replayed."
+      ]
+    },
+    {
+      "id": "engine-codex",
+      "summary": "Codex app-server adapter and event mapping",
+      "keywords": [
+        "engine-codex",
+        "provider",
+        "model",
+        "adapter",
+        "events",
+        "usage",
+        "CLI"
+      ],
+      "roots": [
+        "crates/engine-codex"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/engine-adapters.md"
+      ],
+      "entrypoints": [
+        "crates/engine-codex/src/lib.rs",
+        "crates/engine-codex/src/mapper.rs",
+        "crates/engine-codex/src/adapter.rs"
+      ],
+      "tests": [
+        "crates/engine-codex/src/adapter_tests.rs"
+      ],
+      "checks": [
+        "cargo test --locked -p engine-codex"
+      ],
+      "constraints": [
+        "Provider CLI owns authentication; preserve protocol-specific refusal and unknown-outcome semantics."
+      ]
+    },
+    {
+      "id": "engine-claude",
+      "summary": "Claude CLI adapter, transcript store and event mapping",
+      "keywords": [
+        "engine-claude",
+        "provider",
+        "model",
+        "adapter",
+        "events",
+        "usage",
+        "CLI"
+      ],
+      "roots": [
+        "crates/engine-claude"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/engine-adapters.md"
+      ],
+      "entrypoints": [
+        "crates/engine-claude/src/lib.rs",
+        "crates/engine-claude/src/mapper.rs",
+        "crates/engine-claude/src/adapter.rs"
+      ],
+      "tests": [
+        "crates/engine-claude/src/adapter_tests.rs"
+      ],
+      "checks": [
+        "cargo test --locked -p engine-claude"
+      ],
+      "constraints": [
+        "Provider CLI owns authentication; preserve protocol-specific refusal and unknown-outcome semantics."
+      ]
+    },
+    {
+      "id": "engine-acp",
+      "summary": "ACP adapter, Grok/Qwen profiles and OpenCode worker runner",
+      "keywords": [
+        "engine-acp",
+        "provider",
+        "model",
+        "adapter",
+        "events",
+        "usage",
+        "CLI"
+      ],
+      "roots": [
+        "crates/engine-acp"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/engine-adapters.md"
+      ],
+      "entrypoints": [
+        "crates/engine-acp/src/lib.rs",
+        "crates/engine-acp/src/mapper.rs",
+        "crates/engine-acp/src/adapter.rs"
+      ],
+      "tests": [
+        "crates/engine-acp/src/adapter_tests.rs"
+      ],
+      "checks": [
+        "cargo test --locked -p engine-acp"
+      ],
+      "constraints": [
+        "Provider CLI owns authentication; preserve protocol-specific refusal and unknown-outcome semantics."
+      ]
+    },
+    {
+      "id": "provider-replay",
+      "summary": "Test-only provider replay: recorded Claude/Codex/ACP CLI sessions served to the real adapters, the recorder and its identity scrubber",
+      "keywords": [
+        "provider-replay",
+        "replay",
+        "record",
+        "recording",
+        "transcript",
+        "fixture",
+        "live check",
+        "regression",
+        "scrub"
+      ],
+      "roots": [
+        "crates/provider-replay"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md",
+        "apps/interface-host/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/engine-adapters.md",
+        "docs/superpowers/specs/2026-11-14-t3-systems-design.md"
+      ],
+      "entrypoints": [
+        "crates/provider-replay/src/lib.rs",
+        "crates/provider-replay/src/replay.rs",
+        "crates/provider-replay/src/record.rs",
+        "crates/provider-replay/src/scrub.rs",
+        "apps/interface-host/tests/suite/provider_replay.rs",
+        "apps/interface-host/tests/suite/provider_record_live.rs"
+      ],
+      "tests": [
+        "crates/provider-replay/src/matcher_tests.rs",
+        "crates/provider-replay/tests/replay_cli.rs",
+        "apps/interface-host/tests/suite/provider_replay.rs"
+      ],
+      "checks": [
+        "cargo test --locked -p provider-replay",
+        "cargo test --locked -p interface-host --test suite provider_replay"
+      ],
+      "constraints": [
+        "Never packaged and never a production dependency. Fixtures are real recordings, scrubbed by the recorder; never hand-write or hand-edit one: re-record (live, opt-in) or re-scrub a kept journal. A real provider turn happens only in the ignored recording test."
+      ]
+    },
+    {
+      "id": "interface-storage",
+      "summary": "Atomic writes, private directories, leases and CAS",
+      "keywords": [
+        "persistence",
+        "atomic",
+        "fsync",
+        "lock",
+        "lease",
+        "quarantine"
+      ],
+      "roots": [
+        "crates/interface-storage"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/persistence-and-services.md"
+      ],
+      "entrypoints": [
+        "crates/interface-storage/src/lib.rs",
+        "crates/interface-storage/src/atomic.rs",
+        "crates/interface-storage/src/secure.rs"
+      ],
+      "tests": [
+        "crates/interface-storage/tests/storage.rs"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-storage"
+      ],
+      "constraints": [
+        "After rename, a failed write is uncertain; never unlink the writer lock or add a second canonical writer."
+      ]
+    },
+    {
+      "id": "interface-registry",
+      "summary": "Session cache, worktrees and checkpoints",
+      "keywords": [
+        "cache",
+        "worktree",
+        "checkpoint",
+        "restore",
+        "registry"
+      ],
+      "roots": [
+        "crates/interface-registry"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/persistence-and-services.md"
+      ],
+      "entrypoints": [
+        "crates/interface-registry/src/lib.rs",
+        "crates/interface-registry/src/session.rs",
+        "crates/interface-registry/src/checkpoint.rs"
+      ],
+      "tests": [
+        "crates/interface-registry/src/checkpoint_tests.rs"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-registry"
+      ],
+      "constraints": [
+        "Persisted bytes and checkpoint path policy are contracts; inspect retained surface before removing unused code."
+      ]
+    },
+    {
+      "id": "interface-settings",
+      "summary": "Appearance, saved workspaces, project pins and profile stores",
+      "keywords": [
+        "settings",
+        "appearance",
+        "font",
+        "project pinning",
+        "workspace",
+        "roster",
+        "preferences",
+        "background runner",
+        "prompt recovery",
+        "output review"
+      ],
+      "roots": [
+        "crates/interface-settings"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/persistence-and-services.md"
+      ],
+      "entrypoints": [
+        "crates/interface-settings/src/lib.rs",
+        "crates/interface-settings/src/appearance.rs",
+        "crates/interface-settings/src/terminal_workspaces.rs",
+        "crates/interface-settings/src/background.rs",
+        "crates/interface-settings/src/output_reviews.rs",
+        "crates/interface-settings/src/prompt_recovery.rs"
+      ],
+      "tests": [
+        "crates/interface-settings/src/appearance.rs"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-settings"
+      ],
+      "constraints": [
+        "Rust owns persistence; old appearance versions remain accepted; changed looks need current-session approval."
+      ]
+    },
+    {
+      "id": "themes",
+      "summary": "Colour themes: built-in palettes, theme files in ~/.config/interface/themes, looks (a backdrop behind glass panes and threads, moving scenes), the Settings theme picker",
+      "keywords": [
+        "theme",
+        "themes",
+        "theme file",
+        "custom theme",
+        "palette",
+        "colour",
+        "color",
+        "dark mode",
+        "light mode",
+        "follow macos",
+        "css tokens",
+        "ansi colours",
+        "theme import",
+        "itermcolors",
+        "ghostty",
+        "alacritty",
+        "base16",
+        "vscode theme",
+        "look",
+        "looks",
+        "backdrop",
+        "animated theme",
+        "moving backdrop",
+        "glass",
+        "scene",
+        "theme skill"
+      ],
+      "roots": [
+        "electron/src/renderer",
+        "crates/interface-settings",
+        "crates/interface-contracts",
+        "apps/interface-host",
+        "apps/iface"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "electron/AGENTS.md",
+        "crates/AGENTS.md",
+        "apps/interface-host/AGENTS.md",
+        "apps/iface/AGENTS.md"
+      ],
+      "guides": [
+        "docs/THEMES.md",
+        "docs/areas/renderer.md",
+        "docs/areas/persistence-and-services.md",
+        "docs/SETTLED_LOOKS.md"
+      ],
+      "entrypoints": [
+        "electron/src/renderer/theme.css",
+        "electron/src/renderer/appearance.ts",
+        "electron/src/renderer/theme-look.css",
+        "electron/src/renderer/theme-look.ts",
+        "electron/src/shared/appearance.ts",
+        "electron/src/renderer/components/SettingsPage.tsx",
+        "electron/src/renderer/components/SettingsAppearance.tsx",
+        "crates/interface-contracts/src/appearance.rs",
+        "crates/interface-settings/src/custom_themes.rs",
+        "crates/interface-settings/src/theme_import.rs",
+        "apps/iface/src/theme.rs",
+        "apps/interface-host/src/theme_watch.rs",
+        "docs/theme-examples/Aurora.css",
+        "electron/src/renderer/theme-shader.ts",
+        "docs/theme-examples/tn-code/port-themes.mjs",
+        "skills/interface-theme/SKILL.md"
+      ],
+      "tests": [
+        "electron/src/renderer/theme-files.test.ts",
+        "electron/src/renderer/theme-accessibility.test.ts",
+        "electron/src/renderer/theme-look.test.ts",
+        "electron/src/shared/custom-themes-contract.test.ts",
+        "crates/interface-settings/src/custom_themes.rs",
+        "crates/interface-settings/src/theme_import_tests.rs",
+        "apps/iface/src/theme.rs"
+      ],
+      "checks": [
+        "cd electron && npx --no-install vitest run src/renderer/theme-files.test.ts src/renderer/theme-accessibility.test.ts src/renderer/theme-look.test.ts src/renderer/chrome-mode.test.ts src/shared/custom-themes-contract.test.ts",
+        "cargo test --locked -p interface-settings theme",
+        "cargo test --locked -p iface theme"
+      ],
+      "constraints": [
+        "Built-in palettes change colours and fonts only (settled look); theme files may use any CSS. The token system stays inside @layer interface-palette so a theme file's plain :root rule wins; never !important there. Rust reads theme files and never writes them.",
+        "A look's glass rules stay scoped to :root[data-theme-look=\"backdrop\"], so built-in palettes and theme files without a backdrop paint as before. A moving backdrop is stepped at 30 frames a second and rests while Interface is not in front, under Reduce motion, and when Settings turns it off (owner's battery rule); never let its animations run free. A scene is cleaned before it is drawn."
+      ]
+    },
+    {
+      "id": "interface-review",
+      "summary": "Credential-filtered git diff and bounded check runner",
+      "keywords": [
+        "review",
+        "diff",
+        "git",
+        "numstat",
+        "check discovery",
+        "commit selection",
+        "hunk selection"
+      ],
+      "roots": [
+        "crates/interface-review"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/persistence-and-services.md"
+      ],
+      "entrypoints": [
+        "crates/interface-review/src/lib.rs",
+        "crates/interface-review/src/repository.rs",
+        "crates/interface-review/src/checks.rs",
+        "crates/interface-review/src/thread_commit.rs"
+      ],
+      "tests": [
+        "crates/interface-review/src/repository.rs",
+        "crates/interface-review/src/thread_commit_tests.rs"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-review"
+      ],
+      "constraints": [
+        "Do not weaken path filtering or output/deadline bounds; review commands are not arbitrary shell execution."
+      ]
+    },
+    {
+      "id": "interface-workspace",
+      "summary": "File search, Quick Open, editor and customization inventory",
+      "keywords": [
+        "search",
+        "quick open",
+        "editor",
+        "file save",
+        "inventory",
+        "rules",
+        "skills",
+        "provider customization",
+        "MCP health"
+      ],
+      "roots": [
+        "crates/interface-workspace"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/persistence-and-services.md",
+        "docs/PROVIDER_CUSTOMIZATION.md"
+      ],
+      "entrypoints": [
+        "crates/interface-workspace/src/lib.rs",
+        "crates/interface-workspace/src/search.rs",
+        "crates/interface-workspace/src/editor.rs",
+        "crates/interface-workspace/src/inventory_providers.rs",
+        "crates/interface-workspace/src/inventory_probe.rs"
+      ],
+      "tests": [
+        "crates/interface-workspace/src/inventory_tests.rs",
+        "crates/interface-workspace/src/inventory_provider_tests.rs"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-workspace"
+      ],
+      "constraints": [
+        "Use current workspace authority and compare-and-save identity checks; no symlink or secret reads."
+      ]
+    },
+    {
+      "id": "interface-prompt-context",
+      "summary": "Prompt path grants and pasted image handling",
+      "keywords": [
+        "prompt context",
+        "attachment",
+        "image",
+        "mention",
+        "grant"
+      ],
+      "roots": [
+        "crates/interface-prompt-context"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/persistence-and-services.md"
+      ],
+      "entrypoints": [
+        "crates/interface-prompt-context/src/lib.rs",
+        "crates/interface-prompt-context/src/path.rs",
+        "crates/interface-prompt-context/src/service.rs"
+      ],
+      "tests": [
+        "crates/interface-prompt-context/src/path.rs"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-prompt-context"
+      ],
+      "constraints": [
+        "Grants remain exact and every canonicalization rechecks identity."
+      ]
+    },
+    {
+      "id": "interface-terminal",
+      "summary": "PTY lifecycle, generation fences, titles and launch profiles",
+      "keywords": [
+        "terminal",
+        "PTY",
+        "launch",
+        "pane title",
+        "rename",
+        "process",
+        "shell",
+        "canary",
+        "CLI drift",
+        "provider CLI version"
+      ],
+      "roots": [
+        "crates/interface-terminal"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/persistence-and-services.md"
+      ],
+      "entrypoints": [
+        "crates/interface-terminal/src/lib.rs",
+        "crates/interface-terminal/src/service.rs",
+        "crates/interface-terminal/src/launch.rs",
+        "crates/interface-terminal/src/service/titles.rs",
+        "crates/interface-terminal/src/embedded/orphan.rs",
+        "crates/interface-terminal/src/provider_canary.rs",
+        "crates/interface-terminal/src/native_checkpoint.rs"
+      ],
+      "tests": [
+        "crates/interface-terminal/src/launch_tests.rs",
+        "crates/interface-terminal/src/provider_canary_tests.rs"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-terminal"
+      ],
+      "constraints": [
+        "Preserve generation fencing and lifecycle lock order; process effects and title authority remain Rust-owned."
+      ]
+    },
+    {
+      "id": "interface-desktop-services",
+      "summary": "Desktop dispatch, workspace grants and checkpoint adapters",
+      "keywords": [
+        "desktop",
+        "dispatch",
+        "grant",
+        "checkpoint",
+        "workspace authority"
+      ],
+      "roots": [
+        "crates/interface-desktop-services"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/persistence-and-services.md"
+      ],
+      "entrypoints": [
+        "crates/interface-desktop-services/src/lib.rs",
+        "crates/interface-desktop-services/src/service.rs",
+        "crates/interface-desktop-services/src/service/terminal_state.rs",
+        "crates/interface-desktop-services/src/checkpoint.rs"
+      ],
+      "tests": [
+        "crates/interface-desktop-services/src/service_tests.rs"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-desktop-services"
+      ],
+      "constraints": [
+        "Exactly one owner per operation; error certainty is typed, never inferred from prose."
+      ]
+    },
+    {
+      "id": "interface-updater",
+      "summary": "Update state, feed admission, macOS verification and the public update channel",
+      "keywords": [
+        "updater",
+        "feed",
+        "signature",
+        "restart",
+        "download",
+        "public",
+        "publish",
+        "manifest",
+        "channel"
+      ],
+      "roots": [
+        "crates/interface-updater"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md",
+        "xtask/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/persistence-and-services.md",
+        "docs/PUBLIC_UPDATES.md"
+      ],
+      "entrypoints": [
+        "crates/interface-updater/src/lib.rs",
+        "crates/interface-updater/src/state.rs",
+        "crates/interface-updater/src/service.rs",
+        "crates/interface-updater/src/remote.rs",
+        "crates/interface-updater/src/signed_manifest.rs",
+        "crates/interface-updater/src/channel.rs",
+        "xtask/src/update_channel.rs"
+      ],
+      "tests": [
+        "crates/interface-updater/src/state.rs",
+        "crates/interface-updater/src/remote.rs",
+        "crates/interface-updater/src/signed_manifest.rs"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-updater"
+      ],
+      "constraints": [
+        "Preserve generation-fenced verification and sticky Ready; production install/restart needs owner authority.",
+        "Once a build is public: never change the feed address, the manifest file name or schema, or drop every trusted key; publishing is owner-requested (docs/PUBLIC_UPDATES.md)."
+      ]
+    },
+    {
+      "id": "interface-voice",
+      "summary": "Voice protocol, sentence chunks and speech cleanup",
+      "keywords": [
+        "voice",
+        "speech",
+        "sentence",
+        "chunk",
+        "tail"
+      ],
+      "roots": [
+        "crates/interface-voice"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md"
+      ],
+      "guides": [
+        "docs/VOICE_ASSISTANT.md"
+      ],
+      "entrypoints": [
+        "crates/interface-voice/src/lib.rs",
+        "crates/interface-voice/src/chunker.rs",
+        "crates/interface-voice/src/protocol.rs"
+      ],
+      "tests": [
+        "crates/interface-voice/src/chunker.rs"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-voice"
+      ],
+      "constraints": [
+        "Protocol and text projection stay Rust-owned; microphone and real speech tests are separate from unit checks."
+      ]
+    },
+    {
+      "id": "interface-remote",
+      "summary": "Phone access, trust, encrypted connection and relay",
+      "keywords": [
+        "remote",
+        "iPhone",
+        "phone",
+        "pairing",
+        "trust",
+        "HPKE",
+        "relay",
+        "Bonjour",
+        "shared inbox",
+        "agent progress"
+      ],
+      "roots": [
+        "crates/interface-remote"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/remote-and-native.md"
+      ],
+      "entrypoints": [
+        "crates/interface-remote/src/lib.rs",
+        "crates/interface-remote/src/http.rs",
+        "crates/interface-remote/src/connection.rs",
+        "crates/interface-remote/src/threads.rs"
+      ],
+      "tests": [
+        "crates/interface-remote/src/http/direct_tests.rs",
+        "crates/interface-remote/src/http_threads_tests.rs"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-remote"
+      ],
+      "constraints": [
+        "Mac owns trust and input effects; discovery never grants authority; preserve v1-v5 compatibility and replay refusal."
+      ]
+    },
+    {
+      "id": "phone-relay-worker",
+      "summary": "Phone relay on Cloudflare Workers (off-Wi-Fi access)",
+      "keywords": [
+        "relay",
+        "Cloudflare",
+        "Worker",
+        "Durable Object",
+        "cellular",
+        "off Wi-Fi",
+        "wrangler"
+      ],
+      "roots": [
+        "deploy/phone-relay-worker"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md"
+      ],
+      "guides": [
+        "deploy/phone-relay-worker/README.md",
+        "docs/areas/remote-and-native.md"
+      ],
+      "entrypoints": [
+        "deploy/phone-relay-worker/src/lib.rs",
+        "deploy/phone-relay-worker/src/protocol.rs"
+      ],
+      "tests": [
+        "deploy/phone-relay-worker/src/protocol.rs",
+        "crates/interface-remote/src/http/direct_tests.rs"
+      ],
+      "checks": [
+        "cargo test --manifest-path deploy/phone-relay-worker/Cargo.toml",
+        "deploy/phone-relay-worker/local-check.sh"
+      ],
+      "constraints": [
+        "Speaks the Mac's v5 relay protocol unchanged (no Mac or phone release); only ciphertext crosses it; deploying needs the owner's Cloudflare account."
+      ]
+    },
+    {
+      "id": "host",
+      "summary": "Rust desktop adapter, startup and operation routing",
+      "keywords": [
+        "host",
+        "bootstrap",
+        "IPC",
+        "dispatcher",
+        "shutdown",
+        "reopen",
+        "restore",
+        "cold start"
+      ],
+      "roots": [
+        "apps/interface-host"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "apps/interface-host/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/interface-host.md"
+      ],
+      "entrypoints": [
+        "apps/interface-host/src/main.rs",
+        "apps/interface-host/src/router.rs",
+        "apps/interface-host/src/bootstrap.rs",
+        "apps/interface-host/src/terminal/lifecycle.rs",
+        "apps/interface-host/src/collaboration/projection.rs",
+        "apps/interface-host/src/native_checkpoint_setup.rs",
+        "apps/interface-host/src/provider_capture/native.rs"
+      ],
+      "tests": [
+        "apps/interface-host/tests/suite/session_management.rs",
+        "apps/interface-host/src/terminal_restore_matrix_tests.rs"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-host",
+        "cargo test --locked -p interface-host --lib restore_matrix"
+      ],
+      "constraints": [
+        "Adapters call Rust domain services; preserve push-before-response order, one writer and typed effect certainty."
+      ]
+    },
+    {
+      "id": "cli",
+      "summary": "iface argv, TUI commands, drawing and terminal lifecycle",
+      "keywords": [
+        "CLI",
+        "TUI",
+        "argv",
+        "slash",
+        "help",
+        "Ratatui",
+        "composer"
+      ],
+      "roots": [
+        "apps/iface"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "apps/iface/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/iface.md"
+      ],
+      "entrypoints": [
+        "apps/iface/src/argv.rs",
+        "apps/iface/src/tui/commands.rs",
+        "apps/iface/src/tui/view.rs",
+        "apps/iface/src/errors.rs",
+        "apps/iface/src/tui/agent_control.rs",
+        "apps/iface/src/tui/terminal.rs",
+        "apps/iface/src/tui/controller.rs"
+      ],
+      "tests": [
+        "apps/iface/tests/tui_pty.rs"
+      ],
+      "checks": [
+        "cargo test --locked -p iface"
+      ],
+      "constraints": [
+        "Only main.rs emits process output; sanitize display text and preserve exit-code distinctions and PTY teardown."
+      ]
+    },
+    {
+      "id": "away",
+      "summary": "Bounded Away pilot, selected-file CLI cycle and one-button project loop",
+      "keywords": [
+        "away",
+        "demo",
+        "queue",
+        "repair",
+        "stop",
+        "supervisor",
+        "project loop",
+        "one button",
+        "projectAway"
+      ],
+      "roots": [
+        "apps/iface",
+        "crates/interface-collaboration",
+        "apps/interface-host",
+        "electron"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "apps/iface/AGENTS.md",
+        "crates/AGENTS.md",
+        "apps/interface-host/AGENTS.md",
+        "electron/AGENTS.md"
+      ],
+      "guides": [
+        "docs/AWAY_PILOT.md",
+        "docs/AWAY_CYCLE.md",
+        "docs/PROJECT_AWAY.md"
+      ],
+      "entrypoints": [
+        "apps/iface/src/away.rs",
+        "crates/interface-collaboration/src/away.rs",
+        "crates/interface-collaboration/src/project_away.rs",
+        "apps/interface-host/src/project_away.rs",
+        "electron/src/renderer/components/AwayControl.tsx",
+        "electron/src/renderer/away-view.ts",
+        "apps/interface-host/src/threads/away.rs",
+        "electron/src/renderer/away-thread.ts",
+        "electron/src/renderer/components/ThreadAwayParts.tsx"
+      ],
+      "tests": [
+        "apps/iface/src/away_tests.rs",
+        "crates/interface-collaboration/src/away_tests.rs",
+        "crates/interface-collaboration/src/project_away/tests.rs",
+        "electron/src/renderer/fixtures/away-fixture.tsx",
+        "electron/src/renderer/away-thread.test.ts"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-collaboration project_away",
+        "cargo xtask check"
+      ],
+      "constraints": [
+        "Demo accepts fresh disposable projects only; recovery never replays uncertain provider or apply effects.",
+        "Project loops act only after an owner start; Stop and expiry prevent continuation, and restart never replays work.",
+        "A project loop is a Threads thread in its own worktree (protocol 45): it holds the thread while it runs, and the Away store is project-away.v3.json (protocol 47: an optional reviewer) with a read-once v2, else v1, carry-over."
+      ]
+    },
+    {
+      "id": "retired-features",
+      "summary": "Archived features (Clean GUI, pane delegation, Control assistant, Tailscale phone route) and the wire shims that answer unavailable",
+      "keywords": [
+        "retired",
+        "archive",
+        "archived",
+        "delegation",
+        "control",
+        "tailscale",
+        "clean"
+      ],
+      "roots": [
+        "docs/archive",
+        "apps/interface-host/src",
+        "crates/interface-remote/src"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md",
+        "apps/interface-host/AGENTS.md"
+      ],
+      "guides": [
+        "docs/archive/pane-delegation-20261014/README.md",
+        "docs/archive/control-assistant-20261014/README.md",
+        "docs/archive/tailscale-route-20261014/README.md",
+        "docs/archive/clean-gui-20260914/README.md"
+      ],
+      "entrypoints": [
+        "apps/interface-host/src/terminal.rs",
+        "apps/interface-host/src/voice/mod.rs",
+        "crates/interface-remote/src/http.rs"
+      ],
+      "tests": [
+        "apps/interface-host/tests/suite/child_protocol.rs",
+        "crates/interface-remote/src/http_voice_tests.rs",
+        "crates/interface-remote/src/http.rs"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-host --test suite retired_control_channel",
+        "cargo test --locked -p interface-remote retired_control_route",
+        "cargo test --locked -p interface-remote a_tailscale_address_is_refused"
+      ],
+      "constraints": [
+        "Archived features return only on a new owner instruction. Their channels stay wire protocol and answer unavailable; their data files stay on disk, unread."
+      ]
+    },
+    {
+      "id": "electron-bridge",
+      "summary": "Electron lifecycle, sandboxed preload and host transport",
+      "keywords": [
+        "electron",
+        "preload",
+        "bridge",
+        "window",
+        "CSP",
+        "IPC",
+        "MessagePort",
+        "handsfree"
+      ],
+      "roots": [
+        "electron/src/main",
+        "electron/src/shared"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "electron/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/electron-main.md"
+      ],
+      "entrypoints": [
+        "electron/src/main/main.ts",
+        "electron/src/main/preload.cts",
+        "electron/src/main/ipc-payload.ts",
+        "electron/src/main/rust-host-client.ts",
+        "electron/src/main/terminal-bridge-controller.ts",
+        "electron/src/main/handsfree.ts"
+      ],
+      "tests": [
+        "electron/src/main/ipc-payload.test.ts",
+        "electron/src/main/rust-host-client.test.ts",
+        "electron/src/main/terminal-bridge-controller.test.ts",
+        "electron/src/main/handsfree.test.ts"
+      ],
+      "checks": [
+        "cd electron && npx --no-install vitest run src/main/ipc-payload.test.ts src/main/rust-host-client.test.ts"
+      ],
+      "constraints": [
+        "Preload has no runtime imports; channel changes require Rust, shared TS, encoder, preload and host contract checks."
+      ]
+    },
+    {
+      "id": "sidebar",
+      "summary": "Sidebar grouping, search, project pins and attention projections",
+      "keywords": [
+        "sidebar",
+        "pinning",
+        "project",
+        "workspace",
+        "filter",
+        "attention"
+      ],
+      "roots": [
+        "electron/src/renderer"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "electron/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/renderer.md"
+      ],
+      "entrypoints": [
+        "electron/src/renderer/sidebar-view.ts",
+        "electron/src/renderer/viewmodels.ts",
+        "electron/src/renderer/components/Sidebar.tsx"
+      ],
+      "tests": [
+        "electron/src/renderer/viewmodels.test.ts",
+        "electron/src/renderer/workspace-ui.test.ts"
+      ],
+      "checks": [
+        "cd electron && npx --no-install vitest run src/renderer/viewmodels.test.ts src/renderer/workspace-ui.test.ts"
+      ],
+      "constraints": [
+        "Persistent decisions live in interface-settings; read SETTLED_LOOKS before visual changes."
+      ]
+    },
+    {
+      "id": "conversation",
+      "summary": "Transcript projections, grouping and Markdown display",
+      "keywords": [
+        "conversation",
+        "transcript",
+        "message",
+        "markdown",
+        "streaming",
+        "history"
+      ],
+      "roots": [
+        "electron/src/renderer"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "electron/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/renderer.md"
+      ],
+      "entrypoints": [
+        "electron/src/renderer/conversation-display.ts",
+        "electron/src/renderer/conversation-projection.ts",
+        "electron/src/renderer/conversation-reducer.ts",
+        "electron/src/renderer/transcript-merge.ts",
+        "electron/src/renderer/components/Conversation.tsx",
+        "electron/src/renderer/components/ConversationTranscript.tsx",
+        "electron/src/renderer/components/ConversationComposer.tsx",
+        "electron/src/renderer/draft-store.ts"
+      ],
+      "tests": [
+        "electron/src/renderer/conversation-projection.test.ts",
+        "electron/src/renderer/conversation.test.ts",
+        "electron/src/renderer/components/Conversation.queue.test.ts",
+        "electron/src/renderer/draft-store.test.ts",
+        "electron/src/renderer/markdown.test.ts",
+        "electron/src/renderer/markdown-incremental.test.ts"
+      ],
+      "checks": [
+        "cd electron && npx --no-install vitest run src/renderer/conversation-projection.test.ts src/renderer/conversation.test.ts src/renderer/components/Conversation.queue.test.ts src/renderer/draft-store.test.ts src/renderer/markdown.test.ts src/renderer/markdown-incremental.test.ts"
+      ],
+      "constraints": [
+        "Keep unresolved approvals and pending effects; compare incremental projection with the reference reducer."
+      ]
+    },
+    {
+      "id": "terminal-ui",
+      "summary": "Mounted xterm panes, layout, keyboard and accessibility",
+      "keywords": [
+        "terminal",
+        "pane",
+        "split",
+        "drag",
+        "swap",
+        "xterm",
+        "scroll",
+        "accessibility",
+        "announcements"
+      ],
+      "roots": [
+        "electron/src/renderer"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "electron/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/renderer.md"
+      ],
+      "entrypoints": [
+        "electron/src/renderer/terminal-workspace.ts",
+        "electron/src/renderer/terminal-splitter-drag.ts",
+        "electron/src/renderer/terminal-announcements.ts",
+        "electron/src/renderer/components/IntegratedTerminalCenter.tsx",
+        "electron/src/renderer/terminal-stream-router.ts",
+        "electron/src/renderer/terminal-activity-tracker.ts",
+        "electron/src/renderer/terminal-view-focus.ts"
+      ],
+      "tests": [
+        "electron/src/renderer/terminal-workspace.test.ts",
+        "electron/src/renderer/terminal-splitter-drag.test.ts",
+        "electron/src/renderer/terminal-announcements.test.ts",
+        "electron/src/renderer/terminal-stream-router.test.ts",
+        "electron/src/renderer/terminal-restore-matrix.test.ts"
+      ],
+      "checks": [
+        "cd electron && npx --no-install vitest run src/renderer/terminal-workspace.test.ts src/renderer/terminal-splitter-drag.test.ts src/renderer/terminal-announcements.test.ts src/renderer/terminal-stream-router.test.ts src/renderer/terminal-restore-matrix.test.ts"
+      ],
+      "constraints": [
+        "Keep xterm instances mounted and generation-fenced; layout/interaction changes need the real renderer lane."
+      ]
+    },
+    {
+      "id": "composer",
+      "summary": "Prompt editing, attachments and submission presentation",
+      "keywords": [
+        "composer",
+        "prompt",
+        "paste",
+        "drop",
+        "attachment",
+        "send",
+        "recovery",
+        "retry",
+        "continue"
+      ],
+      "roots": [
+        "electron/src/renderer"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "electron/AGENTS.md",
+        "crates/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/renderer.md"
+      ],
+      "entrypoints": [
+        "electron/src/renderer/prompt-submit.ts",
+        "electron/src/renderer/prompt-context.ts",
+        "electron/src/renderer/outbound-lane.ts",
+        "electron/src/renderer/composer-model.ts",
+        "electron/src/renderer/components/Composer.tsx",
+        "electron/src/renderer/components/PromptRecoveryPanel.tsx",
+        "crates/interface-settings/src/prompt_recovery.rs",
+        "crates/interface-desktop-services/src/service/prompt_recovery.rs"
+      ],
+      "tests": [
+        "electron/src/renderer/composer.test.ts",
+        "electron/src/renderer/composer-model.test.ts",
+        "electron/src/renderer/prompt-submit.test.ts",
+        "electron/src/renderer/prompt-context.test.ts",
+        "electron/src/renderer/outbound-lane.test.ts",
+        "electron/src/shared/recovery.test.ts"
+      ],
+      "checks": [
+        "cd electron && npx --no-install vitest run src/renderer/composer.test.ts src/renderer/composer-model.test.ts src/renderer/prompt-submit.test.ts src/renderer/prompt-context.test.ts src/renderer/outbound-lane.test.ts"
+      ],
+      "constraints": [
+        "App.tsx alone calls window.iface; unknown outcomes never resend or restore captured context."
+      ]
+    },
+    {
+      "id": "agents",
+      "summary": "Rust-owned agent teammates: roster, threads, home folders, approval policy, routines and run history",
+      "keywords": [
+        "agent",
+        "roster",
+        "routine",
+        "schedule",
+        "run history",
+        "teammate",
+        "agent home",
+        "approval policy",
+        "verification",
+        "artifact",
+        "calendar",
+        "consultation",
+        "memory history",
+        "task budget"
+      ],
+      "roots": [
+        "crates/interface-settings",
+        "crates/interface-desktop-services",
+        "apps/interface-host",
+        "electron/src/renderer"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "apps/interface-host/AGENTS.md",
+        "crates/AGENTS.md",
+        "electron/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/agents.md",
+        "docs/AGENT_TASK_CONTROLS.md"
+      ],
+      "entrypoints": [
+        "crates/interface-settings/src/agents.rs",
+        "crates/interface-settings/src/agent_home.rs",
+        "crates/interface-desktop-services/src/agent_control.rs",
+        "crates/interface-desktop-services/src/agent_policy.rs",
+        "apps/interface-host/src/agents.rs",
+        "electron/src/renderer/components/AgentWorkspacePanel.tsx",
+        "crates/interface-contracts/src/agent_work.rs",
+        "crates/interface-settings/src/agent_starts.rs",
+        "crates/interface-settings/src/agent_work.rs",
+        "crates/interface-settings/src/agent_calendar.rs",
+        "crates/interface-desktop-services/src/agent_work.rs",
+        "crates/interface-desktop-services/src/agent_consultation.rs",
+        "apps/interface-host/src/agent_tools.rs",
+        "apps/interface-host/src/agent_consultation.rs",
+        "electron/src/renderer/components/AgentWorkPanel.tsx",
+        "electron/src/renderer/components/AgentCalendarPanel.tsx"
+      ],
+      "tests": [
+        "apps/interface-host/src/agents_tests.rs",
+        "electron/src/renderer/agent-roster.test.ts",
+        "crates/interface-settings/src/agent_work.rs",
+        "crates/interface-settings/src/agent_starts.rs",
+        "crates/interface-settings/src/agent_calendar.rs",
+        "crates/interface-desktop-services/src/service_tests.rs",
+        "electron/src/shared/agents.test.ts"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-settings -p interface-host agents",
+        "cargo test --locked -p interface-desktop-services agent",
+        "cd electron && npx --no-install vitest run src/renderer/agent-roster.test.ts"
+      ],
+      "constraints": [
+        "Rust persists run claims before provider launch; restart marks active runs Unknown without replay."
+      ]
+    },
+    {
+      "id": "phone-ui",
+      "summary": "Native iPhone library and shared phone conversation",
+      "keywords": [
+        "phone",
+        "iPhone",
+        "SwiftUI",
+        "WebKit",
+        "Face ID",
+        "mobile",
+        "native"
+      ],
+      "roots": [
+        "apps/interface-ios",
+        "electron/src/remote"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "apps/interface-ios/AGENTS.md",
+        "electron/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/remote-and-native.md",
+        "apps/interface-ios/README.md"
+      ],
+      "entrypoints": [
+        "apps/interface-ios/PhoneModel.swift",
+        "apps/interface-ios/SessionWebView.swift",
+        "electron/src/remote/RemoteConversation.tsx",
+        "electron/src/remote/task-result-polling.ts",
+        "apps/interface-ios/PhoneThreadViews.swift",
+        "apps/interface-ios/PhoneThreads.swift"
+      ],
+      "tests": [
+        "apps/interface-ios/MacAddressTests.swift",
+        "electron/src/remote/native-transport.test.ts"
+      ],
+      "checks": [
+        "cd electron && npx --no-install vitest run src/remote/native-transport.test.ts",
+        "xcodebuild -project apps/interface-ios/InterfacePhone.xcodeproj -scheme InterfacePhone -configuration Debug -destination \"platform=iOS Simulator,name=Interface iPhone\" -derivedDataPath /private/tmp/interface-ios-build test"
+      ],
+      "constraints": [
+        "Select an installed Simulator; credentials remain native and Mac authority stays in Rust. Full gate does not replace native/physical acceptance."
+      ]
+    },
+    {
+      "id": "voice-helper",
+      "summary": "Apple speech framework helper and audio buffers",
+      "keywords": [
+        "Swift",
+        "voice",
+        "speech",
+        "microphone",
+        "audio",
+        "buffer"
+      ],
+      "roots": [
+        "apps/interface-voice"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "apps/interface-voice/AGENTS.md"
+      ],
+      "guides": [
+        "apps/interface-voice/README.md",
+        "docs/VOICE_ASSISTANT.md"
+      ],
+      "entrypoints": [
+        "apps/interface-voice/Sources/interface-voice/Protocol.swift",
+        "apps/interface-voice/Sources/interface-voice/VoiceBuffers.swift"
+      ],
+      "tests": [
+        "apps/interface-voice/Tests/VoiceBufferTests/VoiceBufferTests.swift"
+      ],
+      "checks": [
+        "xcrun swift test --package-path apps/interface-voice"
+      ],
+      "constraints": [
+        "Swift adapts Apple frameworks; Rust owns voice policy. Self-test speaks audio; it is not part of this focused command."
+      ]
+    },
+    {
+      "id": "pipeline",
+      "summary": "Navigation, gates, fix proofs, Dev closeout, packaging and release receipts",
+      "keywords": [
+        "xtask",
+        "navigation",
+        "gate",
+        "test",
+        "build",
+        "release",
+        "Dev",
+        "closeout",
+        "package",
+        "receipt",
+        "landing",
+        "promote",
+        "prove"
+      ],
+      "roots": [
+        "xtask",
+        "electron/scripts"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "electron/AGENTS.md",
+        "xtask/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/xtask.md",
+        "docs/AGENT_TASKS.md"
+      ],
+      "entrypoints": [
+        "xtask/src/main.rs",
+        "xtask/src/navigation.rs",
+        "xtask/src/gate.rs",
+        "xtask/src/closeout.rs",
+        "xtask/src/prove.rs"
+      ],
+      "tests": [
+        "xtask/src/navigation_tests.rs",
+        "xtask/src/gate_cache.rs",
+        "electron/scripts/protocol-docs.test.mjs"
+      ],
+      "checks": [
+        "cargo test --locked -p xtask",
+        "cargo xtask navigate --check"
+      ],
+      "constraints": [
+        "`cargo xtask check --changed` gates xtask changes with the Rust suite (`xtask/src/package.rs` also runs Electron's); receipts bind source bytes and each suite's tools, and Dev landing does not authorize production promotion."
+      ]
+    },
+    {
+      "id": "harness-usability",
+      "summary": "Shared command catalog, durable Attention, task results, drafts and bounded pairing experiment",
+      "keywords": [
+        "harness",
+        "attention",
+        "result",
+        "draft",
+        "presets",
+        "pairing",
+        "sidekick",
+        "slash"
+      ],
+      "roots": [
+        "crates/interface-contracts",
+        "crates/interface-settings",
+        "crates/interface-desktop-services",
+        "apps/iface",
+        "electron/src/renderer"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md",
+        "apps/iface/AGENTS.md",
+        "electron/AGENTS.md"
+      ],
+      "guides": [
+        "docs/HARNESS_IMPLEMENTATION.md",
+        "docs/areas/contracts.md",
+        "docs/areas/renderer.md"
+      ],
+      "entrypoints": [
+        "crates/interface-contracts/src/command_catalog.rs",
+        "crates/interface-contracts/src/harness.rs",
+        "crates/interface-settings/src/harness.rs",
+        "crates/interface-desktop-services/src/harness.rs",
+        "apps/iface/src/away_pair.rs",
+        "electron/src/renderer/components/TaskInspector.tsx"
+      ],
+      "tests": [
+        "apps/iface/src/away_pair_tests.rs",
+        "electron/src/renderer/fixtures/harness-fixture.tsx",
+        "crates/interface-remote/src/http_harness_tests.rs"
+      ],
+      "checks": [
+        "cargo xtask check"
+      ],
+      "constraints": [
+        "The Rust host alone writes harness.v1.json. Seen never resolves an Attention event.",
+        "Check evidence is immutable and candidate-bound. Draft compare-and-set never sends input.",
+        "Pairing is opt-in, bounded and held for explicit decision; pane delegation is retired."
+      ]
+    },
+    {
+      "id": "collaboration-ui",
+      "summary": "Desktop collaboration request lifetime and durable receipt reconciliation",
+      "keywords": [
+        "collaboration",
+        "controller",
+        "receipt",
+        "push",
+        "refresh"
+      ],
+      "roots": [
+        "electron/src/renderer"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "electron/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/renderer.md"
+      ],
+      "entrypoints": [
+        "electron/src/renderer/collaboration-controller.ts",
+        "electron/src/renderer/use-collaborations.ts"
+      ],
+      "tests": [
+        "electron/src/renderer/collaboration-controller.test.ts"
+      ],
+      "checks": [
+        "cd electron && npx --no-install vitest run src/renderer/collaboration-controller.test.ts"
+      ],
+      "constraints": [
+        "Inject host API from App; preserve newer durable receipts and invalidate stale list responses."
+      ]
+    },
+    {
+      "id": "output-preview",
+      "summary": "Version-bound project output previews and scoped feedback beside native terminals",
+      "keywords": [
+        "output",
+        "preview",
+        "pdf",
+        "artifact",
+        "annotation",
+        "file browser"
+      ],
+      "roots": [
+        "crates/interface-workspace",
+        "crates/interface-contracts",
+        "apps/interface-host",
+        "electron/src/renderer"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md",
+        "apps/interface-host/AGENTS.md",
+        "electron/AGENTS.md"
+      ],
+      "guides": [
+        "docs/OUTPUT_PREVIEW.md"
+      ],
+      "entrypoints": [
+        "crates/interface-contracts/src/output_preview.rs",
+        "crates/interface-workspace/src/output_preview.rs",
+        "apps/interface-host/src/terminal.rs",
+        "electron/src/renderer/components/OutputPreviewPanel.tsx",
+        "electron/src/renderer/components/OutputPdfPreview.tsx",
+        "crates/interface-settings/src/output_reviews.rs",
+        "crates/interface-desktop-services/src/service/output_reviews.rs",
+        "crates/interface-contracts/src/output_review.rs"
+      ],
+      "tests": [
+        "crates/interface-workspace/src/output_preview_tests.rs",
+        "electron/src/renderer/output-preview.test.ts",
+        "electron/src/renderer/fixtures/output-preview-fixture.tsx"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-workspace output_preview",
+        "cargo xtask check"
+      ],
+      "constraints": [
+        "Rust rechecks current project authority and file identity; output content cannot invoke the privileged bridge.",
+        "Feedback stays bound to the displayed hash; never remount terminals or replay provider input."
+      ]
+    },
+    {
+      "id": "browser-pane",
+      "summary": "Browser pane: the <webview> page, address bar, width presets and point-and-fix (pick an element or mark a region, note and picture into a thread's draft)",
+      "keywords": [
+        "browser",
+        "webview",
+        "pick",
+        "point and fix",
+        "region",
+        "screenshot",
+        "selector",
+        "viewport",
+        "phone",
+        "download",
+        "popup",
+        "find in page",
+        "zoom",
+        "permission"
+      ],
+      "roots": [
+        "electron/src/renderer",
+        "electron/src/main"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "electron/AGENTS.md"
+      ],
+      "guides": [
+        "docs/areas/renderer.md",
+        "docs/areas/electron-main.md",
+        "docs/superpowers/specs/2026-11-14-t3-systems-design.md"
+      ],
+      "entrypoints": [
+        "electron/src/renderer/components/BrowserPane.tsx",
+        "electron/src/renderer/browser-page.ts",
+        "electron/src/renderer/browser-point.ts",
+        "electron/src/renderer/browser-point-page.ts",
+        "electron/src/main/browser-pane.ts",
+        "electron/src/main/browser-pane-native.ts",
+        "electron/src/shared/browser-events.ts"
+      ],
+      "tests": [
+        "electron/src/renderer/browser-point.test.ts",
+        "electron/src/renderer/browser-pane.test.ts",
+        "electron/src/main/browser-pane.test.ts",
+        "electron/src/shared/browser-events.test.ts",
+        "electron/src/renderer/fixtures/browser-point-fixture.tsx",
+        "electron/src/renderer/fixtures/browser-chrome-fixture.tsx",
+        "electron/scripts/browser-chrome-lane.cjs"
+      ],
+      "checks": [
+        "cd electron && npx --no-install vitest run src/renderer/browser-point.test.ts src/renderer/browser-pane.test.ts src/main/browser-pane.test.ts src/shared/browser-events.test.ts",
+        "cd electron && INTERFACE_BROWSER_POINT_ONLY=1 npm run test:renderer",
+        "cd electron && INTERFACE_BROWSER_CHROME_ONLY=1 npm run test:renderer"
+      ],
+      "constraints": [
+        "The guest and its popups keep no preload, no Node and no IPC, stay in persist:browser-pane and on http(s); permissions are decided in main only as docs/WORKSPACE_TOOLS.md says (camera, microphone, notifications and clipboard read ask once per site for the run, fullscreen, pointer lock and clipboard write allowed, another app asks, the rest refused; the sheet defaults to Block). Downloads go through the injectable folder hook; tests never write to the owner's Downloads.",
+        "The picker runs in the page's main world, so its result is untrusted page data: bound and clean it, draw it only as text, and show it before it reaches a draft. Add to draft never sends."
+      ]
+    },
+    {
+      "id": "threads",
+      "summary": "Threads surface: Rust-owned thread inbox state, thread workspaces, per-turn checkpoints, diffs and fork at a turn",
+      "keywords": [
+        "threads",
+        "thread",
+        "inbox",
+        "pinned",
+        "snoozed",
+        "settled",
+        "unread",
+        "checkpoint",
+        "fork at",
+        "edit from"
+      ],
+      "roots": [
+        "crates/interface-contracts",
+        "crates/interface-settings",
+        "crates/interface-review",
+        "apps/interface-host",
+        "electron/src/shared",
+        "electron/src/renderer"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md",
+        "apps/interface-host/AGENTS.md",
+        "electron/AGENTS.md"
+      ],
+      "guides": [
+        "docs/superpowers/specs/2026-10-06-threads-design.md",
+        "docs/areas/interface-host.md",
+        "docs/areas/renderer.md",
+        "docs/PROTOCOL_FACTS.md"
+      ],
+      "entrypoints": [
+        "electron/src/renderer/thread-card.ts",
+        "electron/src/renderer/thread-turns.ts",
+        "electron/src/renderer/components/ThreadDiffPanel.tsx",
+        "crates/interface-contracts/src/threads.rs",
+        "crates/interface-settings/src/threads.rs",
+        "crates/interface-review/src/thread_git.rs",
+        "crates/interface-review/src/thread_ship.rs",
+        "apps/interface-host/src/threads.rs",
+        "electron/src/shared/threads.ts",
+        "electron/src/renderer/thread-inbox.ts",
+        "electron/src/renderer/use-thread-inbox.ts",
+        "electron/src/renderer/components/ThreadInbox.tsx",
+        "crates/interface-settings/src/threads/view.rs",
+        "electron/src/renderer/latest-read.ts"
+      ],
+      "tests": [
+        "electron/src/renderer/thread-card.test.ts",
+        "electron/src/renderer/thread-turns.test.ts",
+        "electron/src/renderer/thread-view.test.ts",
+        "electron/src/renderer/fixtures/thread-view-fixture.tsx",
+        "crates/interface-contracts/src/threads.rs",
+        "crates/interface-settings/src/threads_tests.rs",
+        "apps/interface-host/src/threads_tests.rs",
+        "apps/interface-host/src/router_tests.rs",
+        "electron/src/shared/threads.test.ts",
+        "electron/src/fixtures/threads-v34.json",
+        "electron/src/fixtures/threads-v36.json",
+        "electron/src/fixtures/threads-v37.json",
+        "electron/src/fixtures/threads-hidden-v58.json",
+        "crates/interface-review/src/thread_ship_tests.rs",
+        "apps/interface-host/src/threads_ship_tests.rs",
+        "electron/src/renderer/thread-inbox.test.ts",
+        "electron/src/renderer/use-thread-inbox.test.ts",
+        "electron/src/renderer/components/ThreadInbox.test.ts",
+        "electron/src/renderer/fixtures/thread-inbox-fixture.tsx",
+        "electron/src/renderer/latest-read.test.ts",
+        "electron/src/renderer/fixtures/thread-read-fixture.tsx"
+      ],
+      "checks": [
+        "cd electron && npx --no-install vitest run src/renderer/thread-card.test.ts src/renderer/thread-turns.test.ts src/renderer/thread-view.test.ts src/renderer/composer-thread.test.ts src/renderer/components/ThreadDiffPanel.test.ts",
+        "cd electron && INTERFACE_THREADS_ONLY=1 npm run test:renderer",
+        "cargo test --locked -p interface-contracts threads",
+        "cargo test --locked -p interface-settings threads",
+        "cargo test --locked -p interface-host threads",
+        "cd electron && npx --no-install vitest run src/renderer/thread-inbox.test.ts src/renderer/use-thread-inbox.test.ts src/renderer/components/ThreadInbox.test.ts",
+        "INTERFACE_THREAD_INBOX_ONLY=1 npm --prefix electron run test:renderer",
+        "cargo xtask check"
+      ],
+      "constraints": [
+        "Rust derives every section, unread flag, order key and restore permission; the renderer only renders the ThreadsView and sends commands.",
+        "Thread identity is the session key; registry.json stays untouched. Wire changes go through threads-v34.json (threads-v36.json for turn ends, threads-v37.json for shipping) in both languages; threads.v2.json carries threads.v1.json over read-only.",
+        "threadControl is never replay-safe as an operation; refusals say definitely-unsent explicitly and git effects never touch the user's index, branch or stash."
+      ]
+    },
+    {
+      "id": "thread-journal",
+      "summary": "Thread journal: each thread's append-only record (prompts, answers, tools, turn ends), the Threads search's In messages, and history for providers that keep none",
+      "keywords": [
+        "thread journal",
+        "journal",
+        "in messages",
+        "message search",
+        "threadJournal",
+        "replay",
+        "history fallback",
+        "restart marker"
+      ],
+      "roots": [
+        "crates/interface-contracts",
+        "crates/interface-settings",
+        "apps/interface-host",
+        "electron/src/shared",
+        "electron/src/renderer"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md",
+        "apps/interface-host/AGENTS.md",
+        "electron/AGENTS.md"
+      ],
+      "guides": [
+        "docs/superpowers/specs/2026-11-14-t3-systems-design.md",
+        "docs/areas/persistence-and-services.md",
+        "docs/areas/interface-host.md",
+        "docs/PROTOCOL_FACTS.md"
+      ],
+      "entrypoints": [
+        "crates/interface-contracts/src/thread_journal.rs",
+        "crates/interface-settings/src/thread_journal.rs",
+        "crates/interface-settings/src/thread_journal/store.rs",
+        "crates/interface-settings/src/thread_journal/read.rs",
+        "apps/interface-host/src/threads/journal.rs",
+        "electron/src/shared/thread-journal.ts",
+        "electron/src/renderer/thread-inbox.ts"
+      ],
+      "tests": [
+        "crates/interface-settings/src/thread_journal/tests.rs",
+        "apps/interface-host/src/threads/journal_tests.rs",
+        "apps/interface-host/src/threads_tests.rs",
+        "apps/interface-host/src/dispatcher_tests.rs",
+        "electron/src/shared/thread-journal.test.ts",
+        "electron/src/fixtures/thread-journal-v56.json",
+        "electron/src/renderer/thread-inbox.test.ts",
+        "electron/src/renderer/fixtures/thread-inbox-fixture.tsx"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-contracts thread_journal",
+        "cargo test --locked -p interface-settings thread_journal",
+        "cargo test --locked -p interface-host journal",
+        "cd electron && npx --no-install vitest run src/shared/thread-journal.test.ts src/renderer/thread-inbox.test.ts",
+        "INTERFACE_THREAD_INBOX_ONLY=1 npm --prefix electron run test:renderer",
+        "cargo xtask check"
+      ],
+      "constraints": [
+        "The observer does no I/O and never awaits: events, run changes and prompts reach one journal worker over one channel, in pump order.",
+        "Only the process holding host.lock writes thread-journal/; readers take no lock and skip what they cannot parse.",
+        "iface:threadJournal only reads; the journal's wire and line shapes go through thread-journal-v56.json in both languages."
+      ]
+    },
+    {
+      "id": "team-tools",
+      "summary": "Team tools: an agent in a thread starts, waits for, reads and messages other threads through the per-session iface_team MCP server",
+      "keywords": [
+        "team tools",
+        "iface_team",
+        "start_thread",
+        "wait_thread",
+        "read_thread",
+        "send_to_thread",
+        "started threads",
+        "child lineage",
+        "permission ladder",
+        "teamTools"
+      ],
+      "roots": [
+        "crates/interface-contracts",
+        "crates/interface-settings",
+        "crates/interface-engine",
+        "crates/engine-claude",
+        "crates/engine-codex",
+        "crates/engine-acp",
+        "apps/interface-host",
+        "electron/src/shared",
+        "electron/src/renderer",
+        "electron/scripts"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md",
+        "apps/interface-host/AGENTS.md",
+        "electron/AGENTS.md"
+      ],
+      "guides": [
+        "docs/superpowers/specs/2026-11-14-t3-systems-design.md",
+        "docs/areas/interface-host.md",
+        "docs/areas/engine-adapters.md",
+        "docs/areas/persistence-and-services.md",
+        "docs/PROTOCOL_FACTS.md"
+      ],
+      "entrypoints": [
+        "crates/interface-settings/src/thread_team.rs",
+        "crates/interface-contracts/src/engine.rs",
+        "crates/interface-engine/src/team_tools.rs",
+        "apps/interface-host/src/team_tools.rs",
+        "apps/interface-host/src/threads/team.rs",
+        "electron/src/renderer/started-threads.ts",
+        "electron/src/renderer/components/StartedThreads.tsx",
+        "electron/scripts/handsfree-fake-claude.mjs"
+      ],
+      "tests": [
+        "crates/interface-settings/src/thread_team_tests.rs",
+        "apps/interface-host/src/threads_team_tests.rs",
+        "apps/interface-host/src/dispatcher_tests.rs",
+        "crates/engine-claude/src/adapter_tests.rs",
+        "crates/engine-codex/src/adapter_tests.rs",
+        "crates/engine-acp/src/adapter_tests.rs",
+        "crates/interface-settings/src/threads_tests.rs",
+        "electron/src/fixtures/threads-team-v57.json",
+        "electron/src/shared/threads.test.ts",
+        "electron/src/renderer/started-threads.test.ts",
+        "electron/src/main/handsfree-fake-claude.test.ts"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-settings thread_team",
+        "cargo test --locked -p interface-host threads::tests::team",
+        "cargo test --locked -p engine-claude -p engine-codex -p engine-acp team_tools",
+        "cd electron && npx --no-install vitest run src/renderer/started-threads.test.ts src/main/handsfree-fake-claude.test.ts src/shared/threads.test.ts",
+        "cargo xtask check"
+      ],
+      "constraints": [
+        "The caller is the socket it connected to, bound to the session key the provider confirmed; never anything in tool input.",
+        "A started thread runs at collaboration depth 1 (also on resume): no team tools, no collaboration MCP, exactly one level.",
+        "Permissions never widen: the target engine's mode at the caller's rung or the nearest lower one; no tool input picks a mode.",
+        "Starts and sends go through the guarded runtime and the send hook; an unknown outcome is reported and never retried."
+      ]
+    },
+    {
+      "id": "switch-provider",
+      "summary": "Switch provider inside a thread: one thread runs as a chain of provider sessions, handed over from the journal, and switches back with only what was missed",
+      "keywords": [
+        "switch provider",
+        "switchProvider",
+        "Switch to",
+        "chain",
+        "segmentOf",
+        "handoff",
+        "switch back",
+        "threads.v5.json"
+      ],
+      "roots": [
+        "crates/interface-contracts",
+        "crates/interface-settings",
+        "crates/interface-collaboration",
+        "apps/interface-host",
+        "electron/src/shared",
+        "electron/src/renderer",
+        "electron/scripts"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md",
+        "apps/interface-host/AGENTS.md",
+        "electron/AGENTS.md"
+      ],
+      "guides": [
+        "docs/superpowers/specs/2026-11-14-t3-systems-design.md",
+        "docs/areas/interface-host.md",
+        "docs/areas/persistence-and-services.md",
+        "docs/areas/renderer.md",
+        "docs/PROTOCOL_FACTS.md"
+      ],
+      "entrypoints": [
+        "crates/interface-settings/src/threads/chain.rs",
+        "crates/interface-settings/src/thread_journal/read.rs",
+        "crates/interface-collaboration/src/thread_handoff.rs",
+        "apps/interface-host/src/threads/switch.rs",
+        "electron/src/renderer/thread-opinion.ts",
+        "electron/src/renderer/thread-pane.ts",
+        "electron/src/renderer/use-thread-bridges.ts",
+        "electron/scripts/handsfree-fake-acp.mjs"
+      ],
+      "tests": [
+        "crates/interface-settings/src/threads/chain_tests.rs",
+        "crates/interface-settings/src/thread_journal/tests.rs",
+        "apps/interface-host/src/threads_switch_tests.rs",
+        "electron/src/fixtures/threads-switch-v59.json",
+        "electron/src/shared/threads.test.ts",
+        "electron/src/renderer/thread-switch.test.ts",
+        "electron/src/renderer/thread-opinion.test.ts",
+        "electron/src/main/handsfree-fake-acp.test.ts"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-settings threads::chain",
+        "cargo test --locked -p interface-host threads::tests::switch",
+        "cargo test --locked -p interface-collaboration thread_handoff",
+        "cd electron && npx --no-install vitest run src/renderer/thread-switch.test.ts src/renderer/thread-opinion.test.ts src/main/handsfree-fake-acp.test.ts src/shared/threads.test.ts",
+        "cargo xtask check"
+      ],
+      "constraints": [
+        "Exactly one segment of a chain is listed (the head); a switch moves the thread's owner-facing state to it in one store commit.",
+        "A target that cannot be opened changes nothing; a handoff whose send is unknown stands and is never retried.",
+        "A new session never runs wider than the thread: the target's mode at the old head's rung or the nearest lower one.",
+        "An earlier segment's turns draw no per-turn control; history for a head with two or more segments comes from the journal."
+      ]
+    },
+    {
+      "id": "thread-schedules",
+      "summary": "Scheduled prompts and pull-request watch: a thread is sent a prompt at a time, on a repeat or a calendar, or when its pull request's checks fail or new review comments arrive",
+      "keywords": [
+        "schedule",
+        "scheduled prompt",
+        "Schedule a prompt",
+        "scheduleSet",
+        "watch",
+        "Watch",
+        "pull request watch",
+        "iface trigger",
+        "schedule_prompt",
+        "thread-schedules.v2.json"
+      ],
+      "roots": [
+        "crates/interface-contracts",
+        "crates/interface-settings",
+        "apps/interface-host",
+        "apps/iface",
+        "electron/src/shared",
+        "electron/src/renderer",
+        "electron/scripts"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md",
+        "apps/interface-host/AGENTS.md",
+        "apps/iface/AGENTS.md",
+        "electron/AGENTS.md"
+      ],
+      "guides": [
+        "docs/superpowers/specs/2026-11-14-t3-systems-design.md",
+        "docs/areas/interface-host.md",
+        "docs/areas/persistence-and-services.md",
+        "docs/areas/renderer.md",
+        "docs/areas/iface.md",
+        "docs/PROTOCOL_FACTS.md"
+      ],
+      "entrypoints": [
+        "crates/interface-settings/src/thread_schedules.rs",
+        "apps/interface-host/src/threads/schedules.rs",
+        "apps/interface-host/src/threads/worker.rs",
+        "apps/interface-host/src/orchestration_transport.rs",
+        "apps/iface/src/app.rs",
+        "electron/src/renderer/thread-schedules.ts",
+        "electron/src/renderer/use-thread-schedules.ts",
+        "electron/src/renderer/components/ThreadScheduleDialog.tsx",
+        "electron/src/renderer/components/ThreadScheduleLine.tsx",
+        "electron/src/renderer/components/ThreadSchedulesSettings.tsx"
+      ],
+      "tests": [
+        "crates/interface-settings/src/thread_schedules_tests.rs",
+        "apps/interface-host/src/threads_schedules_tests.rs",
+        "electron/src/fixtures/threads-schedules-v62.json",
+        "electron/src/shared/threads.test.ts",
+        "electron/src/renderer/thread-schedules.test.ts",
+        "electron/src/main/handsfree-fake-claude.test.ts"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-settings thread_schedules",
+        "cargo test --locked -p interface-host threads::tests::scheduled",
+        "cargo test --locked -p iface trigger",
+        "cd electron && npx --no-install vitest run src/renderer/thread-schedules.test.ts src/shared/threads.test.ts src/main/handsfree-fake-claude.test.ts",
+        "cargo xtask check"
+      ],
+      "constraints": [
+        "Each firing is recorded as an attempt (outcome unknown) before its send and is delivered at most once, ever; an unknown outcome is never retried, after a restart included.",
+        "Delivery goes through the gate the phone's send uses: idle or failed, no Away loop or Code pane, not settled or archived; a busy thread is waited for, one firing at a time.",
+        "Only the latest missed due time fires (never a burst), and only when it is less than a day late.",
+        "gh is read only through interface_review's Gh, off the worker, on the pull-request pass."
+      ]
+    },
+    {
+      "id": "resume-at-reset",
+      "summary": "Resume at reset: when a thread's provider hits its usage limit, the limit line offers Resume at reset (the thread carries on by itself a minute after the reset) and Snooze until reset",
+      "keywords": [
+        "resume at reset",
+        "Resume at reset",
+        "Snooze until reset",
+        "usage limit",
+        "rate limit",
+        "resetsAt",
+        "resumeAtReset",
+        "ThreadView.limit",
+        "limit <seconds>"
+      ],
+      "roots": [
+        "crates/interface-contracts",
+        "crates/engine-claude",
+        "crates/engine-codex",
+        "crates/interface-settings",
+        "apps/interface-host",
+        "electron/src/shared",
+        "electron/src/renderer",
+        "electron/scripts"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md",
+        "apps/interface-host/AGENTS.md",
+        "electron/AGENTS.md"
+      ],
+      "guides": [
+        "docs/superpowers/specs/2026-11-14-t3-systems-design.md",
+        "docs/areas/interface-host.md",
+        "docs/areas/persistence-and-services.md",
+        "docs/areas/renderer.md",
+        "docs/areas/engine-adapters.md",
+        "docs/PROTOCOL_FACTS.md"
+      ],
+      "entrypoints": [
+        "crates/engine-claude/src/mapper.rs",
+        "crates/engine-codex/src/mapper.rs",
+        "crates/interface-settings/src/thread_schedules.rs",
+        "apps/interface-host/src/threads/resume.rs",
+        "apps/interface-host/src/threads/schedules.rs",
+        "electron/src/renderer/thread-opinion.ts",
+        "electron/src/renderer/components/ThreadOpinionCards.tsx",
+        "electron/src/renderer/thread-schedules.ts",
+        "electron/src/renderer/components/ThreadScheduleLine.tsx",
+        "electron/scripts/handsfree-fake-claude.mjs"
+      ],
+      "tests": [
+        "crates/interface-settings/src/thread_schedules_tests.rs",
+        "apps/interface-host/src/threads_schedules_tests.rs",
+        "electron/src/fixtures/threads-resume-v66.json",
+        "electron/src/shared/threads.test.ts",
+        "electron/src/renderer/thread-resume.test.ts",
+        "electron/src/main/handsfree-fake-claude.test.ts"
+      ],
+      "checks": [
+        "cargo test --locked -p engine-claude -p engine-codex rate_limit",
+        "cargo test --locked -p interface-settings thread_schedules",
+        "cargo test --locked -p interface-host threads::tests::scheduled",
+        "cd electron && npx --no-install vitest run src/renderer/thread-resume.test.ts src/shared/threads.test.ts src/main/handsfree-fake-claude.test.ts",
+        "cargo xtask check"
+      ],
+      "constraints": [
+        "A resume is a one-time scheduled prompt (kind resume, one per thread): the scheduler's gate, occurrence id and one attempt apply unchanged; an unknown outcome is never retried.",
+        "Never a guessed time: without a reset from the notice or a full usage window of the thread's own account, neither action is offered and resumeAtReset is refused.",
+        "A resume never carries a prompt whose delivery is unknown; a limit-refused prompt goes as a Retry of its prompt-recovery receipt, so it can never go twice.",
+        "The provider replay fixtures are real recordings: never edit them."
+      ]
+    },
+    {
+      "id": "provider-accounts",
+      "summary": "Several accounts per provider: named Claude, Codex and Grok profile directories, which account each session is bound to, and the account a new thread, terminal pane or sign-in uses",
+      "keywords": [
+        "provider account",
+        "accounts",
+        "CLAUDE_CONFIG_DIR",
+        "CODEX_HOME",
+        "GROK_HOME",
+        "providerAccounts",
+        "sign in",
+        "usage per account",
+        "session-accounts"
+      ],
+      "roots": [
+        "crates/interface-contracts",
+        "crates/interface-settings",
+        "crates/interface-runtime",
+        "crates/interface-terminal",
+        "crates/engine-claude",
+        "crates/engine-codex",
+        "crates/engine-acp",
+        "apps/interface-host",
+        "electron/src/shared",
+        "electron/src/renderer"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md",
+        "apps/interface-host/AGENTS.md",
+        "electron/AGENTS.md"
+      ],
+      "guides": [
+        "docs/superpowers/specs/2026-11-14-t3-systems-design.md",
+        "docs/areas/engine-adapters.md",
+        "docs/areas/interface-host.md",
+        "docs/areas/persistence-and-services.md",
+        "docs/PROTOCOL_FACTS.md"
+      ],
+      "entrypoints": [
+        "crates/interface-contracts/src/provider_accounts.rs",
+        "crates/interface-settings/src/provider_accounts.rs",
+        "crates/interface-runtime/src/accounts.rs",
+        "apps/interface-host/src/provider_accounts.rs",
+        "apps/interface-host/src/provider_capture/accounts.rs",
+        "crates/interface-terminal/src/launch.rs",
+        "electron/src/shared/provider-accounts.ts",
+        "electron/src/renderer/provider-accounts-view.ts",
+        "electron/src/renderer/components/ProviderAccountsSection.tsx"
+      ],
+      "tests": [
+        "crates/interface-settings/src/provider_accounts_tests.rs",
+        "crates/interface-runtime/src/accounts_tests.rs",
+        "apps/interface-host/src/provider_accounts_tests.rs",
+        "apps/interface-host/src/provider_accounts_removed_tests.rs",
+        "crates/engine-claude/src/adapter_tests.rs",
+        "crates/engine-codex/src/adapter_tests.rs",
+        "crates/engine-acp/src/adapter_tests.rs",
+        "electron/src/fixtures/provider-accounts-v60.json",
+        "electron/src/shared/provider-accounts.test.ts",
+        "electron/src/renderer/provider-accounts-view.test.ts"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-settings provider_accounts",
+        "cargo test --locked -p interface-runtime accounts",
+        "cargo test --locked -p interface-host provider_accounts",
+        "cd electron && npx --no-install vitest run src/shared/provider-accounts.test.ts src/renderer/provider-accounts-view.test.ts",
+        "cargo xtask check"
+      ],
+      "constraints": [
+        "The Default account is the host's inherited environment: no directory, never removed, and its adapter, environment, store roots and argv are exactly as before accounts.",
+        "The account is never part of the session key or the engine id; session-accounts.v1.json binds added-account sessions only.",
+        "Sign-in state comes only from each CLI run with the account's environment; nothing reads credentials.",
+        "A session bound to a removed account is history that cannot be resumed; resume refuses definitely-unsent."
+      ]
+    },
+    {
+      "id": "composer-references",
+      "summary": "Composer references and stash: Quote a reply's selection, send a terminal selection to a thread's draft, refer to another thread (Rust writes the block), and stash drafts in Rust",
+      "keywords": [
+        "quote",
+        "stash",
+        "draft stash",
+        "draftStash",
+        "thread reference",
+        "chat chip",
+        "read_thread",
+        "send selection to thread",
+        "terminal selection"
+      ],
+      "roots": [
+        "crates/interface-contracts",
+        "crates/interface-settings",
+        "crates/interface-prompt-context",
+        "apps/interface-host",
+        "electron/src/shared",
+        "electron/src/renderer"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md",
+        "apps/interface-host/AGENTS.md",
+        "electron/AGENTS.md"
+      ],
+      "guides": [
+        "docs/superpowers/specs/2026-11-14-t3-systems-design.md",
+        "docs/areas/interface-host.md",
+        "docs/areas/persistence-and-services.md",
+        "docs/areas/renderer.md",
+        "docs/PROTOCOL_FACTS.md",
+        "docs/APP_MENU.md"
+      ],
+      "entrypoints": [
+        "crates/interface-contracts/src/draft_stash.rs",
+        "crates/interface-settings/src/draft_stash.rs",
+        "crates/interface-settings/src/thread_reference.rs",
+        "crates/interface-prompt-context/src/validation.rs",
+        "apps/interface-host/src/threads/stash.rs",
+        "apps/interface-host/src/threads/reference.rs",
+        "electron/src/shared/draft-stash.ts",
+        "electron/src/renderer/composer-quote.ts",
+        "electron/src/renderer/thread-reference.ts",
+        "electron/src/renderer/use-draft-stash.ts",
+        "electron/src/renderer/components/StashedDrafts.tsx",
+        "electron/src/renderer/components/ComposerReferenceDialogs.tsx"
+      ],
+      "tests": [
+        "crates/interface-settings/src/draft_stash_tests.rs",
+        "crates/interface-settings/src/thread_reference_tests.rs",
+        "crates/interface-prompt-context/tests/prompt_context.rs",
+        "apps/interface-host/src/threads_references_tests.rs",
+        "electron/src/fixtures/composer-references-v63.json",
+        "electron/src/shared/draft-stash.test.ts",
+        "electron/src/renderer/composer-quote.test.ts",
+        "electron/src/renderer/thread-reference.test.ts",
+        "electron/src/renderer/draft-stash-view.test.ts",
+        "electron/src/renderer/fixtures/composer-references-fixture.tsx"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-settings -- draft_stash thread_reference",
+        "cargo test --locked -p interface-prompt-context",
+        "cargo test --locked -p interface-host references",
+        "cd electron && npx --no-install vitest run src/shared/draft-stash.test.ts src/renderer/composer-quote.test.ts src/renderer/thread-reference.test.ts src/renderer/draft-stash-view.test.ts",
+        "cd electron && INTERFACE_RENDERER_LANE=threads,terminal-interaction npm run test:renderer",
+        "cargo xtask check"
+      ],
+      "constraints": [
+        "Rust alone decides what another thread's block holds and whether the sender may read it (team tools' may_read, through heads); whatever the renderer sends as a chat item's safeContent is ignored.",
+        "Selected text, terminal output and other threads' words are plain text: bounded, never rendered as HTML, placed in a prompt as quoted data.",
+        "A stash keeps references only; a stashed draft's file paths keep pasted images but grant nothing, and restored paths are granted again.",
+        "A stash belongs to the thread: it follows a switched thread's head and is forgotten with the thread."
+      ]
+    },
+    {
+      "id": "quick-wins",
+      "summary": "Quick wins: Write with AI for commit messages and pull request text, the private secret card (request_secret), and side questions (/btw)",
+      "keywords": [
+        "write with ai",
+        "suggestShipText",
+        "ship text",
+        "commit message",
+        "request_secret",
+        "secret",
+        "threadSecret",
+        "secret card",
+        "side question",
+        "btw",
+        "/btw",
+        "sideAsk",
+        "bring back"
+      ],
+      "roots": [
+        "crates/engine-claude",
+        "crates/interface-review",
+        "crates/interface-contracts",
+        "crates/interface-settings",
+        "apps/interface-host",
+        "electron/src/shared",
+        "electron/src/renderer",
+        "electron/scripts"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md",
+        "apps/interface-host/AGENTS.md",
+        "electron/AGENTS.md"
+      ],
+      "guides": [
+        "docs/superpowers/specs/2026-11-14-t3-systems-design.md",
+        "docs/areas/interface-host.md",
+        "docs/areas/persistence-and-services.md",
+        "docs/areas/renderer.md",
+        "docs/PROTOCOL_FACTS.md",
+        "docs/AGENT_HANDSFREE_TESTING.md"
+      ],
+      "entrypoints": [
+        "crates/engine-claude/src/ship_text.rs",
+        "crates/interface-review/src/thread_ship_text.rs",
+        "crates/interface-contracts/src/thread_secrets.rs",
+        "crates/interface-settings/src/thread_secrets.rs",
+        "crates/interface-settings/src/thread_sides.rs",
+        "apps/interface-host/src/threads/ship.rs",
+        "apps/interface-host/src/threads/secrets.rs",
+        "apps/interface-host/src/threads/side.rs",
+        "apps/interface-host/src/team_tools.rs",
+        "electron/src/shared/thread-secrets.ts",
+        "electron/src/renderer/components/WriteWithAi.tsx",
+        "electron/src/renderer/components/ThreadSecretCard.tsx",
+        "electron/src/renderer/components/ThreadSecretsSettings.tsx",
+        "electron/src/renderer/use-thread-secrets.ts",
+        "electron/src/renderer/side-question.ts",
+        "electron/src/renderer/components/SideQuestionPanel.tsx"
+      ],
+      "tests": [
+        "crates/engine-claude/src/ship_text_tests.rs",
+        "crates/interface-review/src/thread_ship_text_tests.rs",
+        "crates/interface-settings/src/thread_secrets_tests.rs",
+        "crates/interface-settings/src/thread_sides_tests.rs",
+        "apps/interface-host/src/threads_ship_tests.rs",
+        "apps/interface-host/src/threads_team_tests.rs",
+        "electron/src/fixtures/quick-wins-v67.json",
+        "electron/src/shared/thread-secrets.test.ts",
+        "electron/src/renderer/thread-ship.test.ts",
+        "electron/src/renderer/thread-secrets.test.ts",
+        "electron/src/renderer/side-question.test.ts",
+        "electron/src/main/handsfree-fake-claude.test.ts"
+      ],
+      "checks": [
+        "cargo test --locked -p engine-claude ship_text",
+        "cargo test --locked -p interface-settings -- thread_secrets thread_sides",
+        "cargo test --locked -p interface-host -- write_with_ai a_given_secret a_side_question",
+        "cd electron && npx --no-install vitest run src/shared/thread-secrets.test.ts src/renderer/thread-ship.test.ts src/renderer/thread-secrets.test.ts src/renderer/side-question.test.ts",
+        "cargo xtask check"
+      ],
+      "constraints": [
+        "A given secret's value exists only in its 0600 file: never in a tool result, push, journal, store, draft or log; the channel's payload is never logged.",
+        "Write with AI reads only through thread_git::diff (credential and binary files named, not read) and redacts what it quotes; it commits and pushes nothing.",
+        "A side thread is never a thread record: it is hidden, resumes one hop down with no team tools, and is deleted when closed or with its thread."
+      ]
+    },
+    {
+      "id": "workflows",
+      "summary": "Saved project setup readiness and reusable thread recipes",
+      "keywords": [
+        "recipes",
+        "prerequisites",
+        "setup",
+        "readiness",
+        "workflow templates"
+      ],
+      "roots": [
+        "crates/interface-contracts",
+        "crates/interface-settings",
+        "crates/interface-review",
+        "apps/interface-host",
+        "electron"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md",
+        "apps/interface-host/AGENTS.md",
+        "electron/AGENTS.md"
+      ],
+      "guides": [
+        "docs/WORKFLOW_RECIPES.md"
+      ],
+      "entrypoints": [
+        "crates/interface-contracts/src/workflows.rs",
+        "crates/interface-settings/src/workflows.rs",
+        "crates/interface-review/src/workspace_setup.rs",
+        "apps/interface-host/src/threads/workflows.rs",
+        "electron/src/renderer/components/WorkflowControls.tsx"
+      ],
+      "tests": [
+        "crates/interface-settings/src/workflows.rs",
+        "crates/interface-review/src/workspace_setup.rs",
+        "apps/interface-host/src/threads_tests.rs",
+        "electron/src/shared/workflows.test.ts",
+        "electron/src/renderer/fixtures/workflows-fixture.tsx"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-settings workflows",
+        "cargo test --locked -p interface-review workspace_setup",
+        "cargo test --locked -p interface-host setup_",
+        "INTERFACE_RENDERER_LANE=workflows,threads npm --prefix electron run test:renderer",
+        "cargo xtask check"
+      ],
+      "constraints": [
+        "Only explicitly saved setup runs; failed/interrupted setup never yields a launch token and is never replayed automatically.",
+        "Recipes store context descriptors, not cached file bytes or credentials; ordinary context authority still validates at launch."
+      ]
+    },
+    {
+      "id": "visual-replies",
+      "summary": "Visual replies: an agent shows a rendered page above its reply through team tools' show_visual, kept per thread and drawn only in a sandboxed iface-visual: frame",
+      "keywords": [
+        "visual reply",
+        "visual replies",
+        "show_visual",
+        "visual.shown",
+        "thread-visuals",
+        "iface-visual",
+        "visualFrame",
+        "sandbox",
+        "Render"
+      ],
+      "roots": [
+        "crates/interface-contracts",
+        "crates/interface-settings",
+        "apps/interface-host",
+        "electron/src/shared",
+        "electron/src/main",
+        "electron/src/renderer",
+        "electron/scripts"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md",
+        "apps/interface-host/AGENTS.md",
+        "electron/AGENTS.md"
+      ],
+      "guides": [
+        "docs/superpowers/specs/2026-11-14-t3-systems-design.md",
+        "docs/areas/interface-host.md",
+        "docs/areas/persistence-and-services.md",
+        "docs/areas/electron-main.md",
+        "docs/areas/renderer.md",
+        "docs/PROTOCOL_FACTS.md"
+      ],
+      "entrypoints": [
+        "crates/interface-settings/src/thread_visuals.rs",
+        "crates/interface-settings/src/thread_journal/read.rs",
+        "apps/interface-host/src/threads/team.rs",
+        "apps/interface-host/src/threads/journal.rs",
+        "electron/src/shared/visual-frame.ts",
+        "electron/src/main/visual-frames.ts",
+        "electron/src/main/visual-network-fence.ts",
+        "electron/src/renderer/visual-reply.ts",
+        "electron/src/renderer/components/VisualReply.tsx",
+        "electron/scripts/visual-reply-lane.cjs"
+      ],
+      "tests": [
+        "crates/interface-settings/src/thread_visuals_tests.rs",
+        "crates/interface-settings/src/thread_journal/tests.rs",
+        "apps/interface-host/src/threads_team_tests.rs",
+        "electron/src/fixtures/visual-replies-v61.json",
+        "electron/src/shared/visual-frame.test.ts",
+        "electron/src/main/visual-frames.test.ts",
+        "electron/src/main/visual-network-fence.test.ts",
+        "electron/src/renderer/visual-reply.test.ts",
+        "electron/src/main/handsfree-fake-claude.test.ts"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-settings thread_visuals",
+        "cargo test --locked -p interface-host show_visual",
+        "cd electron && npx --no-install vitest run src/shared/visual-frame.test.ts src/main/visual-frames.test.ts src/main/visual-network-fence.test.ts src/renderer/visual-reply.test.ts",
+        "cd electron && INTERFACE_RENDERER_LANE=visual-reply npm run test:renderer",
+        "cargo xtask check"
+      ],
+      "constraints": [
+        "A visual page is drawn only in <iframe sandbox=\"allow-scripts\"> on an iface-visual: URL that main serves with the visual CSP and sandbox headers; never srcdoc, blob: or data: (they inherit the app policy), never allow-same-origin.",
+        "The app CSP frames only iface-visual:, and a frame showing a visual never navigates; no postMessage listener exists for a visual.",
+        "WebRTC is outside CSP: the app window keeps disable_non_proxied_udp and its session a proxy that leads nowhere, loopback included (visual-network-fence.ts); the window itself makes no network request.",
+        "Pages are at most 512 KiB, 64 and 16 MiB a thread, owner-private, removed with their session; the event never carries the page."
+      ]
+    },
+    {
+      "id": "outside-agents",
+      "summary": "Outside agents: a Claude Code or Codex running outside Interface lists, reads and (when the owner allows it) starts and messages Interface threads through iface mcp and the host's owner-only outside socket",
+      "keywords": [
+        "outside agents",
+        "iface mcp",
+        "outside.sock",
+        "outsideAgents",
+        "startedFromOutside",
+        "list_projects",
+        "claude mcp add",
+        "codex mcp add",
+        "thread-team.v2"
+      ],
+      "roots": [
+        "crates/interface-contracts",
+        "crates/interface-settings",
+        "apps/interface-host",
+        "apps/iface",
+        "electron/src/shared",
+        "electron/src/renderer"
+      ],
+      "rules": [
+        "AGENTS.md",
+        "crates/AGENTS.md",
+        "apps/interface-host/AGENTS.md",
+        "apps/iface/AGENTS.md",
+        "electron/AGENTS.md"
+      ],
+      "guides": [
+        "docs/superpowers/specs/2026-11-14-t3-systems-design.md",
+        "docs/areas/interface-host.md",
+        "docs/areas/iface.md",
+        "docs/areas/persistence-and-services.md",
+        "docs/areas/renderer.md",
+        "docs/PROTOCOL_FACTS.md"
+      ],
+      "entrypoints": [
+        "crates/interface-settings/src/thread_team.rs",
+        "apps/interface-host/src/outside_agents.rs",
+        "apps/interface-host/src/threads/outside.rs",
+        "apps/interface-host/src/threads/team.rs",
+        "apps/iface/src/mcp.rs",
+        "electron/src/renderer/outside-agents.ts",
+        "electron/src/renderer/components/SettingsPage.tsx",
+        "electron/src/renderer/components/ThreadPaneHead.tsx"
+      ],
+      "tests": [
+        "crates/interface-settings/src/thread_team_tests.rs",
+        "apps/interface-host/src/threads_outside_tests.rs",
+        "apps/iface/src/mcp_tests.rs",
+        "apps/interface-host/tests/suite/outside_agents.rs",
+        "electron/src/fixtures/outside-agents-v65.json",
+        "electron/src/shared/threads.test.ts",
+        "electron/src/renderer/outside-agents.test.ts",
+        "electron/src/renderer/components/SettingsPage.test.ts"
+      ],
+      "checks": [
+        "cargo test --locked -p interface-settings thread_team",
+        "cargo test --locked -p interface-host outside",
+        "cargo test --locked -p iface mcp",
+        "cargo build --locked -p iface && cargo test --locked -p interface-host --test suite outside_agents",
+        "cd electron && npx --no-install vitest run src/renderer/outside-agents.test.ts src/shared/threads.test.ts src/renderer/components/SettingsPage.test.ts",
+        "cargo xtask check"
+      ],
+      "constraints": [
+        "Off by default; the level is the owner's Settings choice, kept in the team tools ledger (never the Threads store) and read at every call.",
+        "The outside socket is 0600 in a 0700 directory and the host drops a peer whose uid is not its own; iface mcp talks only to a socket and directory its own user owns.",
+        "The caller is the connection the host accepted; no tool input names a caller, a level, a mode or a folder. A start names an existing Interface project's root or name only.",
+        "A started thread runs at the target's asking rung (child_mode(engine, Rung::Ask)) at collaboration depth 1 with no team tools, on the provider's default account; 4 running and 16 in all per outside session, 64 a day across sessions.",
+        "Read can change nothing; send and stop reach only threads that outside session started. A call lost after it reached the host is outcome-unknown, never retried."
+      ]
+    }
+  ]
+}

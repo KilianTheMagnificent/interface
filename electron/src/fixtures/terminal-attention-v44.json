@@ -1,0 +1,390 @@
+{
+  "version": 44,
+  "description": "Which PTY bytes and inputs make a pane need the user (TerminalSummary.attention, host protocol v44). crates/interface-terminal/src/attention.rs and electron/src/renderer/terminal-activity.ts both replay every case; a step's `waiting` is the answer after it.",
+  "cases": [
+    {
+      "name": "Claude waits on a permission dialog until it is answered",
+      "profile": "claude",
+      "steps": [
+        {
+          "output": "\u001b]2;interface-claude-activity:working\u0007",
+          "waiting": false
+        },
+        {
+          "output": "\u001b]2;interface-claude-activity:waiting\u0007",
+          "waiting": true
+        },
+        {
+          "output": "\u001b]2;\u2733 Renamed task\u0007",
+          "waiting": true
+        },
+        {
+          "output": "plain output while the dialog shows",
+          "waiting": true
+        },
+        {
+          "input": "\u001b[I",
+          "waiting": true
+        },
+        {
+          "input": "1",
+          "waiting": false
+        },
+        {
+          "output": "\u001b]2;interface-claude-activity:waiting\u0007",
+          "waiting": true
+        },
+        {
+          "output": "\u001b]2;interface-claude-activity:working\u0007",
+          "waiting": false
+        },
+        {
+          "output": "\u001b]2;interface-claude-activity:waiting\u0007",
+          "waiting": true
+        },
+        {
+          "output": "\u001b]2;interface-claude-activity:idle\u0007",
+          "waiting": false
+        }
+      ]
+    },
+    {
+      "name": "Claude's bell beside a finished turn is not a request",
+      "profile": "claude",
+      "steps": [
+        {
+          "output": "\u001b]2;interface-claude-activity:working\u0007\u001b]2;interface-claude-activity:idle\u0007",
+          "waiting": false
+        },
+        {
+          "output": "\u0007",
+          "waiting": false
+        },
+        {
+          "input": "next prompt\r",
+          "waiting": false
+        },
+        {
+          "output": "\u0007",
+          "waiting": true
+        },
+        {
+          "input": "y",
+          "waiting": false
+        }
+      ]
+    },
+    {
+      "name": "Codex approvals arrive as OSC 9; a spinner or a finished turn ends them",
+      "profile": "codex",
+      "steps": [
+        {
+          "output": "\u001b]0;\u280b Working\u0007",
+          "waiting": false
+        },
+        {
+          "output": "\u001b]9;Approval requested: npm test\u0007",
+          "waiting": true
+        },
+        {
+          "output": "\u001b]0;Renamed\u0007",
+          "waiting": true
+        },
+        {
+          "output": "\u001b]0;\u2819 Working\u0007",
+          "waiting": false
+        },
+        {
+          "output": "\u001b]9;Codex wants to edit src/main.rs\u0007",
+          "waiting": true
+        },
+        {
+          "input": "y",
+          "waiting": false
+        },
+        {
+          "output": "\u001b]9;Plan mode prompt: Ship it\u001b\\",
+          "waiting": true
+        },
+        {
+          "output": "\u001b]9;Agent turn complete\u0007",
+          "waiting": false
+        },
+        {
+          "output": "\u0007",
+          "waiting": false
+        },
+        {
+          "output": "\u001b]9;  APPROVAL REQUESTED: padded and shouting\u0007",
+          "waiting": true
+        },
+        {
+          "output": "\u001b]9;Approval was granted\u0007",
+          "waiting": false
+        }
+      ]
+    },
+    {
+      "name": "Codex's spinner after a brand mark is work resumed",
+      "profile": "codex",
+      "steps": [
+        {
+          "output": "\u001b]9;Approval requested: rm build\u0007",
+          "waiting": true
+        },
+        {
+          "output": "\u001b]0;\u273b \u280b Thinking\u0007",
+          "waiting": false
+        }
+      ]
+    },
+    {
+      "name": "OSC 9 from a pane that is not Codex is ignored; its bell still asks",
+      "profile": "grok",
+      "steps": [
+        {
+          "output": "\u001b]9;Approval requested: deploy\u0007",
+          "waiting": false
+        },
+        {
+          "output": "\u0007",
+          "waiting": true
+        },
+        {
+          "input": "\r",
+          "waiting": false
+        }
+      ]
+    },
+    {
+      "name": "A shell's bell waits until a keystroke, not a protocol reply",
+      "profile": "shell",
+      "steps": [
+        {
+          "output": "make: done\u0007",
+          "waiting": true
+        },
+        {
+          "output": "more output",
+          "waiting": true
+        },
+        {
+          "input": "\u001b[?1;2c",
+          "waiting": true
+        },
+        {
+          "input": "\u001b[O",
+          "waiting": true
+        },
+        {
+          "input": "\u001b[>0;276;0c",
+          "waiting": true
+        },
+        {
+          "input": "\r",
+          "waiting": false
+        }
+      ]
+    },
+    {
+      "name": "A BEL that ends or sits inside an escape is not a bell",
+      "profile": "shell",
+      "steps": [
+        {
+          "output": "\u001b]0;title\u0007",
+          "waiting": false
+        },
+        {
+          "output": "\u001b[3\u0007m",
+          "waiting": false
+        },
+        {
+          "output": "\u001b]52;c;YWJj\u0007",
+          "waiting": false
+        },
+        {
+          "output": "\u001bP+q\u0007\u001b\\",
+          "waiting": false
+        },
+        {
+          "output": "\u001b]2;unterminated",
+          "waiting": false
+        },
+        {
+          "output": "\u0007",
+          "waiting": false
+        },
+        {
+          "output": "\u0007",
+          "waiting": true
+        }
+      ]
+    },
+    {
+      "name": "A cancelled escape returns to text, so the next BEL rings",
+      "profile": "shell",
+      "steps": [
+        {
+          "output": "\u001b\u0018\u0007",
+          "waiting": true
+        }
+      ]
+    },
+    {
+      "name": "A string terminator broken by another byte drops the title",
+      "profile": "claude",
+      "steps": [
+        {
+          "output": "\u001b]2;interface-claude-activity:waiting\u001bX",
+          "waiting": false
+        },
+        {
+          "output": "\u0007",
+          "waiting": true
+        }
+      ]
+    },
+    {
+      "name": "Frames split across reads still count",
+      "profile": "claude",
+      "steps": [
+        {
+          "output": "\u001b]2;interface-claude-activity:wai",
+          "waiting": false
+        },
+        {
+          "output": "ting\u0007",
+          "waiting": true
+        },
+        {
+          "output": "\u001b]2;interface-claude-act",
+          "waiting": true
+        },
+        {
+          "output": "ivity:idle\u001b\\",
+          "waiting": false
+        }
+      ]
+    },
+    {
+      "name": "The host's private activity titles decide alone once seen",
+      "profile": "opencode",
+      "steps": [
+        {
+          "output": "\u001b]2;interface-terminal-activity:v1:working\u0007",
+          "waiting": false
+        },
+        {
+          "output": "\u001b]2;interface-terminal-activity:v1:waiting\u0007",
+          "waiting": true
+        },
+        {
+          "input": "y",
+          "waiting": true
+        },
+        {
+          "output": "\u0007",
+          "waiting": true
+        },
+        {
+          "output": "\u001b]0;\u280b Working\u0007",
+          "waiting": true
+        },
+        {
+          "output": "\u001b]2;interface-terminal-activity:v1:complete\u0007",
+          "waiting": false
+        },
+        {
+          "output": "\u0007",
+          "waiting": false
+        },
+        {
+          "output": "\u001b]2;interface-terminal-activity:v1:waiting\u0007",
+          "waiting": true
+        },
+        {
+          "output": "\u001b]2;interface-terminal-activity:v1:idle\u0007",
+          "waiting": false
+        }
+      ]
+    },
+    {
+      "name": "An unknown private signal is not host activity",
+      "profile": "shell",
+      "steps": [
+        {
+          "output": "\u001b]2;interface-terminal-activity:v1:bogus\u0007",
+          "waiting": false
+        },
+        {
+          "output": "\u0007",
+          "waiting": true
+        }
+      ]
+    },
+    {
+      "name": "A new program in the pane is not bound by the old one's activity titles",
+      "profile": "shell",
+      "steps": [
+        {
+          "output": "\u001b]2;interface-terminal-activity:v1:idle\u0007",
+          "waiting": false
+        },
+        {
+          "output": "\u0007",
+          "waiting": false
+        },
+        {
+          "profile": "claude",
+          "waiting": false
+        },
+        {
+          "output": "\u0007",
+          "waiting": true
+        }
+      ]
+    },
+    {
+      "name": "Antigravity OSC 7501 blocked frames wait until answered or resumed",
+      "profile": "gemini",
+      "steps": [
+        {
+          "output": "\u001b]7501;state=idle:app=agy\u0007",
+          "waiting": false
+        },
+        {
+          "output": "\u001b]7501;state=working:id=t1:app=agy:title=Antigravity:msg=Thinking\u0007",
+          "waiting": false
+        },
+        {
+          "output": "\u001b]7501;state=blocked:id=t1:kind=permission:app=agy\u0007",
+          "waiting": true
+        },
+        {
+          "output": "\u001b]2;Antigravity\u0007",
+          "waiting": true
+        },
+        {
+          "input": "y",
+          "waiting": false
+        },
+        {
+          "output": "\u001b]7501;state=blocked:id=t1:kind=question:app=agy\u001b\\",
+          "waiting": true
+        },
+        {
+          "output": "\u001b]7501;state=working:id=t1:app=agy\u0007",
+          "waiting": false
+        },
+        {
+          "output": "\u001b]7501;state=blocked:id=t1:kind=auth:app=agy\u0007",
+          "waiting": true
+        },
+        {
+          "output": "\u001b]7501;state=done:id=t1:app=agy\u0007",
+          "waiting": false
+        }
+      ]
+    }
+  ]
+}

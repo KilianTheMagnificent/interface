@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "revision": 1,
+  "config": {
+    "version": 1,
+    "project": "/project",
+    "objective": "Repair the utility",
+    "files": [
+      "value.py"
+    ],
+    "contextFiles": [
+      "test.py"
+    ],
+    "validation": {
+      "version": 1,
+      "files": [
+        "test.py"
+      ],
+      "protectedFiles": [
+        "test.py"
+      ],
+      "checks": [
+        [
+          "python3",
+          "test.py"
+        ]
+      ]
+    },
+    "workerModel": "codex/model",
+    "reviewModel": "claude/model",
+    "durationSeconds": 60,
+    "maxIterations": 2
+  },
+  "startedAtMs": <STARTED>,
+  "deadlineAtMs": <DEADLINE>,
+  "status": "running",
+  "phase": "idle",
+  "detail": "",
+  "iterations": []
+}

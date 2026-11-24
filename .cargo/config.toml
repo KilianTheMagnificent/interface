@@ -1,0 +1,9 @@
+[alias]
+xtask = "run --package xtask --"
+
+# Do not point `build.target-dir` at one shared directory for every worktree:
+# cargo hashes workspace members by their path relative to the workspace root,
+# so two worktrees of this repository produce identical artifact names and
+# overwrite each other's binaries and test executables. Reuse across worktrees
+# belongs to a compiler cache (`sccache`, set as `rustc-wrapper` in
+# ~/.cargo/config.toml once installed), never to a shared target directory.

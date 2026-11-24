@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- Interface Dev app icon: The Fold on a canary plate (2026-08-30).
+
+       Same chiral Fold as build/icon.svg, drawn in the charcoal of the footer
+       (2026-09-24: white on canary was low contrast). The plate is canary
+       rather than production emerald so Dock, Spotlight and Cmd-Tab cannot
+       confuse this build with /Applications/Interface.app.
+
+       Two drawings share the file. `.large` (the default) lifts the Fold so a
+       charcoal footer can carry the DEV wordmark in the same gold; at Dock size
+       the letters read. `.small` drops the footer and centres the Fold at the
+       production scale, because at 16-64px the footer is only an unreadable
+       strip: scripts/make-icon.mjs rasterizes it for those slices.
+
+       Geometry: 1024 canvas, 100px transparent margin, 824 plate, rx 186 —
+       the same macOS convention as the production icon. Regenerate
+       build/icon-dev.icns with `node scripts/make-icon.mjs`. -->
+  <style>.small { display: none; }</style>
+  <defs>
+    <linearGradient id="face" x1="512" y1="100" x2="512" y2="924" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f0c33c"/><stop offset="1" stop-color="#c49212"/>
+    </linearGradient>
+    <clipPath id="plate">
+      <rect x="100" y="100" width="824" height="824" rx="186"/>
+    </clipPath>
+  </defs>
+  <g class="large" clip-path="url(#plate)">
+    <rect x="100" y="100" width="824" height="824" fill="url(#face)"/>
+    <g transform="translate(0 -56) translate(-18 12) translate(512 512) scale(0.82) translate(-512 -512)"
+       fill="none" stroke="#1c1608" stroke-width="96" stroke-linecap="butt" stroke-linejoin="miter">
+      <path d="M 256 256 L 672 672 L 864 480 L 704 320 L 585.5 438.5"/>
+      <path d="M 438.5 585.5 L 256 768"/>
+    </g>
+    <rect x="100" y="748" width="824" height="176" fill="#1c1608"/>
+    <g fill="#f0c33c" fill-rule="evenodd">
+      <path d="M 338 792h90c44 0 74 24 74 54s-30 54-74 54H338V792zm50 34v40h38c18 0 28-8 28-20s-10-20-28-20H388z"/>
+      <path d="M 528 792h136v34H576v14h76v30h-76v16h92v34H528V792z"/>
+      <path d="M 686 792h54l42 86 42-86h54l-70 108h-52z"/>
+    </g>
+  </g>
+  <g class="small" clip-path="url(#plate)">
+    <rect x="100" y="100" width="824" height="824" fill="url(#face)"/>
+    <g transform="translate(-18 12) translate(512 512) scale(0.92) translate(-512 -512)"
+       fill="none" stroke="#1c1608" stroke-width="96" stroke-linecap="butt" stroke-linejoin="miter">
+      <path d="M 256 256 L 672 672 L 864 480 L 704 320 L 585.5 438.5"/>
+      <path d="M 438.5 585.5 L 256 768"/>
+    </g>
+  </g>
+</svg>

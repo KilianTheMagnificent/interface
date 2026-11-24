@@ -1,0 +1,16 @@
+{
+  "protocolVersion": 50,
+  "shell": {
+    "id": "00000000-0000-4000-8000-000000001402",
+    "generation": 1,
+    "title": "handoff",
+    "root": "/fixture/handoff",
+    "cwd": "/fixture/handoff",
+    "launch": { "version": 1, "profileId": "shell" },
+    "state": "running",
+    "size": { "columns": 80, "rows": 24 },
+    "createdAt": "2026-10-14T00:00:00.000Z",
+    "updatedAt": "2026-10-14T00:00:00.000Z",
+    "replaces": "00000000-0000-4000-8000-000000001401"
+  }
+}

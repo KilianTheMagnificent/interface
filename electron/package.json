@@ -1,0 +1,53 @@
+{
+  "name": "interface-electron",
+  "productName": "Interface",
+  "version": "0.3.182",
+  "description": "Preserved Interface Electron/React presentation layer",
+  "author": "Andre Romero",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "main": "dist-main/main/main.js",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "build:icon": "node scripts/make-icon.mjs",
+    "test": "node scripts/check-test-discovery.mjs && vitest run && npm run test:release",
+    "test:renderer": "tsc -p tsconfig.main.json && node scripts/test-renderer-dom.mjs",
+    "test:release": "node --test --test-reporter=dot scripts/package-parity.test.mjs scripts/sign-mac.test.cjs scripts/verify-fuses.test.cjs scripts/smoke-packaged.test.mjs scripts/smoke-pins.test.mjs scripts/dev-app.test.mjs scripts/protocol-docs.test.mjs scripts/contract-parity.test.mjs scripts/renderer-lanes.test.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.main.json --noEmit",
+    "build:remote": "vite build --config vite.remote.config.ts",
+    "build": "vite build && npm run build:remote && node -e \"require('node:fs').rmSync('dist-main',{recursive:true,force:true})\" && tsc -p tsconfig.main.json",
+    "check": "node scripts/check.mjs",
+    "check:changed": "cargo run --manifest-path ../Cargo.toml --package xtask -- check --changed",
+    "smoke:terminal": "cargo build -p interface-host && tsc -p tsconfig.main.json && node scripts/smoke-integrated-terminal.mjs",
+    "handsfree": "node scripts/handsfree-app.mjs",
+    "handsfree:tui": "node scripts/handsfree-tui.mjs",
+    "smoke:remote": "cargo build -p interface-host && npm run build:remote && tsc -p tsconfig.main.json && electron scripts/smoke-remote.cjs",
+    "package:mac": "cargo run --manifest-path ../Cargo.toml --package xtask -- package-mac",
+    "package:smoke": "cargo run --manifest-path ../Cargo.toml --package xtask -- package-mac --smoke",
+    "stage:update": "cargo run --manifest-path ../Cargo.toml --package xtask -- stage-update --source ../release",
+    "promote": "cargo run --manifest-path ../Cargo.toml --package xtask -- promote",
+    "release:local": "npm run package:smoke && npm run stage:update",
+    "release:local:replace": "npm run package:smoke -- --allow-same-version && npm run stage:update -- --allow-same-version"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@vitejs/plugin-react": "^6.0.5",
+    "@xterm/addon-fit": "^0.11.0",
+    "@xterm/addon-search": "^0.16.0",
+    "@xterm/addon-webgl": "^0.19.0",
+    "@xterm/xterm": "^6.0.0",
+    "electron": "^43.8.10",
+    "electron-builder": "^26.17.0",
+    "pdfjs-dist": "^6.3.289",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.8",
+    "vitest": "^4.1.12"
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.9"
+  }
+}

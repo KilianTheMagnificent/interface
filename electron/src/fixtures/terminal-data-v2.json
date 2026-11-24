@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "headerBytes": 44,
+  "windowBytes": 262144,
+  "windowFrames": 64,
+  "terminalId": "00112233-4455-6677-8899-aabbccddeeff",
+  "generation": 7,
+  "frames": [
+    { "direction": 1, "kind": 1, "sequence": 9, "payload": [65, 13, 10], "hex": "4954524d0201010000112233445566778899aabbccddeeff0700000000000000090000000000000003000000410d0a" },
+    { "direction": 2, "kind": 3, "sequence": 9, "payload": [], "hex": "4954524d0202030000112233445566778899aabbccddeeff0700000000000000090000000000000000000000" },
+    { "direction": 1, "kind": 2, "sequence": 10, "payload": [], "hex": "4954524d0201020000112233445566778899aabbccddeeff07000000000000000a0000000000000000000000" }
+  ]
+}

@@ -1,0 +1,340 @@
+{
+  "protocolVersion": 23,
+  "commands": [
+    {
+      "kind": "read"
+    },
+    {
+      "kind": "importLegacy",
+      "agents": [
+        {
+          "id": "research",
+          "name": "Research",
+          "engine": "claude",
+          "model": "",
+          "effort": "",
+          "instructions": "Cite primary sources.",
+          "color": "teal",
+          "shape": "star"
+        }
+      ],
+      "assignments": {}
+    },
+    {
+      "kind": "saveAgent",
+      "expectedRevision": 0,
+      "profile": {
+        "id": "research",
+        "name": "Research",
+        "engine": "claude",
+        "model": "",
+        "effort": "",
+        "instructions": "Cite primary sources.",
+        "color": "teal",
+        "shape": "star",
+        "home": "/fixture/agents/Research",
+        "folders": ["/fixture/project"],
+        "instructionsFileSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "kind": "removeAgent",
+      "expectedRevision": 1,
+      "id": "research"
+    },
+    {
+      "kind": "assign",
+      "expectedRevision": 2,
+      "sessionKey": "claude#11111111-1111-4111-8111-111111111111",
+      "agentId": "research"
+    },
+    {
+      "kind": "saveRoutine",
+      "expectedRevision": 3,
+      "routine": {
+        "id": "morning",
+        "agentId": "research",
+        "name": "Morning brief",
+        "prompt": "Summarize the project.",
+        "cwd": "/fixture/project",
+        "enabled": false,
+        "startAtMs": 1788958800000,
+        "intervalMinutes": 1440,
+        "nextRunAtMs": 1788958800000
+      }
+    },
+    {
+      "kind": "removeRoutine",
+      "expectedRevision": 4,
+      "id": "morning"
+    },
+    {
+      "kind": "runNow",
+      "expectedRevision": 5,
+      "routineId": "morning",
+      "requestId": "once"
+    },
+    {
+      "kind": "acknowledgeRun",
+      "expectedRevision": 6,
+      "id": "manual:once"
+    },
+    {
+      "kind": "startAgentThread",
+      "agentId": "research",
+      "text": "Summarize the project.",
+      "requestId": "thread-1"
+    },
+    {
+      "kind": "newThread",
+      "expectedRevision": 7,
+      "agentId": "research"
+    },
+    {
+      "kind": "markRead",
+      "agentId": "research"
+    },
+    {
+      "kind": "readAgentFiles",
+      "agentId": "research"
+    },
+    {
+      "kind": "saveAgentMemory",
+      "agentId": "research",
+      "expectedSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "text": "Remember to cite primary sources."
+    },
+    {
+      "kind": "overwriteAgentInstructionsFile",
+      "agentId": "research",
+      "expectedSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "kind": "saveAgentFolders",
+      "expectedRevision": 8,
+      "agentId": "research",
+      "folders": ["/fixture/project"]
+    },
+    {
+      "kind": "readAgentDecisions",
+      "agentId": "research",
+      "limit": 20
+    },
+    {
+      "kind": "recreateAgentHome",
+      "agentId": "research"
+    },
+    {
+      "kind": "revealAgentHome",
+      "agentId": "research"
+    }
+  ],
+  "state": {
+    "version": 2,
+    "revision": 4,
+    "agents": [
+      {
+        "id": "research",
+        "name": "Research",
+        "engine": "claude",
+        "model": "",
+        "effort": "",
+        "instructions": "Cite primary sources.",
+        "color": "teal",
+        "shape": "star",
+        "home": "/fixture/agents/Research",
+        "folders": ["/fixture/project"],
+        "instructionsFileSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "id": "writer",
+        "name": "Writer",
+        "engine": "claude",
+        "model": "",
+        "effort": "",
+        "instructions": "Write plainly.",
+        "color": "sky",
+        "shape": "pebble"
+      }
+    ],
+    "assignments": {
+      "claude#11111111-1111-4111-8111-111111111111": "research",
+      "claude#33333333-3333-4333-8333-333333333333": "writer"
+    },
+    "routines": [
+      {
+        "id": "morning",
+        "agentId": "research",
+        "name": "Morning brief",
+        "prompt": "Summarize the project.",
+        "cwd": "/fixture/project",
+        "enabled": false,
+        "startAtMs": 1788958800000,
+        "intervalMinutes": 1440,
+        "nextRunAtMs": 1788958800000
+      }
+    ],
+    "runs": [],
+    "threads": {
+      "research": {
+        "current": {
+          "sessionKey": "claude#11111111-1111-4111-8111-111111111111",
+          "startedAtMs": 1788958900000,
+          "status": "working",
+          "interrupted": false
+        },
+        "past": [
+          {
+            "sessionKey": "claude#22222222-2222-4222-8222-222222222222",
+            "startedAtMs": 1788958000000,
+            "endedAtMs": 1788958500000
+          }
+        ],
+        "lastReadAtMs": 1788958000000,
+        "lastActivityAtMs": 1788958900000
+      },
+      "writer": {
+        "current": {
+          "sessionKey": "claude#33333333-3333-4333-8333-333333333333",
+          "startedAtMs": 1788958950000,
+          "status": "idle",
+          "interrupted": false
+        },
+        "lastReadAtMs": 0,
+        "lastActivityAtMs": 1788958950000
+      }
+    }
+  },
+  "response": {
+    "version": 2,
+    "revision": 4,
+    "agents": [
+      {
+        "id": "research",
+        "name": "Research",
+        "engine": "claude",
+        "model": "",
+        "effort": "",
+        "instructions": "Cite primary sources.",
+        "color": "teal",
+        "shape": "star",
+        "home": "/fixture/agents/Research",
+        "folders": ["/fixture/project"],
+        "instructionsFileSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "id": "writer",
+        "name": "Writer",
+        "engine": "claude",
+        "model": "",
+        "effort": "",
+        "instructions": "Write plainly.",
+        "color": "sky",
+        "shape": "pebble"
+      }
+    ],
+    "assignments": {
+      "claude#11111111-1111-4111-8111-111111111111": "research",
+      "claude#33333333-3333-4333-8333-333333333333": "writer"
+    },
+    "routines": [
+      {
+        "id": "morning",
+        "agentId": "research",
+        "name": "Morning brief",
+        "prompt": "Summarize the project.",
+        "cwd": "/fixture/project",
+        "enabled": false,
+        "startAtMs": 1788958800000,
+        "intervalMinutes": 1440,
+        "nextRunAtMs": 1788958800000
+      }
+    ],
+    "runs": [],
+    "threads": {
+      "research": {
+        "current": {
+          "sessionKey": "claude#11111111-1111-4111-8111-111111111111",
+          "startedAtMs": 1788958900000,
+          "status": "working",
+          "interrupted": false
+        },
+        "past": [
+          {
+            "sessionKey": "claude#22222222-2222-4222-8222-222222222222",
+            "startedAtMs": 1788958000000,
+            "endedAtMs": 1788958500000
+          }
+        ],
+        "lastReadAtMs": 1788958000000,
+        "lastActivityAtMs": 1788958900000
+      },
+      "writer": {
+        "current": {
+          "sessionKey": "claude#33333333-3333-4333-8333-333333333333",
+          "startedAtMs": 1788958950000,
+          "status": "idle",
+          "interrupted": false
+        },
+        "lastReadAtMs": 0,
+        "lastActivityAtMs": 1788958950000
+      }
+    },
+    "statuses": {
+      "research": "working",
+      "writer": "idle"
+    },
+    "pendingApprovals": [
+      {
+        "agentId": "research",
+        "sessionKey": "claude#11111111-1111-4111-8111-111111111111",
+        "approvalId": "approval-1",
+        "tool": "Bash",
+        "summary": "Run tests",
+        "reason": "Shell command needs owner approval.",
+        "askedAtMs": 1788958950000
+      }
+    ],
+    "files": {
+      "home": "/fixture/agents/Research",
+      "exists": true,
+      "markerOk": true,
+      "instructions": {
+        "text": "Cite primary sources.",
+        "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "tooLarge": false
+      },
+      "instructionsConflict": false,
+      "memory": {
+        "text": "Remember to cite primary sources.",
+        "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "tooLarge": false
+      }
+    },
+    "decisions": [
+      {
+        "atMs": 1788958910000,
+        "sessionKey": "claude#11111111-1111-4111-8111-111111111111",
+        "approvalId": "approval-0",
+        "tool": "Bash",
+        "summary": "Run build",
+        "facts": {"kind": "shell", "command": "npm run build", "cwd": "/fixture/project"},
+        "decision": "allowed",
+        "reason": "Matches the allowlisted build command.",
+        "outcome": "sent"
+      },
+      {
+        "atMs": 1788958920000,
+        "sessionKey": "claude#11111111-1111-4111-8111-111111111111",
+        "approvalId": "approval-1",
+        "tool": "web.search",
+        "summary": "Search docs",
+        "facts": {"kind": "mcp", "server": "docs", "tool": "search"},
+        "decision": "asked",
+        "reason": "Unrecognized MCP tool requires owner approval.",
+        "outcome": "pending"
+      }
+    ],
+    "sessionKey": "claude#11111111-1111-4111-8111-111111111111"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "note": "Public test scalars: Mac=1, phone=2. Never use these identities outside tests.",
+  "rust": {
+    "macId": "698bea63dc44a344663ff1429aea10842df27b6b991ef25866b2c6c02cdcc5be",
+    "macPublic": "046b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c2964fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5",
+    "phonePublic": "047cf27b188d034f7e8a52380304b51ac3c08969e277f21b35a60b48fc4766997807775510db8ed040293d9ac69f7430dbba7dade63ce982299e04b79d227873d1",
+    "request": {
+      "ciphertext": "p2aTWD7OPdoxxMuZK2mItv/hsDIA+bxaUuWz9IdCWz4mEFZMGSkQw5vmqHAX4y1y",
+      "encapsulatedKey": "04e98599074ea95596bc67b52dd4bf576aec82be03d6b03b2d03ec6f0e375fafe428a53ae1998ce5ab836c377086a6fcbfb598f9f910a0678ba469c60e2c8d3700",
+      "macId": "698bea63dc44a344663ff1429aea10842df27b6b991ef25866b2c6c02cdcc5be",
+      "requestId": "12345678-1234-4234-8234-123456789abc",
+      "senderKey": "047cf27b188d034f7e8a52380304b51ac3c08969e277f21b35a60b48fc4766997807775510db8ed040293d9ac69f7430dbba7dade63ce982299e04b79d227873d1",
+      "version": 5
+    },
+    "requestId": "12345678-1234-4234-8234-123456789abc",
+    "response": {
+      "ciphertext": "JeraDb0VFBqHal9oD+NSfrBwQ8VR7uAF/39MaxHAa8BkWUSfVd3lOib+0bFtUbZNeQ==",
+      "encapsulatedKey": "044ec39885bdf8a7959c98e53fa235a3a071dc43522fe6218d6afca583cacf5c397d1d1131129370f8c68f09169115d6527d0c4b53345b765008f0bb9b05f81f4a",
+      "macId": "698bea63dc44a344663ff1429aea10842df27b6b991ef25866b2c6c02cdcc5be",
+      "requestId": "12345678-1234-4234-8234-123456789abc",
+      "senderKey": "046b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c2964fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5",
+      "version": 5
+    },
+    "version": 5
+  },
+  "swift": {
+    "macId": "698bea63dc44a344663ff1429aea10842df27b6b991ef25866b2c6c02cdcc5be",
+    "macPublic": "046b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c2964fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5",
+    "phonePublic": "047cf27b188d034f7e8a52380304b51ac3c08969e277f21b35a60b48fc4766997807775510db8ed040293d9ac69f7430dbba7dade63ce982299e04b79d227873d1",
+    "request": {
+      "ciphertext": "FclbtE5L0wW2dYzEKhpe0jaEqNi7KrE5xxqIvyc3RAWt1YgJbMNZaqfbW4GuCyCT",
+      "encapsulatedKey": "0448277ca14c7659cad10a501925e1a5d0e53b8e98b25028e46b23d0310925617a1514f8dcbafc679dbc343af607767de66fc84ea682662835d41b4c150c0256a4",
+      "macId": "698bea63dc44a344663ff1429aea10842df27b6b991ef25866b2c6c02cdcc5be",
+      "requestId": "12345678-1234-4234-8234-123456789abc",
+      "senderKey": "047cf27b188d034f7e8a52380304b51ac3c08969e277f21b35a60b48fc4766997807775510db8ed040293d9ac69f7430dbba7dade63ce982299e04b79d227873d1",
+      "version": 5
+    },
+    "requestId": "12345678-1234-4234-8234-123456789abc",
+    "response": {
+      "ciphertext": "lwH4l62GvZnAMP/g9ixPARYA53toCSyjd92rOHxyJm/+L6v0Lymi2CdLoUHTYJ2fYg==",
+      "encapsulatedKey": "043f24e09409ae541852fc5f33913fea677c05b92a022a4a1eb5de0ab5e52dc9157dd093f6d74aba8e761bc5bf37157475e7a5995612a59432bc2d36d568ad3604",
+      "macId": "698bea63dc44a344663ff1429aea10842df27b6b991ef25866b2c6c02cdcc5be",
+      "requestId": "12345678-1234-4234-8234-123456789abc",
+      "senderKey": "046b17d1f2e12c4247f8bce6e563a440f277037d812deb33a0f4a13945d898c2964fe342e2fe1a7f9b8ee7eb4a7c0f9e162bce33576b315ececbb6406837bf51f5",
+      "version": 5
+    },
+    "version": 5
+  }
+}

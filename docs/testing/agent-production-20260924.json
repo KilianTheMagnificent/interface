@@ -1,0 +1,138 @@
+{
+  "source": "71db4cb9ddeaa63b3ef0ca9fb1d22cee74788312",
+  "version": "0.3.132",
+  "protocol": 29,
+  "providers": "synthetic Claude and Codex fixtures",
+  "zipSha256": "bca200df80478ee7e356501302ef5c00400b6b14104620a9e4194c58b2c724d5",
+  "dmgSha256": "3795a86ceb2b7bac44da4c5953ecd5e035483d4e50e1575ba105a009ae5765e6",
+  "hostSha256": "ef3ddf2be273b8113723cb682a1cc5d799e84ae11025aa1ce242ac0051eba57c",
+  "packagedSmokePassed": true,
+  "host": [
+    {
+      "name": "claude success, artifact verification and scoped host tools",
+      "passed": true,
+      "detail": {
+        "execution": "completed",
+        "verification": "verified"
+      }
+    },
+    {
+      "name": "codex success, artifact verification and scoped host tools",
+      "passed": true,
+      "detail": {
+        "execution": "completed",
+        "verification": "verified"
+      }
+    },
+    {
+      "name": "BADJSON artifact cannot verify",
+      "passed": true,
+      "detail": {
+        "execution": "completed",
+        "verification": "failed"
+      }
+    },
+    {
+      "name": "MISSING artifact cannot verify",
+      "passed": true,
+      "detail": {
+        "execution": "completed",
+        "verification": "failed"
+      }
+    },
+    {
+      "name": "Stop active task",
+      "passed": true,
+      "detail": "stopped"
+    },
+    {
+      "name": "Memory history, restore and fact confirmation",
+      "passed": true,
+      "detail": "memory restored; fact owner-confirmed"
+    },
+    {
+      "name": "DST spring gap and fall fold previews",
+      "passed": true,
+      "detail": {
+        "springGap": [
+          "2027-03-15T07:30:00+00:00",
+          "2027-03-16T07:30:00+00:00",
+          "2027-03-17T07:30:00+00:00"
+        ],
+        "fallFold": [
+          "2027-11-07T06:30:00+00:00",
+          "2027-11-08T07:30:00+00:00",
+          "2027-11-09T07:30:00+00:00"
+        ]
+      }
+    },
+    {
+      "name": "Routine test-before-enable",
+      "passed": true,
+      "detail": "untested enable refused; verified manual test permits enable; changed contract invalidates test"
+    },
+    {
+      "name": "Exclusive folder leases",
+      "passed": true,
+      "detail": "overlapping writable scope refused"
+    },
+    {
+      "name": "Scoped consultation review and apply",
+      "passed": true,
+      "detail": "selected context, tool-free child, reviewed proposal and host CAS applied"
+    },
+    {
+      "name": "Approval denial for outside-scope write",
+      "passed": true,
+      "detail": "outside-scope write asked; owner denial reached provider; no write"
+    },
+    {
+      "name": "Resume scoped host tools",
+      "passed": true,
+      "detail": "scoped host tools work after explicit resume"
+    },
+    {
+      "name": "Required input freshness",
+      "passed": true,
+      "detail": "stale required input refused before dispatch"
+    },
+    {
+      "name": "Active grant revocation",
+      "passed": true,
+      "detail": "live provider closed; resumed task has only the reduced roots"
+    },
+    {
+      "name": "Automatic budget stop",
+      "passed": true,
+      "detail": {
+        "execution": "stopped",
+        "seconds": 10.34
+      }
+    },
+    {
+      "name": "Crash recovery does not replay",
+      "passed": true,
+      "detail": "restart marks Unknown; restart refused until explicit acknowledgement"
+    }
+  ],
+  "ui": {
+    "passed": true,
+    "results": [
+      "task contract saved through UI; risky options default off",
+      "first routine creates home and stays paused",
+      "calendar preview, save and test-before-enable refusal",
+      "memory proposal confirmed through UI and persisted by Rust",
+      "task result controls rendered"
+    ]
+  },
+  "devIntegration": {
+    "landing": "745d36245460ef4c483f86cf0c3501129da3f5af",
+    "protocol": 30,
+    "rustPassed": 1965,
+    "rustIgnored": 24,
+    "javascriptPassed": 2812,
+    "swiftPassed": 3,
+    "rendererToHostVerified": true,
+    "productionPublishedByThisTask": false
+  }
+}

@@ -1,0 +1,270 @@
+{
+  "protocolVersion": 49,
+  "commands": [
+    {
+      "kind": "workflow",
+      "command": {
+        "action": "read",
+        "projectRoot": "/workspace/project"
+      }
+    },
+    {
+      "kind": "workflow",
+      "command": {
+        "action": "saveSetup",
+        "setup": {
+          "prerequisites": [
+            "command -v node"
+          ],
+          "commands": [
+            "npm ci"
+          ],
+          "timeoutSeconds": 120
+        },
+        "projectRoot": "/workspace/project"
+      }
+    },
+    {
+      "kind": "workflow",
+      "command": {
+        "action": "saveRecipe",
+        "recipe": {
+          "name": "Review changes",
+          "prompt": "Review this project",
+          "engine": "claude",
+          "model": "claude-opus-5",
+          "context": [
+            {
+              "kind": "file",
+              "value": "README.md"
+            },
+            {
+              "kind": "folder",
+              "value": "src"
+            },
+            {
+              "kind": "url",
+              "value": "https://example.org/guide"
+            }
+          ],
+          "newWorktree": true,
+          "baseRef": "main",
+          "setup": {
+            "prerequisites": [
+              "command -v node"
+            ],
+            "commands": [
+              "npm ci"
+            ],
+            "timeoutSeconds": 120
+          },
+          "expectedOutputs": [
+            "review.md"
+          ],
+          "checks": [
+            "npm test"
+          ]
+        },
+        "projectRoot": "/workspace/project"
+      }
+    },
+    {
+      "kind": "workflow",
+      "command": {
+        "action": "deleteRecipe",
+        "name": "Review changes",
+        "projectRoot": "/workspace/project"
+      }
+    },
+    {
+      "kind": "workflow",
+      "command": {
+        "action": "useRecipe",
+        "name": "Review changes",
+        "projectRoot": "/workspace/project"
+      }
+    },
+    {
+      "kind": "workflow",
+      "command": {
+        "action": "retrySetup",
+        "cwd": "/workspace/worktree",
+        "projectRoot": "/workspace/project"
+      }
+    }
+  ],
+  "workflow": {
+    "projectRoot": "/workspace/project",
+    "setup": {
+      "prerequisites": [
+        "command -v node"
+      ],
+      "commands": [
+        "npm ci"
+      ],
+      "timeoutSeconds": 120
+    },
+    "recipes": [
+      {
+        "name": "Review changes",
+        "prompt": "Review this project",
+        "engine": "claude",
+        "model": "claude-opus-5",
+        "context": [
+          {
+            "kind": "file",
+            "value": "README.md"
+          },
+          {
+            "kind": "folder",
+            "value": "src"
+          },
+          {
+            "kind": "url",
+            "value": "https://example.org/guide"
+          }
+        ],
+        "newWorktree": true,
+        "baseRef": "main",
+        "setup": {
+          "prerequisites": [
+            "command -v node"
+          ],
+          "commands": [
+            "npm ci"
+          ],
+          "timeoutSeconds": 120
+        },
+        "expectedOutputs": [
+          "review.md"
+        ],
+        "checks": [
+          "npm test"
+        ]
+      }
+    ],
+    "lastSetup": {
+      "cwd": "/workspace/worktree",
+      "state": "failed",
+      "steps": [
+        {
+          "command": "command -v node",
+          "prerequisite": true,
+          "output": "Node unavailable",
+          "exitCode": 1,
+          "timedOut": false,
+          "truncated": false
+        }
+      ],
+      "message": "A prerequisite failed."
+    },
+    "draft": {
+      "recipe": {
+        "name": "Review changes",
+        "prompt": "Review this project",
+        "engine": "claude",
+        "model": "claude-opus-5",
+        "context": [
+          {
+            "kind": "file",
+            "value": "README.md"
+          },
+          {
+            "kind": "folder",
+            "value": "src"
+          },
+          {
+            "kind": "url",
+            "value": "https://example.org/guide"
+          }
+        ],
+        "newWorktree": true,
+        "baseRef": "main",
+        "setup": {
+          "prerequisites": [
+            "command -v node"
+          ],
+          "commands": [
+            "npm ci"
+          ],
+          "timeoutSeconds": 120
+        },
+        "expectedOutputs": [
+          "review.md"
+        ],
+        "checks": [
+          "npm test"
+        ]
+      },
+      "prompt": "Review this project\n\nExpected outputs:\n- review.md\n\nRequired checks:\n- npm test",
+      "context": [
+        {
+          "kind": "file",
+          "value": "/workspace/project/README.md"
+        }
+      ]
+    }
+  },
+  "reports": [
+    {
+      "cwd": "/workspace/worktree",
+      "state": "running",
+      "steps": [
+        {
+          "command": "command -v node",
+          "prerequisite": true,
+          "output": "Node unavailable",
+          "exitCode": 1,
+          "timedOut": false,
+          "truncated": false
+        }
+      ],
+      "message": "A prerequisite failed."
+    },
+    {
+      "cwd": "/workspace/worktree",
+      "state": "ready",
+      "steps": [
+        {
+          "command": "command -v node",
+          "prerequisite": true,
+          "output": "Node unavailable",
+          "exitCode": 1,
+          "timedOut": false,
+          "truncated": false
+        }
+      ],
+      "message": "A prerequisite failed."
+    },
+    {
+      "cwd": "/workspace/worktree",
+      "state": "failed",
+      "steps": [
+        {
+          "command": "command -v node",
+          "prerequisite": true,
+          "output": "Node unavailable",
+          "exitCode": 1,
+          "timedOut": false,
+          "truncated": false
+        }
+      ],
+      "message": "A prerequisite failed."
+    },
+    {
+      "cwd": "/workspace/worktree",
+      "state": "interrupted",
+      "steps": [
+        {
+          "command": "command -v node",
+          "prerequisite": true,
+          "output": "Node unavailable",
+          "exitCode": 1,
+          "timedOut": false,
+          "truncated": false
+        }
+      ],
+      "message": "A prerequisite failed."
+    }
+  ]
+}

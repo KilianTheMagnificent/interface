@@ -1,0 +1,68 @@
+{
+  "protocolVersion": 65,
+  "commands": [
+    {
+      "kind": "setSettings",
+      "settings": {
+        "autoSettleDays": 3,
+        "settleOnMerge": true,
+        "generatedTitles": false,
+        "trackPullRequests": true,
+        "outsideAgents": "full"
+      }
+    },
+    {
+      "kind": "setSettings",
+      "settings": {
+        "autoSettleDays": 3,
+        "settleOnMerge": true,
+        "generatedTitles": false,
+        "trackPullRequests": true,
+        "outsideAgents": "read"
+      }
+    }
+  ],
+  "view": {
+    "version": 1,
+    "revision": 34,
+    "now": 1791298800000,
+    "settings": {
+      "autoSettleDays": 3,
+      "settleOnMerge": true,
+      "generatedTitles": false,
+      "trackPullRequests": true,
+      "outsideAgents": "full"
+    },
+    "threads": [
+      {
+        "key": "claude#8d2e3f40-5162-4a73-8b84-e9f0a1b2c3d4",
+        "section": "active",
+        "createdAt": 1791298790000,
+        "woke": false,
+        "unread": true,
+        "autoSettle": true,
+        "lastRun": {
+          "startedAt": 1791298790000
+        },
+        "workspace": {
+          "mode": "local",
+          "projectRoot": "/Users/fixture/Developer/Projects/atlas",
+          "branch": "main",
+          "owned": false
+        },
+        "titleSource": "prompt",
+        "turns": [
+          {
+            "ordinal": 0,
+            "sentAt": 1791298790000,
+            "promptDigest": "2b3c4d5e6f7a8b9c",
+            "hasStart": true,
+            "hasEnd": false,
+            "state": "running"
+          }
+        ],
+        "startedFromOutside": "claude-code"
+      }
+    ]
+  }
+}

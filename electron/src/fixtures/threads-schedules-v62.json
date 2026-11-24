@@ -1,0 +1,150 @@
+{
+  "protocolVersion": 62,
+  "commands": [
+    {
+      "kind": "scheduleSet",
+      "key": "claude#6c1d2e3f-4a5b-4c6d-8e7f-90a1b2c3d4e5",
+      "prompt": "Run the test suite and tell me what fails.",
+      "when": { "kind": "once", "at": 1791302400000 }
+    },
+    {
+      "kind": "scheduleSet",
+      "key": "claude#6c1d2e3f-4a5b-4c6d-8e7f-90a1b2c3d4e5",
+      "id": "s-7f3a9c1e2b4d",
+      "name": "Nightly check",
+      "prompt": "Check the overnight build.",
+      "when": {
+        "kind": "calendar",
+        "calendar": { "timezone": "America/Chicago", "weekdays": [1, 2, 3, 4, 5], "hour": 7, "minute": 30 }
+      }
+    },
+    {
+      "kind": "scheduleSet",
+      "key": "claude#6c1d2e3f-4a5b-4c6d-8e7f-90a1b2c3d4e5",
+      "prompt": "Look at the queue again.",
+      "when": { "kind": "interval", "minutes": 60 }
+    },
+    { "kind": "scheduleDelete", "id": "s-7f3a9c1e2b4d" },
+    { "kind": "scheduleEnable", "id": "s-7f3a9c1e2b4d", "enabled": false },
+    { "kind": "watchSet", "key": "claude#6c1d2e3f-4a5b-4c6d-8e7f-90a1b2c3d4e5", "enabled": true }
+  ],
+  "view": {
+    "version": 1,
+    "revision": 41,
+    "now": 1791298800000,
+    "settings": {
+      "autoSettleDays": 3,
+      "settleOnMerge": true,
+      "generatedTitles": false,
+      "trackPullRequests": true
+    },
+    "threads": [
+      {
+        "key": "claude#6c1d2e3f-4a5b-4c6d-8e7f-90a1b2c3d4e5",
+        "section": "active",
+        "createdAt": 1791212400000,
+        "activeOrder": "V",
+        "woke": false,
+        "unread": false,
+        "autoSettle": true,
+        "workspace": {
+          "mode": "worktree",
+          "projectRoot": "/Users/fixture/Developer/Projects/atlas",
+          "worktreePath": "/Users/fixture/Developer/Projects/.atlas-worktrees/fix-login",
+          "branch": "iface/fix-login",
+          "baseRef": "main",
+          "owned": true
+        },
+        "pullRequest": {
+          "url": "https://github.com/fixture/atlas/pull/42",
+          "number": 42,
+          "state": "open",
+          "checkedAt": 1791298200000
+        },
+        "turns": [],
+        "schedules": {
+          "schedules": [
+            {
+              "id": "s-1a2b3c4d5e6f",
+              "prompt": "Look at the queue again.",
+              "when": { "kind": "interval", "minutes": 60 },
+              "enabled": true,
+              "createdAt": 1791291600000,
+              "nextAt": 1791302400000,
+              "lastRun": {
+                "occurrence": 1791298800000,
+                "at": 1791298801000,
+                "outcome": "sent"
+              },
+              "setBy": "agent",
+              "paused": false
+            },
+            {
+              "id": "s-7f3a9c1e2b4d",
+              "name": "Nightly check",
+              "prompt": "Check the overnight build.",
+              "when": {
+                "kind": "calendar",
+                "calendar": { "timezone": "America/Chicago", "weekdays": [1, 2, 3, 4, 5], "hour": 7, "minute": 30 }
+              },
+              "enabled": true,
+              "createdAt": 1791212400000,
+              "nextAt": 1791379800000,
+              "lastRun": {
+                "occurrence": 1791293400000,
+                "at": 1791293400500,
+                "outcome": "refused",
+                "detail": "An Away loop is running this thread."
+              },
+              "waiting": 1791293400000,
+              "setBy": "owner",
+              "paused": false
+            },
+            {
+              "id": "s-0e9d8c7b6a5f",
+              "prompt": "Run the test suite and tell me what fails.",
+              "when": { "kind": "once", "at": 1791212500000 },
+              "enabled": false,
+              "createdAt": 1791212400000,
+              "lastRun": {
+                "occurrence": 1791212500000,
+                "at": 1791298000000,
+                "outcome": "skipped",
+                "detail": "Missed by more than a day while Interface was closed or the Mac slept."
+              },
+              "setBy": "owner",
+              "paused": false
+            }
+          ],
+          "watch": {
+            "enabled": true,
+            "needsGh": false,
+            "failingChecks": 1,
+            "reviewThreads": 2,
+            "observedAt": 1791298200000,
+            "lastRun": {
+              "occurrence": 1791298200000,
+              "at": 1791298200400,
+              "outcome": "unknown"
+            },
+            "waiting": false
+          }
+        }
+      }
+    ]
+  },
+  "response": {
+    "view": {
+      "version": 1,
+      "revision": 41,
+      "now": 1791298800000,
+      "settings": {
+        "autoSettleDays": 3,
+        "settleOnMerge": true,
+        "generatedTitles": false,
+        "trackPullRequests": true
+      },
+      "threads": []
+    }
+  }
+}

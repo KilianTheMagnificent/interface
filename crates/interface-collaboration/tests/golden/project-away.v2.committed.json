@@ -1,0 +1,64 @@
+{
+  "version": 2,
+  "revision": 1,
+  "defaults": {
+    "objective": "Improve this project. Follow its instructions and existing to-do list; choose useful, evidence-backed work, implement it, run the relevant checks, and stop when no justified work remains.",
+    "provider": "codex",
+    "model": null,
+    "durationSeconds": 3600,
+    "maxIterations": 12
+  },
+  "presets": [
+    {
+      "cwd": "/project",
+      "options": {
+        "objective": "Improve this project. Follow its instructions and existing to-do list; choose useful, evidence-backed work, implement it, run the relevant checks, and stop when no justified work remains.",
+        "provider": "codex",
+        "model": null,
+        "durationSeconds": 3600,
+        "maxIterations": 12
+      }
+    }
+  ],
+  "runs": [
+    {
+      "id": "interrupted",
+      "cwd": "/project",
+      "options": {
+        "objective": "Improve this project. Follow its instructions and existing to-do list; choose useful, evidence-backed work, implement it, run the relevant checks, and stop when no justified work remains.",
+        "provider": "codex",
+        "model": null,
+        "durationSeconds": 3600,
+        "maxIterations": 12
+      },
+      "startedAtMs": 1,
+      "deadlineAtMs": 3600001,
+      "state": "running",
+      "detail": "Working",
+      "turns": [
+        {
+          "iteration": 1,
+          "role": "work",
+          "sessionKey": "codex:exact",
+          "state": "completed",
+          "report": "partial \"report\"",
+          "threadTurn": 0
+        },
+        {
+          "iteration": 1,
+          "role": "review",
+          "sessionKey": "codex:review",
+          "state": "started",
+          "report": ""
+        }
+      ],
+      "thread": {
+        "key": "codex:exact",
+        "worktree": "/worktrees/project-away",
+        "branch": "iface/away-improve-1a2b3c"
+      }
+    }
+  ],
+  "storageUncertain": false,
+  "cancelledStarts": []
+}

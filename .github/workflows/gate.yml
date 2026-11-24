@@ -1,0 +1,80 @@
+# The canonical gate, on demand only.
+#
+# Manual trigger ONLY. macOS runner minutes are billed on a private repository
+# (ten times the Linux rate against the included allowance), and the owner has
+# not opted into that cost, so nothing here starts on its own. To gate every
+# `dev` push once that cost is accepted, add the second trigger below beside
+# `workflow_dispatch:`
+#
+#   on:
+#     workflow_dispatch:
+#     push:
+#       branches: [dev]
+#
+# The runner stays macOS because the gate builds the same Electron bundle and
+# Rust workspace the release does. No secrets, no signing, no packaging and no
+# feed staging run here: this workflow only ever runs `cargo xtask check`.
+#
+# One case of the gate is weaker here than on the dev machine, by the same rule
+# that applies in any checkout without the Electron binary: `npm ci
+# --ignore-scripts` never downloads it, so verify-fuses.test.cjs skips its
+# "stock Electron is unsafe and the exact fused wire passes" case ("electron
+# devDependency is not installed") and only its pure wire-parsing cases run.
+# Nothing that ships is unchecked by that: `cargo xtask package-mac` verifies
+# the fuses on the real signed app before any artifact is published.
+name: gate
+
+on: workflow_dispatch
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: cargo xtask check
+    # The voice helper needs the macOS 26 SDK (package.rs require_voice_sdk),
+    # which ships only with Xcode 26; each runner image carries one Xcode
+    # major, and macos-26 is the image with Xcode 26.
+    runs-on: macos-26
+    timeout-minutes: 60
+    steps:
+      - name: Check out the revision
+        uses: actions/checkout@v4
+
+      - name: Install the toolchain pinned by rust-toolchain.toml
+        # No version literal here on purpose: rustup reads the channel,
+        # components and targets out of the repository's rust-toolchain.toml.
+        # Newer rustup installs it from `toolchain install` with no argument;
+        # older rustup installs it as a side effect of `show`.
+        run: |
+          rustup toolchain install || rustup show
+          rustc --version
+          cargo --version
+          xcrun --sdk macosx --show-sdk-version
+
+      - name: Cache cargo registry, git checkouts and target
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Use Node 22
+        # The dev machine runs Node 26; pinning the runner keeps a runner-image
+        # bump from changing the JS gate, and no Electron binary is needed here.
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Electron dev dependencies
+        # --ignore-scripts skips the Electron binary download; the JS side of
+        # the gate is vitest, tsc and vite, none of which launch the app.
+        run: npm ci --ignore-scripts
+        working-directory: electron
+
+      - name: Run the gate
+        run: cargo xtask check

@@ -1,0 +1,71 @@
+/* PROJECT HUES (owner, 2026-10-06, "hued glow"). Eight hue pairs a project
+   keeps (project-hue.ts picks one from its folder). Each class sets the pair
+   as `--project-h` / `--project-h2`; anything inside reads them, so a Threads
+   pane, its composer and its sidebar row take their project's colour from one
+   class. `light-dark()` follows the root's colour scheme, so light themes get
+   deeper variants that stay readable on paper. */
+.project-hue-0 { --project-h: light-dark(#0f8a77, #4fc4b0); --project-h2: light-dark(#2f6fd0, #6aa9f0); }
+.project-hue-1 { --project-h: light-dark(#7653d6, #a98bf5); --project-h2: light-dark(#b4448f, #e48ad0); }
+.project-hue-2 { --project-h: light-dark(#a86a00, #f0b44c); --project-h2: light-dark(#c0552f, #f0876b); }
+.project-hue-3 { --project-h: light-dark(#2f6fd0, #6aa9f0); --project-h2: light-dark(#4a57c9, #8f9cf5); }
+.project-hue-4 { --project-h: light-dark(#b8436a, #f08aa8); --project-h2: light-dark(#b8612f, #f0a070); }
+.project-hue-5 { --project-h: light-dark(#5a8a1e, #a3c96b); --project-h2: light-dark(#0f8a77, #4fc4b0); }
+.project-hue-6 { --project-h: light-dark(#c0552f, #f0876b); --project-h2: light-dark(#a86a00, #f0b44c); }
+.project-hue-7 { --project-h: light-dark(#4a57c9, #8f9cf5); --project-h2: light-dark(#8a46c0, #c48af0); }
+.project-hue-none { --project-h: var(--fg-dim); --project-h2: var(--fg-dim); }
+
+/* A project's letter tile: its initial on a wash of its hue. */
+.project-tile {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: calc(var(--radius-control) + 1px);
+  color: var(--project-h);
+  background: color-mix(in srgb, var(--project-h) 20%, transparent);
+  box-shadow: inset 0 0 0 var(--border-w) color-mix(in srgb, var(--project-h) 30%, transparent);
+  font-size: var(--text-meta);
+  font-weight: var(--wght-strong);
+  line-height: 1;
+}
+.project-tile.is-large { width: 20px; height: 20px; border-radius: calc(var(--radius-control) + 2px); }
+
+/* A file-type badge: the extension on a wash of its language's colour. */
+.file-badge {
+  --badge: var(--fg-dim);
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 16px;
+  padding: 0 3px;
+  box-sizing: border-box;
+  border-radius: var(--radius-control);
+  color: var(--badge);
+  background: color-mix(in srgb, var(--badge) 16%, transparent);
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  font-weight: var(--wght-strong);
+  line-height: 1;
+}
+.file-badge.kind-ts { --badge: light-dark(#2f6fd0, #5b9bff); }
+.file-badge.kind-js { --badge: light-dark(#8a7400, #e8cf52); }
+.file-badge.kind-rs { --badge: light-dark(#b8552f, #f78c6c); }
+.file-badge.kind-md { --badge: light-dark(#5d6a7a, #9aa7b8); }
+.file-badge.kind-json { --badge: light-dark(#a86a00, #f0b44c); }
+.file-badge.kind-css { --badge: light-dark(#8a46c0, #c48af0); }
+.file-badge.kind-html { --badge: light-dark(#c0552f, #f0876b); }
+.file-badge.kind-py { --badge: light-dark(#2f6fd0, #6aa9f0); }
+.file-badge.kind-go { --badge: light-dark(#0f8a77, #4fc4b0); }
+.file-badge.kind-swift { --badge: light-dark(#c0552f, #f0876b); }
+.file-badge.kind-cfg { --badge: light-dark(#5a8a1e, #a3c96b); }
+.file-badge.kind-sh { --badge: light-dark(#5a8a1e, #a3c96b); }
+
+/* GitHub's five squares: how a change splits between added and removed. */
+.diffstat-bar { display: inline-flex; flex: none; gap: 2px; }
+.diffstat-bar > i { width: 7px; height: 7px; border-radius: calc(var(--radius-control) - 2px); background: var(--border); }
+.diffstat-bar > i.is-added { background: var(--diff-added); }
+.diffstat-bar > i.is-removed { background: var(--diff-removed); }
