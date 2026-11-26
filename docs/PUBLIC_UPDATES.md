@@ -1,11 +1,16 @@
 # Public updates
 
 How a copy of Interface on someone else's Mac updates itself, and how the
-owner publishes a release to it. Built 21 Nov 2026. **The channel is set up
-and nothing is published on it yet:** builds check
-`https://github.com/KilianTheMagnificent/interface-releases/releases/latest/download/interface-update.json`,
-find nothing there, and go on updating from the feed `cargo xtask promote`
-stages on this Mac. The first release is published at launch (see Go-live).
+owner publishes a release to it. Built 21 Nov 2026. **The channel is live:**
+the first public release, 0.3.182, went out on 24 Nov 2026 as an Apple
+silicon (arm64) archive and a signed manifest on
+[`interface-releases`](https://github.com/KilianTheMagnificent/interface-releases/releases/latest).
+Builds check
+`https://github.com/KilianTheMagnificent/interface-releases/releases/latest/download/interface-update.json`.
+A build that finds nothing there (a "not found") reads that as up to date and
+goes on updating from the feed `cargo xtask promote` stages on its own Mac.
+Nothing newer than 0.3.182 exists yet, so no installed copy has taken a
+public update (see "What was checked, and what was not").
 
 ## What happens on a user's Mac
 
@@ -90,39 +95,31 @@ team, or a Developer ID certificate of it later, still updates installed
 copies. `package-mac`, `promote` and `publish-update` refuse a build that is
 not signed that way.
 
-Done:
+Done (as of 25 Nov 2026, read from the live repositories):
 
-- Releases repository `KilianTheMagnificent/interface-releases`, **private
-  until launch** so nothing is public early. A private repository answers
-  "not found", which the app reads as "nothing published yet".
+- Releases repository `KilianTheMagnificent/interface-releases` is public and
+  holds release `v0.3.182` (`Interface-0.3.182-arm64-mac.zip` and
+  `interface-update.json`), published 24 Nov 2026.
 - Two signing keys, `primary` and `backup`, in
   `~/.config/interface-release/`, both listed in
-  `crates/interface-updater/release-channel.json` with the feed address.
-- The public copy of the source: `python3 scripts/export_public.py "<public
-  checkout>"` writes it (the listed paths as committed; it stops on a
-  personal address, the owner's home folder path, a dead link in the front
-  files or an unknown key-shaped string). The public repository is a separate
-  one with its own history; this one stays private.
+  `crates/interface-updater/release-channel.json` with the feed address. The
+  live manifest is signed by the first of the two.
+- The public copy of the source, `KilianTheMagnificent/interface`, is public,
+  with pull requests limited to collaborators and private vulnerability
+  reporting on. It is a separate repository with its own history, written by
+  `python3 scripts/export_public.py "<public checkout>"` (the listed paths as
+  committed; it stops on a personal address, the owner's home folder path, a
+  dead link in the front files or an unknown key-shaped string). The private
+  development repository stays private.
 
-Still to do, in order, each on the owner's word:
+Still to do, each on the owner's word:
 
 1. **Owner, any time:** copy
    `~/.config/interface-release/update-key-backup.pk8` somewhere that is not
    this Mac (a password manager, a USB stick in a drawer). It is only needed
    if `primary` is lost, and then it is the only way to keep updating
-   installed copies.
-2. Promote a release from `dev` (`cargo xtask promote`); it is the first
-   build signed for the public.
-3. Make the releases repository public and publish that release:
-   `cargo xtask publish-update --allow-unnotarized --github
-   KilianTheMagnificent/interface-releases`.
-4. Publish the source. The name `KilianTheMagnificent/interface` is held by
-   the private repository of the earlier TypeScript app: rename that one
-   first (as `luck-filter-private-archive` and its like were), then commit
-   the exported copy, create the public `interface` from it, limit pull
-   requests to collaborators and turn on private vulnerability reporting.
-   `README.md` and `install.sh` name that address.
-5. Run the README's install line on a clean Mac, publish the next release,
+   installed copies. Nothing public shows whether this has been done.
+2. Run the README's install line on a clean Mac, publish the next release,
    and watch it arrive through Restart to update. A virtual Mac serves:
    `tart clone ghcr.io/cirruslabs/macos-golden-gate-vanilla:<version> newmac`
    then `tart run newmac`. That image ships with Gatekeeper switched off, so
@@ -197,8 +194,25 @@ checksum and a release naming another download
 the same way and fetched with `curl` opened with no Gatekeeper refusal on
 macOS 27.3.
 
-Not checked, because nothing is published yet: a real upload with
-`--github`; a packaged app updating itself from the public address end to
-end; `install.sh` against the real feed; behaviour behind a corporate proxy
-that inspects TLS (the client trusts only the public web roots, so such a
-network cannot update).
+Checked on 25 Nov 2026 against the live release 0.3.182, from a throwaway
+folder and a throwaway data folder (nothing on the checking Mac was touched):
+the manifest at the `releases/latest/download` address is the one attached to
+the release, and its Ed25519 signature verifies against the first of the two
+keys in `release-channel.json` (the manifest names key id `b980dad7bffe8905`);
+the archive's size (146,421,740 bytes) and SHA-512 match the signed values;
+`cargo xtask publish-update --check --download` reports "signed by a trusted
+key" and that the archive "downloads and matches its signed size and SHA-512";
+the README's one-line install, run with `INTERFACE_INSTALL_DIR` and
+`INTERFACE_NO_OPEN=1` against the real feed, installed `Interface.app` (arm64,
+version 0.3.182, bundle id `com.andreromero.interface`, minimum macOS 12.0);
+that copy passes `codesign --verify --deep --strict`, carries the hardened
+runtime and a secure timestamp, is signed by team `36B25Z964W`, and is
+rejected by `spctl` (as expected for an app that is not notarized). The
+install tests and export tests (`python3 -m unittest discover -s scripts -p
+'test_*.py'`) pass.
+
+Not checked: a packaged app updating itself from the public address end to
+end (0.3.182 is the only release, so no installed copy has anything newer to
+take); a first launch on a different, clean Mac; behaviour behind a corporate
+proxy that inspects TLS (the client trusts only the public web roots, so such
+a network cannot update).
